@@ -7,5 +7,4 @@ interface InterfaceWithFields {
     def anotherField;
     int anInt;
     Object object;
-
 }
