@@ -4,16 +4,18 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Created by Rafa on 22.02.2016.
+ *
  */
 public class Decompiler {
 
@@ -27,7 +29,7 @@ public class Decompiler {
         builder.append("interface ").append(name).append(" {\n");
 
         StringBuilder variables = getFields(interafce);
-        builder.append(variables);
+        builder.append(variables).append('\n');
 
         String methods = getInterfaceMethods(interafce);
         builder.append(methods);
@@ -40,16 +42,8 @@ public class Decompiler {
         StringBuilder methods = new StringBuilder();
         List<Method> methodsList = new ArrayList<>();
         for (Class<?> clz = clazz; clz != null; clz = clz.getSuperclass()) {
-            for (Method m : clz.getMethods()) {
-                if (Modifier.isAbstract(m.getModifiers())) {
-                    methodsList.add(m);
-                }
-            }
-            for (Method m : clz.getDeclaredMethods()) {
-                if (Modifier.isAbstract(m.getModifiers())) {
-                    methodsList.add(m);
-                }
-            }
+            Collections.addAll(methodsList, clz.getMethods());
+            Collections.addAll(methodsList, clz.getDeclaredMethods());
         }
         Set<Method> yet = new HashSet<>();
         methodsList.stream().filter(method -> !isYet(yet, method)).forEach(method -> {
@@ -70,28 +64,43 @@ public class Decompiler {
     private StringBuilder createBracketsInside(Executable executable) {
         StringBuilder inside = new StringBuilder();
         inside.append('(');
+        final String fmt = "%24s: %s%n";
 
+
+        Class<?>[] xType = executable.getParameterTypes();
+        Type[] gxType = executable.getGenericParameterTypes();
         int i = 0;
-        for (Class<?> p : executable.getParameterTypes()) {
-            if (Modifier.isStatic(p.getModifiers())) {
-                inside.append(' ').append("static").append(' ');
+        for (; i < xType.length; i++) {
+//TODO: what about modifiers?
+//            if (Modifier.isStatic(xType[i].getModifiers())) {
+//                inside.append(' ').append("static").append(' ');
+//            }
+//
+//            if (Modifier.isFinal(xType[i].getModifiers())) {
+//                inside.append(' ').append("final").append(' ');
+//            }
+
+
+            if (gxType[i] != Object.class) {
+                inside.append(gxType[i])
+                        .append(' ')
+                        .append(gxType[i].toString().toLowerCase())
+                        .append(i)
+                        .append(',').append(' ');
+            } else {
+                if (xType[i] == Object.class) {
+                    inside.append("def var").append(i);
+                } else {
+                    inside.append(xType[i].getCanonicalName())
+                            .append(' ')
+                            .append(xType[i].getSimpleName().replace('[', '_').replace(']', '_').toLowerCase())
+                            .append(i);
+                }
+                inside.append(',').append(' ');
             }
-
-            if (Modifier.isFinal(p.getModifiers())) {
-                inside.append(' ').append("final").append(' ');
-            }
-
-            inside.append(p.getCanonicalName())
-                    .append(' ')
-                    .append(p.getSimpleName().replace('[', '_').replace(']', '_'))
-                    .append(i)
-                    .append(',');
-
-            ++i;
         }
-
         if (i != 0) {
-            inside.setLength(inside.length() - 1);
+            inside.setLength(inside.length() - 2);
         }
         inside.append(')');
         return inside;
@@ -116,11 +125,8 @@ public class Decompiler {
         name.append('\t');
         if (method.getTypeParameters().length > 0) {
             name.append("public ");
+            name.append(createGeneticString(method.getTypeParameters())).append(' ');
         }
-//                .append(Modifier.toString(method.getModifiers()))
-//                .append(' ')
-        name.append(createGeneticString(method.getTypeParameters()))
-                .append(' ');
         if (method.getGenericReturnType() != Object.class) {
             name.append(method.getGenericReturnType());
 
@@ -140,12 +146,12 @@ public class Decompiler {
     private StringBuilder createGeneticString(TypeVariable<?>[] typeVariables) {
         StringBuilder params = new StringBuilder();
         if (typeVariables.length > 0) {
-            params.append(" <");
+            params.append("<");
             for (TypeVariable<?> tv : typeVariables) {
                 params.append(tv.getName()).append(", ");
             }
             params.setLength(params.length() - 2);
-            params.append("> ");
+            params.append(">");
         }
         return params;
     }
@@ -173,6 +179,7 @@ public class Decompiler {
     private StringBuilder getFields(Class<?> clazz) {
         StringBuilder fields = new StringBuilder();
         for (Field field : clazz.getFields()) {
+            fields.append('\t');
             if (!clazz.isInterface()) {
                 fields.append(Modifier.toString(field.getModifiers())).append(" ");
             }
