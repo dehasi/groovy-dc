@@ -22,14 +22,17 @@ public class Decompiler {
 
         StringBuilder packages = getPackage(interafce);
         builder.append(packages);
+
         StringBuilder name = getName(interafce);
         builder.append("interface ").append(name).append(" {\n");
+
         StringBuilder variables = getFields(interafce);
         builder.append(variables);
+
         String methods = getInterfaceMethods(interafce);
         builder.append(methods);
+
         builder.append("}");
-        System.err.println(interafce.toGenericString());
         return builder.toString();
     }
 
@@ -106,16 +109,45 @@ public class Decompiler {
         }
         return exception;
     }
+
     private StringBuilder createMethodName(Method method) {
         StringBuilder name = new StringBuilder();
 
-        name.append('\t')
-                .append(Modifier.toString(method.getModifiers()))
-                .append(' ')
-                .append(method.getReturnType().getCanonicalName())
-                .append(' ')
-                .append(method.getName());
+        name.append('\t');
+        if (method.getTypeParameters().length > 0) {
+            name.append("public ");
+        }
+//                .append(Modifier.toString(method.getModifiers()))
+//                .append(' ')
+        name.append(createGeneticString(method.getTypeParameters()))
+                .append(' ');
+        if (method.getGenericReturnType() != Object.class) {
+            name.append(method.getGenericReturnType());
+
+        } else {
+            if (method.getReturnType() == Object.class) {
+                name.append("def");
+            } else {
+                name.append(method.getReturnType().getCanonicalName());
+            }
+        }
+        name.append(' ').append(method.getName());
+
         return name;
+    }
+
+
+    private StringBuilder createGeneticString(TypeVariable<?>[] typeVariables) {
+        StringBuilder params = new StringBuilder();
+        if (typeVariables.length > 0) {
+            params.append(" <");
+            for (TypeVariable<?> tv : typeVariables) {
+                params.append(tv.getName()).append(", ");
+            }
+            params.setLength(params.length() - 2);
+            params.append("> ");
+        }
+        return params;
     }
 
     private StringBuilder createMethodBody(Method m) {
@@ -125,6 +157,7 @@ public class Decompiler {
         body.append("\n\t}\n");
         return body;
     }
+
     boolean isYet(Set<Method> yet, Method method) {
         for (Method m : yet) {
             if (m.getName().equals(method.getName())
@@ -136,6 +169,7 @@ public class Decompiler {
         }
         return false;
     }
+
     private StringBuilder getFields(Class<?> clazz) {
         StringBuilder fields = new StringBuilder();
         for (Field field : clazz.getFields()) {
@@ -147,11 +181,11 @@ public class Decompiler {
             } else {
                 if (field.getType() == Object.class) {
                     fields.append("def").append(" ");
-                }else {
+                } else {
                     fields.append(field.getType().getName()).append(" ");
                 }
             }
-                fields.append(field.getName()).append("\n");
+            fields.append(field.getName()).append("\n");
 
         }
         return fields;
@@ -160,16 +194,7 @@ public class Decompiler {
 
     private StringBuilder getName(Class<?> clazz) {
         StringBuilder className = new StringBuilder(clazz.getSimpleName());
-        if (clazz.getTypeParameters().length > 0) {
-            className.append("<");
-            for (TypeVariable tv : clazz.getTypeParameters()) {
-                className.append(tv.getName()).append(", ");
-            }
-            if (clazz.getTypeParameters().length == 1) {
-                className.setLength(className.length() - 2);
-            }
-            className.append(">");
-        }
+        className.append(createGeneticString(clazz.getTypeParameters()));
         return className;
     }
 
