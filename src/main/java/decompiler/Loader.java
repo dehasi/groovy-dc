@@ -55,8 +55,7 @@ public class Loader {
     //TODO: add @NotNull  and fix gradle
     public Class<?> loadFromDirectory(String className) {
         try {
-            Class<?> clazz = classLoader.loadClass(className);
-            return clazz;
+            return classLoader.loadClass(className);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
