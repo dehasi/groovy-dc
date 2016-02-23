@@ -68,4 +68,11 @@ public class DecompilerTest {
         String res = decompiler.decompile(clazz);
         System.out.println(res);
     }
+
+    @Test
+    public void testGenericInterface() {
+        Class<?> clazz = loader.loadFromDirectory("interfaces.GenericInterface");
+        String res = decompiler.decompile(clazz);
+        System.out.println(res);
+    }
 }

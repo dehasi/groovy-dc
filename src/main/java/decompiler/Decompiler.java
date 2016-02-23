@@ -4,11 +4,13 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by Rafa on 22.02.2016.
@@ -18,16 +20,16 @@ public class Decompiler {
     private String decompileInterface(Class<?> interafce) {
         StringBuilder builder = new StringBuilder();
 
-        String packages = getPackage(interafce);
+        StringBuilder packages = getPackage(interafce);
         builder.append(packages);
-        String name = getName(interafce);
-        builder.append(name).append(" {\n");
-        String variables = getFields(interafce);
+        StringBuilder name = getName(interafce);
+        builder.append("interface ").append(name).append(" {\n");
+        StringBuilder variables = getFields(interafce);
         builder.append(variables);
         String methods = getInterfaceMethods(interafce);
         builder.append(methods);
         builder.append("}");
-
+        System.err.println(interafce.toGenericString());
         return builder.toString();
     }
 
@@ -108,7 +110,7 @@ public class Decompiler {
         StringBuilder name = new StringBuilder();
 
         name.append('\t')
-                .append(Modifier.toString(method.getModifiers() & ~Modifier.ABSTRACT))
+                .append(Modifier.toString(method.getModifiers()))
                 .append(' ')
                 .append(method.getReturnType().getCanonicalName())
                 .append(' ')
@@ -134,26 +136,44 @@ public class Decompiler {
         }
         return false;
     }
-    private String getFields(Class<?> clazz) {
+    private StringBuilder getFields(Class<?> clazz) {
         StringBuilder fields = new StringBuilder();
         for (Field field : clazz.getFields()) {
             if (!clazz.isInterface()) {
                 fields.append(Modifier.toString(field.getModifiers())).append(" ");
             }
-
-                fields.append(field.getType().getName()).append(" ");
+            if (field.getGenericType() != Object.class) {
+                fields.append(field.getGenericType().getTypeName()).append(" ");
+            } else {
+                if (field.getType() == Object.class) {
+                    fields.append("def").append(" ");
+                }else {
+                    fields.append(field.getType().getName()).append(" ");
+                }
+            }
                 fields.append(field.getName()).append("\n");
 
         }
-        return fields.toString();
+        return fields;
 
     }
 
-    private String getName(Class<?> clazz) {
-        return clazz.getSimpleName();
+    private StringBuilder getName(Class<?> clazz) {
+        StringBuilder className = new StringBuilder(clazz.getSimpleName());
+        if (clazz.getTypeParameters().length > 0) {
+            className.append("<");
+            for (TypeVariable tv : clazz.getTypeParameters()) {
+                className.append(tv.getName()).append(", ");
+            }
+            if (clazz.getTypeParameters().length == 1) {
+                className.setLength(className.length() - 2);
+            }
+            className.append(">");
+        }
+        return className;
     }
 
-    private String getPackage(Class<?> clazz) {
+    private StringBuilder getPackage(Class<?> clazz) {
         StringBuilder classSrt = new StringBuilder();
         String packageName = null;
         if (clazz.getPackage() != null) {
@@ -169,12 +189,11 @@ public class Decompiler {
             classSrt.append("package").append(' ').append(packageName).append(";\n\n");
         }
 
-        return classSrt.toString();
+        return classSrt;
     }
 
     public List<String> decompile(List<Class<?>> classes) {
-        List<String> strings = new ArrayList<>();
-        return strings;
+        return classes.stream().map(this::decompile).collect(Collectors.toList());
     }
 
     public String decompile(Class<?> clazz) {
