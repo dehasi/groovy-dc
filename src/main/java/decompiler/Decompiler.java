@@ -57,15 +57,12 @@ public class Decompiler {
         StringBuilder method = createMethodName(m);
         method.append(createBracketsInside(m));
         method.append(createException(m));
-//        method.append(createMethodBody(m));
         return method;
     }
 
     private StringBuilder createBracketsInside(Executable executable) {
         StringBuilder inside = new StringBuilder();
         inside.append('(');
-        final String fmt = "%24s: %s%n";
-
 
         Class<?>[] xType = executable.getParameterTypes();
         Type[] gxType = executable.getGenericParameterTypes();
