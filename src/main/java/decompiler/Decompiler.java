@@ -14,10 +14,8 @@ public class Decompiler {
     InterfaceDecompiler interfaceDecompiler;
 
     public StringBuilder decompileFromRepository(String className) {
-        JavaClass myownclass = null;
         try {
-            myownclass = Repository.lookupClass( "java.lang.String" );
-//            System.out.println(myownclass.isInterface());
+            JavaClass myownclass = Repository.lookupClass("java.lang.String");
             return decompile(myownclass);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -27,10 +25,8 @@ public class Decompiler {
 
 
     public StringBuilder decompileFromFileSystem(String path) {
-        JavaClass myownclass = null;
         try {
-            myownclass = new ClassParser(path).parse();
-//            System.out.println(myownclass.isInterface());
+            JavaClass myownclass = new ClassParser(path).parse();
             return decompile(myownclass);
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +42,7 @@ public class Decompiler {
         }
     }
 
-    public Decompiler () {
+    public Decompiler() {
         interfaceDecompiler = new InterfaceDecompiler();
     }
 }
