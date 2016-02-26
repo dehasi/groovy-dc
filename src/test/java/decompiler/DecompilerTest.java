@@ -54,6 +54,7 @@ public class DecompilerTest {
     @Test
     @Ignore("nothing to test yet")
     public void testGenericInterface() {
-
+        StringBuilder genericInterface = decompiler.decompileFromFileSystem(TESTS_DIRECTORY + "GenericInterface.class");
+        System.out.println(genericInterface);
     }
 }

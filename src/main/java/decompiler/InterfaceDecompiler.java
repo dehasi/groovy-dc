@@ -1,6 +1,7 @@
 package decompiler;
 
 
+import org.apache.bcel.classfile.ConstantPool;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
@@ -8,8 +9,8 @@ import org.apache.bcel.generic.Type;
 
 public class InterfaceDecompiler {
 
-    //TODO: possible extract interface
     public StringBuilder decompile(JavaClass clazz) {
+        ConstantPool constantPool = clazz.getConstantPool();
         StringBuilder sb = new StringBuilder();
         sb
                 .append(decompileHeader(clazz))
@@ -22,14 +23,13 @@ public class InterfaceDecompiler {
     }
 
     private StringBuilder decompileHeader(JavaClass clazz) {
+
         StringBuilder sb = new StringBuilder();
-//        sb.append(clazz.getClassName());
         sb
                 .append("package ")
                 .append(clazz.getPackageName())
                 .append(";\n")
-                .append(clazz.getClassName().replaceAll(clazz.getPackageName() +".", ""))
-        ;
+                .append(clazz.getClassName().replaceAll(clazz.getPackageName() +".", ""));
         return sb;
     }
 
@@ -40,7 +40,7 @@ public class InterfaceDecompiler {
             Type type = field.getType();
             sb
                     .append('\t')
-                    .append(type.equals(Type.OBJECT)? "def":type)
+                    .append(defIfObj(type))
                     .append(' ')
                     .append(field.getName()) //TODO: filter name java.lang.Integer -> Integer
                     .append('\n');
@@ -54,12 +54,39 @@ public class InterfaceDecompiler {
             Type returnType = method.getReturnType();
             sb
                     .append('\t')
-                    .append(returnType.equals(Type.OBJECT)? "def":returnType)
+                    .append(defIfObj(returnType))
                     .append(' ')
-                    .append(method.getName()) //TODO: filter name java.lang.Integer -> Integer
+                    .append(method.getName())
+                    .append('(')
+                    .append(decompileMethodBody(method))
+                    .append(')')
                     .append('\n');
         }
 
         return sb;
+    }
+
+    private StringBuilder decompileMethodBody(Method method) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        final String var = "var";
+        for (Type type : method.getArgumentTypes() ) {
+           sb
+                    .append(defIfObj(type))
+                    .append(' ')
+                    .append(var).append(i)
+                    .append(',')
+                   .append(' ');
+            ++i;
+        }
+        if (i > 0) {
+            sb.setLength(sb.length()-2);
+        }
+        return sb;
+    }
+
+    private String defIfObj(Type type) {
+        final String def = "def";
+        return type.equals(Type.OBJECT)? def : type.toString();
     }
 }
