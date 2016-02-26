@@ -8,7 +8,7 @@ interface FullInterface {
     int anInt
     Integer anInteger
     Object object
-    def thisHasProblems()
-    def thisHasProblems(alpha)
-    def defaultMethid(alpha)
+    def methodWithoutParams()
+    def methodWithOneParam(alpha)
+    void voidMethod(alpha)
 }

@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 /**
  * Created by Rafa on 23.02.2016.
  */
-@Ignore("nothing to test yet")
+
 public class DecompilerTest {
     static final private String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\interfaces\\";
     static final private String OUTPUT_DIRECTORY = "/tmp/java";
@@ -47,10 +47,12 @@ public class DecompilerTest {
 
     @Test
     public void testFullInterface() {
-
+        StringBuilder fullInterface = decompiler.decompileFromFileSystem(TESTS_DIRECTORY + "FullInterface.class");
+        System.out.println(fullInterface);
     }
 
     @Test
+    @Ignore("nothing to test yet")
     public void testGenericInterface() {
 
     }
