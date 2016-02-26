@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
-//    compile 'com.sun.istack.internal:+'
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile 'asm:asm:3.3.1'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
