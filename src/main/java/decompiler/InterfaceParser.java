@@ -1,8 +1,13 @@
-package decompiler.visitors;
+package decompiler;
 
 import org.objectweb.asm.Type;
 
-public class AbstractParser {
+import static decompiler.ParserUtils.getShortName;
+
+/**
+ * Created by Rafa on 28.02.2016.
+ */
+public class InterfaceParser implements DecompilerParser {
     public static final String DEF = "def";
 
     private static String[] simpleTypeNames = {
@@ -19,12 +24,14 @@ public class AbstractParser {
             "Object"
     };
 
-    protected StringBuilder parseInterfaceField(int access, String name, String desc, String signature, Object value) {
+    @Override
+    public StringBuilder parseField(int access, String name, String desc, String signature, Object value) {
         StringBuilder sb = new StringBuilder();
         sb
                 .append(Field(desc, signature))
                 .append(' ')
                 .append(name)
+                .append(parseValue(value))
                 .append('\n');
         return sb;
     }
@@ -34,7 +41,7 @@ public class AbstractParser {
         if (value == null) {
             return sb;
         }
-        return sb.append(value);
+        return sb.append(" = ").append(value);
     }
 
     protected StringBuilder Field(String desc, String signature) {
@@ -66,7 +73,8 @@ public class AbstractParser {
         return sb;
     }
 
-    protected StringBuilder parseHeader (int version, int access, String name,
+    @Override
+    public StringBuilder parseHeader(int version, int access, String name,
                                          String signature, String superName, String[] interfaces) {
         StringBuilder sb = new StringBuilder();
         sb
@@ -96,37 +104,44 @@ public class AbstractParser {
         return "";
     }
 
-    protected StringBuilder parseMehod(int access, String name, String desc, String signature, String[] exceptions) {
+    @Override
+    public StringBuilder parseMethod(int access, String name, String desc, String signature, String[] exceptions) {
         StringBuilder sb = new StringBuilder("\t");
 //        Method
         if (signature != null) {
             //TODO: generics
         } else {
             sb
-                .append(parseMethodReturnType(desc, signature))
-                .append(' ')
-                .append(name)
-                .append(parseMethodArgs(desc, signature))
-                .append(parseExceptions(exceptions));
-
-
+                    .append(parseMethodReturnType(desc, signature))
+                    .append(' ')
+                    .append(name)
+                    .append(parseMethodArgs(desc, signature))
+                    .append(parseExceptions(exceptions));
         }
         return sb.append('\n');
     }
 
-    private StringBuilder parseExceptions( String[] exceptions) {
+    private StringBuilder parseExceptions(String[] exceptions) {
         StringBuilder sb = new StringBuilder();
-        //TODO: implement
+        if (exceptions == null || exceptions.length == 0) {
+            return sb;
+        }
+
+        sb.append(" throws ");
+        for(String ex : exceptions) {
+            sb.append(getShortName(ex)).append(", ");
+        }
+        sb.setLength(sb.length() - 2);
         return sb;
     }
 
-    private StringBuilder parseMethodReturnType  (String desc, String signature) {
+    private StringBuilder parseMethodReturnType(String desc, String signature) {
         StringBuilder sb = new StringBuilder();
         Type t = Type.getReturnType(desc);
         return sb.append(parseObjName(t));
     }
 
-    private StringBuilder parseMethodArgs (String desc, String signature) {
+    private StringBuilder parseMethodArgs(String desc, String signature) {
         StringBuilder sb = new StringBuilder();
         int i = 0;
         final String var = "var";

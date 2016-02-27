@@ -1,25 +1,27 @@
 package decompiler.visitors;
 
+import decompiler.DecompilerParser;
+import decompiler.ParserUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-public class CVisitor extends AbstractParser implements ClassVisitor {
+public class CVisitor implements ClassVisitor {
 
     private StringBuilder buffer = new StringBuilder();
 
+    private DecompilerParser parser;
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
-        buffer.append(parseHeader(version, access, name, signature, superName, interfaces));
+        parser = ParserUtils.getParser(ParserUtils.getType(signature));
+        buffer.append(parser.parseHeader(version, access, name, signature, superName, interfaces));
     }
 
     @Override
     public void visitSource(String s, String s1) {
-//        System.out.println("Visiting source: " + s);
-//        System.out.println(s1);
     }
 
     @Override
@@ -29,7 +31,6 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String s, boolean b) {
-//        super.visitAnnotation(s,b);
         return null;
     }
 
@@ -45,14 +46,14 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        buffer.append(parseInterfaceField(access, name, desc, signature, value));
+        buffer.append(parser.parseField(access, name, desc, signature, value));
         return (new FVisitor());
     }
 
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        buffer.append(parseMehod(access, name, desc, signature, exceptions));
+        buffer.append(parser.parseMethod(access, name, desc, signature, exceptions));
         return new MVisitor();
     }
 
