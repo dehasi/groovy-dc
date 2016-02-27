@@ -1,11 +1,15 @@
 package decompiler;
 
+import decompiler.visitors.CVisitor;
+import org.objectweb.asm.ClassReader;
+
 /**
  *
  */
 public class Decompiler {
 
-    public StringBuilder decompile(Object o) {
-        throw new UnsupportedOperationException("unfoutunatelly not implement yet");
+    public StringBuilder decompile(ClassReader classReader) {
+        classReader.accept(new CVisitor(),0);
+        return new StringBuilder();
     }
 }

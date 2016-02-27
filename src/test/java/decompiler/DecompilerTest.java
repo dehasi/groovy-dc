@@ -4,16 +4,16 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 
 @Ignore ("nothig to test")
 public class DecompilerTest {
-    static final private String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\";
+    static final private String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\interfaces\\";
     static final private String OUTPUT_DIRECTORY = "/tmp/java";
     static final private String GROOVY_FILES_DIRECTORY = "resources/test/groovy";
 
-    Loader loader = null;
     Decompiler decompiler = new Decompiler();
+    Loader loader = new Loader();
 
     @Before
     public void compileGroovyClasses() {
@@ -22,38 +22,31 @@ public class DecompilerTest {
 
     @Before
     public void init() {
-        try {
-            loader = new Loader(TESTS_DIRECTORY);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        //TODO: write smth useful
     }
 
     @Test
-    public void testEmtpyInterface() {
-        Class<?> clazz = loader.loadFromDirectory("interfaces.EmptyInterface");
-        StringBuilder res = decompiler.decompile(clazz);
-        System.out.println(res);
+    public void testEmptyInterface() throws IOException {
+        final String path = TESTS_DIRECTORY + "EmptyInterface.class";
+        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
     }
 
     @Test
-    public void testInterfaceWithFields() {
-        Class<?> clazz = loader.loadFromDirectory("interfaces.InterfaceWithFields");
-        StringBuilder res = decompiler.decompile(clazz);
-        System.out.println(res);
+    public void testInterfaceWithFields() throws IOException {
+        final String path = TESTS_DIRECTORY + "InterfaceWithFields.class";
+        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
     }
 
     @Test
-    public void testFullInterface() {
-        Class<?> clazz = loader.loadFromDirectory("interfaces.FullInterface");
-        StringBuilder res = decompiler.decompile(clazz);
-        System.out.println(res);
+    public void testFullInterface() throws IOException {
+        final String path = TESTS_DIRECTORY + "FullInterface.class";
+        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
     }
 
     @Test
-    public void testGenericInterface() {
-        Class<?> clazz = loader.loadFromDirectory("interfaces.GenericInterface");
-        StringBuilder res = decompiler.decompile(clazz);
-        System.out.println(res);
+    public void testGenericInterface() throws IOException {
+        final String path = TESTS_DIRECTORY + "GenericInterface.class";
+        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
     }
+
 }
