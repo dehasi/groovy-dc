@@ -8,12 +8,13 @@ import org.objectweb.asm.FieldVisitor;
 public class FVisitor implements FieldVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String s, boolean b) {
-        return null;
+        System.out.println("Visit annotation : " + s + " " + b);
+        return new AVisitor();
     }
 
     @Override
     public void visitAttribute(Attribute attribute) {
-        System.out.println(attribute.type);
+        System.out.println("FV :" + attribute.type);
     }
 
     @Override

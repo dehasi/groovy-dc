@@ -69,6 +69,6 @@ public class CVisitor implements ClassVisitor {
 
     @Override
     public void visitEnd() {
-
+        System.err.println("end");
     }
 }
