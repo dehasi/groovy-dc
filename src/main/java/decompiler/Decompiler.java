@@ -9,9 +9,10 @@ import org.objectweb.asm.ClassReader;
 public class Decompiler {
 
     public StringBuilder decompile(ClassReader classReader) {
-
-        classReader.accept(new CVisitor(), 0);
-        return new StringBuilder();
+        CVisitor cVisitor = new CVisitor();
+        classReader.accept(cVisitor, 0);
+        StringBuilder buffer = cVisitor.getBuffer();
+        return cVisitor.getBuffer();
     }
 
     private StringBuilder parseHeader(ClassReader classReader) {

@@ -6,16 +6,18 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-public class CVisitor implements ClassVisitor {
+public class CVisitor extends AbstractParser implements ClassVisitor {
 
+    private StringBuilder buffer = new StringBuilder();
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
-        System.out.println("Visiting class: " + name);
-        System.out.println("Class Major Version: " + version);
-        System.out.println("Super class: " + superName);
+
+        buffer.append("Visiting class: ").append(name).append('\n');
+        buffer.append("Class Major Version: ").append(version).append('\n');
+        buffer.append("Super class: ").append(superName).append('\n');
         for (String s : interfaces) {
-            System.out.println("implements: " + s);
+            buffer.append("implements: ").append(s).append('\n');
         }
 //        super.visit(version, access, name, signature, superName, interfaces);
     }
@@ -39,7 +41,7 @@ public class CVisitor implements ClassVisitor {
 
     @Override
     public void visitAttribute(Attribute attr) {
-        System.out.println("Class Attribute: "+attr.type);
+        System.out.println("Class Attribute: " + attr.type);
 //        super.visitAttribute(attr);
     }
 
@@ -54,21 +56,31 @@ public class CVisitor implements ClassVisitor {
      * 076
      */
     @Override
-    public FieldVisitor visitField(int access, String name,
-                                   String desc, String signature, Object value) {
-        System.out.println("Field: " + name + " " + desc + " value:" + value);
-        return (new FVisitor());//.visitField(access, name, desc, signature, value);
-
+    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+        buffer.append("Field:");
+        buffer.append("name: ")
+                .append(name)
+                .append(" value:")
+                .append(value)
+                .append(" desc:")
+                .append(desc)
+                .append("signature ")
+                .append(signature);
+        return (new FVisitor());
     }
 
 
     @Override
     public MethodVisitor visitMethod(int i, String s, String s1, String s2, String[] strings) {
-        return null;
+        return new MVisitor();
     }
 
     @Override
     public void visitEnd() {
         System.err.println("end");
+    }
+
+    public StringBuilder getBuffer() {
+        return buffer;
     }
 }
