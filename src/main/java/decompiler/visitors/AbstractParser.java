@@ -39,7 +39,7 @@ public class AbstractParser {
 
     protected StringBuilder parseType(String desc, String signature) {
         StringBuilder sb = new StringBuilder();
-
+        sb.append('\t');
         if (signature != null) {
             //TODO <generic> magic
         } else {
@@ -62,5 +62,35 @@ public class AbstractParser {
             sb.append(type.getClassName());
         }
         return sb;
+    }
+
+    protected StringBuilder parseHeader (int version, int access, String name,
+                                         String signature, String superName, String[] interfaces) {
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append(parsePackagaName(name))
+                .append('\n')
+                .append(parseInterfaceName(name))
+                //TODO: exdends implements
+                .append(" {\n");
+        return sb;
+    }
+
+    private String parsePackagaName(String name) {
+        int i = name.lastIndexOf('/');
+        return "package " + name.substring(0,i).replace('/', '.') + ";";
+    }
+
+    private String parseInterfaceName(String name) {
+        int i = name.lastIndexOf('/');
+        return "interface " + name.substring(++i);
+    }
+
+    private String parseSuperclassClassName(String superName) {
+        return "";
+    }
+
+    private String parseInterfaces(String[] interfaces) {
+        return "";
     }
 }

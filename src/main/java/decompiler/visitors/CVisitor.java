@@ -13,20 +13,13 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
-
-        buffer.append("Visiting class: ").append(name).append('\n');
-        buffer.append("Class Major Version: ").append(version).append('\n');
-        buffer.append("Super class: ").append(superName).append('\n');
-        for (String s : interfaces) {
-            buffer.append("implements: ").append(s).append('\n');
-        }
-//        super.visit(version, access, name, signature, superName, interfaces);
+        buffer.append(parseHeader(version, access, name, signature, superName, interfaces));
     }
 
     @Override
     public void visitSource(String s, String s1) {
-        System.out.println("Visiting source: " + s);
-        System.out.println(s1);
+//        System.out.println("Visiting source: " + s);
+//        System.out.println(s1);
     }
 
     @Override
@@ -59,15 +52,6 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         buffer.append(parseInterfaceField(access, name, desc, signature, value));
-//        buffer.append("name: ")
-//                .append(name)
-//                .append(" value:")
-//                .append(value)
-//                .append(" desc:")
-//                .append(desc)
-//                .append("signature ")
-//                .append(signature)
-//                .append('\n');
         return (new FVisitor());
     }
 
@@ -79,7 +63,7 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
 
     @Override
     public void visitEnd() {
-        System.err.println("end");
+        buffer.append('}');
     }
 
     public StringBuilder getBuffer() {
