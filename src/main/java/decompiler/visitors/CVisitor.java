@@ -36,7 +36,6 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
     @Override
     public void visitAttribute(Attribute attr) {
         System.out.println("Class Attribute: " + attr.type);
-//        super.visitAttribute(attr);
     }
 
     @Override
@@ -44,11 +43,6 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
 
     }
 
-    /**
-     * 075
-     * When a field is encountered
-     * 076
-     */
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         buffer.append(parseInterfaceField(access, name, desc, signature, value));
@@ -57,7 +51,8 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
 
 
     @Override
-    public MethodVisitor visitMethod(int i, String s, String s1, String s2, String[] strings) {
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        buffer.append(parseMehod(access, name, desc, signature, exceptions));
         return new MVisitor();
     }
 

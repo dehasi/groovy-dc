@@ -22,7 +22,7 @@ public class AbstractParser {
     protected StringBuilder parseInterfaceField(int access, String name, String desc, String signature, Object value) {
         StringBuilder sb = new StringBuilder();
         sb
-                .append(parseType(desc, signature))
+                .append(Field(desc, signature))
                 .append(' ')
                 .append(name)
                 .append('\n');
@@ -37,7 +37,7 @@ public class AbstractParser {
         return sb.append(value);
     }
 
-    protected StringBuilder parseType(String desc, String signature) {
+    protected StringBuilder Field(String desc, String signature) {
         StringBuilder sb = new StringBuilder();
         sb.append('\t');
         if (signature != null) {
@@ -92,5 +92,51 @@ public class AbstractParser {
 
     private String parseInterfaces(String[] interfaces) {
         return "";
+    }
+
+    protected StringBuilder parseMehod(int access, String name, String desc, String signature, String[] exceptions) {
+        StringBuilder sb = new StringBuilder("\t");
+//        Method
+        if (signature != null) {
+            //TODO: generics
+        } else {
+            sb
+                .append(parseMethodReturnType(desc, signature))
+                .append(' ')
+                .append(name)
+                .append(parseMethodArgs(desc, signature))
+                .append(parseExceptions(exceptions));
+
+
+        }
+        return sb.append('\n');
+    }
+
+    private StringBuilder parseExceptions( String[] exceptions) {
+        StringBuilder sb = new StringBuilder();
+        //TODO: implement
+        return sb;
+    }
+
+    private StringBuilder parseMethodReturnType  (String desc, String signature) {
+        StringBuilder sb = new StringBuilder();
+        Type t = Type.getReturnType(desc);
+        return sb.append(parseObjName(t));
+    }
+
+    private StringBuilder parseMethodArgs (String desc, String signature) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        final String var = "var";
+        sb.append('(');
+        for (Type t : Type.getArgumentTypes(desc)) {
+            sb.append(parseObjName(t))
+                    .append(' ')
+                    .append(var).append(i).append(',').append(' ');
+        }
+        if (sb.length() > 2) {
+            sb.setLength(sb.length() - 2);
+        }
+        return sb.append(')');
     }
 }
