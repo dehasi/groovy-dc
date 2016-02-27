@@ -42,6 +42,8 @@ public class AbstractParser {
         sb.append('\t');
         if (signature != null) {
             //TODO <generic> magic
+            int t = 0;
+            t++;
         } else {
             Type t = Type.getType(desc);
             if (desc.length() > 1) {

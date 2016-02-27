@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-@Ignore ("nothig to test")
 public class DecompilerTest {
     static final private String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\interfaces\\";
     static final private String OUTPUT_DIRECTORY = "/tmp/java";
@@ -44,6 +43,7 @@ public class DecompilerTest {
     }
 
     @Test
+    @Ignore ("nothig to test")
     public void testGenericInterface() throws IOException {
         final String path = TESTS_DIRECTORY + "GenericInterface.class";
         System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
