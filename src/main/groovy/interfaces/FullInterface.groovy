@@ -4,7 +4,6 @@ package interfaces
  */
 interface FullInterface {
     def field
-    def anotherField
     int anInt
     Integer anInteger
     Object object

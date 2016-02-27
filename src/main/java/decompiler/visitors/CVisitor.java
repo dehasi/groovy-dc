@@ -9,6 +9,7 @@ import org.objectweb.asm.MethodVisitor;
 public class CVisitor extends AbstractParser implements ClassVisitor {
 
     private StringBuilder buffer = new StringBuilder();
+
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
@@ -57,15 +58,16 @@ public class CVisitor extends AbstractParser implements ClassVisitor {
      */
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        buffer.append("Field:");
-        buffer.append("name: ")
-                .append(name)
-                .append(" value:")
-                .append(value)
-                .append(" desc:")
-                .append(desc)
-                .append("signature ")
-                .append(signature);
+        buffer.append(parseInterfaceField(access, name, desc, signature, value));
+//        buffer.append("name: ")
+//                .append(name)
+//                .append(" value:")
+//                .append(value)
+//                .append(" desc:")
+//                .append(desc)
+//                .append("signature ")
+//                .append(signature)
+//                .append('\n');
         return (new FVisitor());
     }
 
