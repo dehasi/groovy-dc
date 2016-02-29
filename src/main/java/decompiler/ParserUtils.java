@@ -1,5 +1,7 @@
 package decompiler;
 
+import org.objectweb.asm.Opcodes;
+
 public class ParserUtils {
 
     public static DecompilerParser getParser(ObjectType type) {
@@ -9,9 +11,15 @@ public class ParserUtils {
         }
     }
 
-    public static ObjectType getType(String name) {
-        //TODO: how to split interface and class?
-        return ObjectType.INTERFACE;
+    public static ObjectType getType(int access) {
+        switch (access) {
+            case Opcodes.ACC_INTERFACE :{
+                return ObjectType.INTERFACE;
+            }
+            default: {
+                throw new UnsupportedOperationException("I can create onдy interface parser");
+            }
+        }
     }
 
     public static String getShortName(String name, String toImport) {

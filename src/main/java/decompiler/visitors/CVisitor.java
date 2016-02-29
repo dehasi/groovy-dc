@@ -16,7 +16,7 @@ public class CVisitor implements ClassVisitor {
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
-        parser = ParserUtils.getParser(ParserUtils.getType(signature));
+        parser = ParserUtils.getParser(ParserUtils.getType(access));
         buffer.append(parser.parseHeader(version, access, name, signature, superName, interfaces));
     }
 
