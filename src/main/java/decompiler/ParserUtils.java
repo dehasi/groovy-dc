@@ -17,7 +17,7 @@ public class ParserUtils {
                 return ObjectType.INTERFACE;
             }
             default: {
-                throw new UnsupportedOperationException("I can create onдy interface parser");
+                throw new UnsupportedOperationException("I can create only interface parser");
             }
         }
     }
