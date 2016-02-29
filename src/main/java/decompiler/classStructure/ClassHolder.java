@@ -10,15 +10,21 @@ public class ClassHolder {
     public HeadHolder head;
     public List<FieldHolder> fields;
     public List<MethodHolder> methods;
+    public List<AnnotationHolder> annotations;
 
 
     public ClassHolder(Builder builder) {
+        this.head = builder.head;
+        this.fields = builder.fields;
+        this.methods = builder.methods;
+        this.annotations =builder.annotations;
     }
 
     public static class Builder {
         HeadHolder head;
         List<FieldHolder> fields;
         List<MethodHolder> methods;
+        List<AnnotationHolder> annotations;
 
         public Builder addField(FieldHolder field) {
             if (fields == null) {
@@ -28,8 +34,24 @@ public class ClassHolder {
             return this;
         }
 
+        public Builder addMethod(MethodHolder method) {
+            if (methods == null) {
+                methods = new ArrayList<>();
+            }
+            methods.add(method);
+            return this;
+        }
+
         public Builder addHead(HeadHolder head) {
             this.head = head;
+            return this;
+        }
+
+        public Builder addAnnotation(AnnotationHolder annotation) {
+            if (annotations == null) {
+                annotations = new ArrayList<AnnotationHolder>();
+            }
+            annotations.add(annotation);
             return this;
         }
 

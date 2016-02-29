@@ -1,7 +1,10 @@
 package decompiler.converters;
 
+import decompiler.classStructure.AnnotationHolder;
 import decompiler.classStructure.ClassHolder;
+import decompiler.classStructure.FieldHolder;
 import decompiler.classStructure.HeadHolder;
+import decompiler.classStructure.MethodHolder;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
@@ -9,20 +12,18 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-/**
- * Created by Rafa on 29.02.2016.
- */
 public class ClassReaser2HolderConverter {
 
-    ClassHolder convert(ClassReader classReader) {
+    public ClassHolder convert(ClassReader classReader) {
         ConverterVisitor visitor = new ConverterVisitor();
         classReader.accept(visitor, 0);
         return visitor.getClassHolder();
     }
 
     private static class ConverterVisitor implements ClassVisitor {
-
+        ClassHolder classHolder;
         ClassHolder.Builder builder;
+
         @Override
         public void visit(int version, int access, String name,
                           String signature, String superName, String[] interfaces) {
@@ -40,7 +41,8 @@ public class ClassReaser2HolderConverter {
         }
 
         @Override
-        public AnnotationVisitor visitAnnotation(String s, boolean b) {
+        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+            builder.addAnnotation(new AnnotationHolder(desc, visible));
             return null;
         }
 
@@ -56,21 +58,23 @@ public class ClassReaser2HolderConverter {
 
         @Override
         public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+            builder.addField(new FieldHolder(access, name, desc, signature, value));
             return null;
         }
 
-
         @Override
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+            builder.addMethod(new MethodHolder(access, name, desc, signature, exceptions));
             return null;
         }
 
         @Override
         public void visitEnd() {
-
+            classHolder = builder.build();
         }
+
         ClassHolder getClassHolder() {
-            return builder.build();
+            return classHolder;
         }
 
     }
