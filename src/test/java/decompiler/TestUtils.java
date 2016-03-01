@@ -23,10 +23,10 @@ public class TestUtils {
         Process compileProcess = null;
         try {
             compileProcess = Runtime.getRuntime().exec("groovyc -cp " + path);
-
             int returnCode = compileProcess.waitFor();
             PrintStream prtStrm = new PrintStream(compileProcess.getOutputStream());
             prtStrm.println();
+            compileProcess.destroy();
             return returnCode == 0;
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
