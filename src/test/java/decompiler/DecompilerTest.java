@@ -2,7 +2,6 @@ package decompiler;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -22,7 +21,7 @@ public class DecompilerTest {
     //TODO: implement compilation
     }
 
-    @BeforeClass
+    @Before
     public void init() {
         //TODO: write smth useful
 //         runtime = Runtime.getRuntime();
