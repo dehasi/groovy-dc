@@ -1,7 +1,7 @@
 package decompiler;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class DecompilerTest {
     Decompiler decompiler = new Decompiler();
     Loader loader = new Loader();
 
-    @AfterClass //TODO inherit from abstract test
+    @BeforeClass //TODO inherit from abstract test
     public static void clear() {
         purgeDirectory(TestUtils.OUTPUT_DIRECTORY);
     }
