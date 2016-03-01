@@ -1,6 +1,8 @@
 package decompiler;
 
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -13,21 +15,25 @@ public class DecompilerTest {
 
     Decompiler decompiler = new Decompiler();
     Loader loader = new Loader();
+    static  Runtime runtime;
 
     @Before
     public void compileGroovyClasses() {
     //TODO: implement compilation
     }
 
-    @Before
+    @BeforeClass
     public void init() {
         //TODO: write smth useful
+//         runtime = Runtime.getRuntime();
     }
 
     @Test
     public void testEmptyInterface() throws IOException {
         final String path = TESTS_DIRECTORY + "EmptyInterface.class";
+        Assert.assertTrue(TestUtils.compile(""));
         System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
+
     }
 
     @Test
