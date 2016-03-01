@@ -7,31 +7,27 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class DecompilerTest {
-    static final private String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\interfaces\\";
-    static final private String OUTPUT_DIRECTORY = "/tmp/java";
-    static final private String GROOVY_FILES_DIRECTORY = "resources/test/groovy";
+import static decompiler.TestUtils.TESTS_DIRECTORY;
+import static decompiler.TestUtils.compile;
+import static decompiler.TestUtils.writeDecompiledFile;
 
+public class DecompilerTest {
+    //TODO: DI
     Decompiler decompiler = new Decompiler();
     Loader loader = new Loader();
-    static  Runtime runtime;
 
-    @Before
-    public void compileGroovyClasses() {
-    //TODO: implement compilation
-    }
-
-    @Before
+   @Before
     public void init() {
         //TODO: write smth useful
-//         runtime = Runtime.getRuntime();
     }
 
     @Test
     public void testEmptyInterface() throws IOException {
-        final String path = TESTS_DIRECTORY + "EmptyInterface.class";
-        Assert.assertTrue(TestUtils.compile(""));
-        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
+        final String path = TestUtils.TESTS_DIRECTORY + "EmptyInterface.class";
+        String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
+        String name =  "EmptyInterface.groovy";
+        String res = writeDecompiledFile(name, content);
+        Assert.assertTrue(compile(res));
 
     }
 
