@@ -24,31 +24,23 @@ public class DecompilerTest {
 
     @Test
     public void testEmptyInterface() throws IOException {
-        final String path = TestUtils.TESTS_DIRECTORY + "EmptyInterface.class";
-        String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
-        String name = "EmptyInterface.groovy";
-        String res = writeDecompiledFile(name, content);
-        Assert.assertTrue(compile(res));
-
+        routine("EmptyInterface");
     }
 
     @Test
     public void testInterfaceWithFields() throws IOException {
-        final String path = TESTS_DIRECTORY + "InterfaceWithFields.class";
-        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
+        routine("InterfaceWithFields");
     }
 
     @Test
     public void testFullInterface() throws IOException {
-        final String path = TESTS_DIRECTORY + "FullInterface.class";
-        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
+        routine("FullInterface");
     }
 
     @Test
     @Ignore("nothig to test")
     public void testGenericInterface() throws IOException {
-        final String path = TESTS_DIRECTORY + "GenericInterface.class";
-        System.out.println(decompiler.decompile(loader.loadFromFileSystem(path)));
+        routine("GenericInterface");
     }
 
     public static void purgeDirectory(String path) {
@@ -60,5 +52,13 @@ public class DecompilerTest {
                 f.delete();
             }
         }
+    }
+
+    public void routine (String name) throws IOException {
+        final String path = TESTS_DIRECTORY + name + ".class";
+        String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
+        String res = writeDecompiledFile(name + ".groovy", content);
+        Assert.assertTrue(compile(res));
+        System.out.println(content);
     }
 }
