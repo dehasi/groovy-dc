@@ -1,6 +1,6 @@
 package decompiler.visitors;
 
-import decompiler.DecompilerParser;
+import decompiler.ASMParser;
 import decompiler.ParserUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
@@ -12,7 +12,7 @@ public class CVisitor implements ClassVisitor {
 
     private StringBuilder buffer = new StringBuilder();
 
-    private DecompilerParser parser;
+    private ASMParser parser;
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {

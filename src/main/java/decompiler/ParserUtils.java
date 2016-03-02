@@ -6,7 +6,7 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 
 public class ParserUtils {
 
-    public static DecompilerParser getParser(ObjectType type) {
+    public static ASMParser getParser(ObjectType type) {
         switch (type) {
             case INTERFACE:
                 return new InterfaceParser();
@@ -31,5 +31,9 @@ public class ParserUtils {
 
     public static String getShortName(String name) {
         return name.replace("/", ".").replace("java.lang.", "");
+    }
+
+    public static ASMParser getParser(int access) {
+        return getParser(getType(access));
     }
 }

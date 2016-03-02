@@ -16,7 +16,7 @@ public class Decompiler {
         classReader.accept(cVisitor, 0);
         StringBuilder buffer = cVisitor.getBuffer();
 
-        ClassHolder res = converter.convert(classReader);
+        ClassHolder res = converter.toDestination(classReader);
         return cVisitor.getBuffer();
     }
 

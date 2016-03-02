@@ -7,7 +7,7 @@ import static decompiler.ParserUtils.getShortName;
 /**
  * Created by Rafa on 28.02.2016.
  */
-public class InterfaceParser implements DecompilerParser {
+public class InterfaceParser implements ASMParser {
     public static final String DEF = "def";
 
     private static String[] simpleTypeNames = {

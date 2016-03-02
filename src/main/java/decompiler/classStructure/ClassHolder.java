@@ -7,11 +7,11 @@ import java.util.List;
  * Created by Rafa on 29.02.2016.
  */
 public class ClassHolder {
-    public List<ImportHolder> imports;
-    public HeadHolder head;
-    public List<FieldHolder> fields;
-    public List<MethodHolder> methods;
-    public List<AnnotationHolder> annotations;
+    private List<ImportHolder> imports;
+    private HeadHolder head;
+    private List<FieldHolder> fields;
+    private List<MethodHolder> methods;
+    private List<AnnotationHolder> annotations;
 
 
     public ClassHolder(Builder builder) {
@@ -59,5 +59,26 @@ public class ClassHolder {
         public ClassHolder build() {
             return new ClassHolder(this);
         }
+    }
+
+
+    public List<ImportHolder> getImports() {
+        return imports;
+    }
+
+    public HeadHolder getHead() {
+        return head;
+    }
+
+    public List<FieldHolder> getFields() {
+        return fields;
+    }
+
+    public List<MethodHolder> getMethods() {
+        return methods;
+    }
+
+    public List<AnnotationHolder> getAnnotations() {
+        return annotations;
     }
 }

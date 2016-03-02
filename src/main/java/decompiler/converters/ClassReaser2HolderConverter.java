@@ -14,12 +14,15 @@ import org.objectweb.asm.MethodVisitor;
 
 public class ClassReaser2HolderConverter {
 
-    public ClassHolder convert(ClassReader classReader) {
+    public ClassHolder toDestination(ClassReader classReader) {
         ConverterVisitor visitor = new ConverterVisitor();
         classReader.accept(visitor, 0);
         return visitor.getClassHolder();
     }
 
+    public ClassReader toSource(ClassHolder classHolder) {
+        throw new UnsupportedOperationException("there is not toSource converter yey");
+    }
     private static class ConverterVisitor implements ClassVisitor {
         ClassHolder classHolder;
         ClassHolder.Builder builder;
@@ -32,7 +35,8 @@ public class ClassReaser2HolderConverter {
         }
 
         @Override
-        public void visitSource(String s, String s1) {
+        public void visitSource(String source, String debug) {
+            System.out.println("source: " + source + " debug " + debug);
         }
 
         @Override
@@ -76,6 +80,5 @@ public class ClassReaser2HolderConverter {
         ClassHolder getClassHolder() {
             return classHolder;
         }
-
     }
 }

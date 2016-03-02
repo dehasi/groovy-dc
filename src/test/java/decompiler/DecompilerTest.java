@@ -58,7 +58,7 @@ public class DecompilerTest {
         final String path = TESTS_DIRECTORY + name + ".class";
         String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
         String res = writeDecompiledFile(name + ".groovy", content);
-        Assert.assertTrue(compile(res));
         System.out.println(content);
+        Assert.assertTrue(compile(res));
     }
 }
