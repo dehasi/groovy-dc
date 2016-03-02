@@ -1,14 +1,17 @@
 package decompiler.holdersParser;
 
+import decompiler.ASMParser;
+import decompiler.ObjectType;
+import decompiler.ParserUtils;
 import decompiler.classStructure.AnnotationHolder;
 import decompiler.classStructure.FieldHolder;
 import decompiler.classStructure.HeadHolder;
 import decompiler.classStructure.MethodHolder;
 
-/**
- * Created by Rafa on 02.03.2016.
- */
-public class HolderParserImpl implements  HolderParser{
+
+public class HolderParserImpl implements  HolderParser {
+
+    ASMParser asmParser;
     @Override
     public StringBuilder parseField(FieldHolder fieldHolder) {
         return null;
@@ -21,7 +24,12 @@ public class HolderParserImpl implements  HolderParser{
 
     @Override
     public StringBuilder parseHeader(HeadHolder headHolder) {
-        return null;
+        ObjectType type = ParserUtils.getType(headHolder.getAccess());
+        asmParser = ParserUtils.getParser(headHolder.getAccess());
+
+        return asmParser.parseHeader(headHolder.getVersion(),
+                headHolder.getAccess(),headHolder.getName(),headHolder.getSignature(),
+                headHolder.getSuperName(),headHolder.getInterfaces());
     }
 
     @Override

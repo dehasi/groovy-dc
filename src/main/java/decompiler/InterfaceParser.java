@@ -3,6 +3,8 @@ package decompiler;
 import org.objectweb.asm.Type;
 
 import static decompiler.ParserUtils.getShortName;
+import static decompiler.ParserUtils.parseInterfaceName;
+import static decompiler.ParserUtils.parsePackagaName;
 
 /**
  * Created by Rafa on 28.02.2016.
@@ -86,15 +88,7 @@ public class InterfaceParser implements ASMParser {
         return sb;
     }
 
-    private String parsePackagaName(String name) {
-        int i = name.lastIndexOf('/');
-        return "package " + name.substring(0,i).replace('/', '.') + ";";
-    }
 
-    private String parseInterfaceName(String name) {
-        int i = name.lastIndexOf('/');
-        return "interface " + name.substring(++i);
-    }
 
     private String parseSuperclassClassName(String superName) {
         return "";

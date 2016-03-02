@@ -36,4 +36,14 @@ public class ParserUtils {
     public static ASMParser getParser(int access) {
         return getParser(getType(access));
     }
+
+    public static String parsePackagaName(String name) {
+        int i = name.lastIndexOf('/');
+        return "package " + name.substring(0,i).replace('/', '.') + ";";
+    }
+
+    public static String parseInterfaceName(String name) {
+        int i = name.lastIndexOf('/');
+        return "interface " + name.substring(++i);
+    }
 }
