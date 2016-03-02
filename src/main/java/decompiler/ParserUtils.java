@@ -1,5 +1,8 @@
 package decompiler;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_INTERFACE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
@@ -45,5 +48,16 @@ public class ParserUtils {
     public static String parseInterfaceName(String name) {
         int i = name.lastIndexOf('/');
         return "interface " + name.substring(++i);
+    }
+
+    public <E> Collection<E> emptyIfNull(Collection<E> collection) {
+        if (collection == null) {
+            return Collections.emptyList();
+        }
+        return collection;
+    }
+
+    public static boolean isInterface (int access) {
+        return (access == (ACC_PUBLIC + ACC_INTERFACE + ACC_ABSTRACT));
     }
 }

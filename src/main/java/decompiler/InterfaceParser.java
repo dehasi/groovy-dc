@@ -4,7 +4,10 @@ import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
 
+import java.util.List;
+
 import static decompiler.ParserUtils.getShortName;
+import static decompiler.ParserUtils.isInterface;
 import static decompiler.ParserUtils.parseInterfaceName;
 import static decompiler.ParserUtils.parsePackagaName;
 
@@ -69,7 +72,7 @@ public class InterfaceParser implements ASMParser {
 
     private StringBuilder parseObjName(Type type) {
         StringBuilder sb = new StringBuilder();
-        if (type.getClassName().equals("java.lang.Object")){
+        if (type.getClassName().equals("java.lang.Object")) {
             sb.append(DEF);
         } else {
             sb.append(type.getClassName());
@@ -79,33 +82,60 @@ public class InterfaceParser implements ASMParser {
 
     @Override
     public StringBuilder parseHeader(int version, int access, String name,
-                                         String signature, String superName, String[] interfaces) {
+                                     String signature, String superName, String[] interfaces) {
         StringBuilder sb = new StringBuilder();
         sb
                 .append(parsePackagaName(name))
                 .append('\n')
                 .append(parseInterfaceName(name))
-                //TODO: exdends implements
+                .append(parseInterfaceSignature(signature))
+                .append(' ')
+                .append(parseInterfaces(access, interfaces))
                 .append(" {\n");
-        SignatureReader signatureReader = new SignatureReader(signature);
-        SVisitor sVisitor = new SVisitor();
-        signatureReader.accept(sVisitor);
-        sVisitor.getBuffer();
         return sb;
     }
 
 
-    private String parseInterfaceSignature(String signature) {
-
-        return "";
+    private StringBuilder parseInterfaceSignature(String signature) {
+        StringBuilder sb = new StringBuilder();
+        if (signature == null) {
+            return sb;
+        }
+        SignatureReader signatureReader = new SignatureReader(signature);
+        SVisitor sVisitor = new SVisitor();
+        signatureReader.accept(sVisitor);
+        List<String> res = sVisitor.getSignatureMap().get(SVisitor.formalTypeParameter);
+        //TODO: refactor
+        if (res != null) {
+            sb.append('<');
+            int i = 0;
+            for (String s : res) {
+                sb.append(s).append(',');
+                i++;
+            }
+            if (i > 0) {
+                sb.setLength(sb.length() - 1);
+            }
+            sb.append('>');
+        }
+        return sb;
     }
 
     private String parseSuperclassClassName(String superName) {
         return "";
     }
 
-    private String parseInterfaces(String[] interfaces) {
-        return "";
+    private StringBuilder parseInterfaces(int access, String[] interfaces) {
+        StringBuilder sb = new StringBuilder();
+        if (interfaces == null || interfaces.length == 0) {
+            return sb;
+        }
+        sb.append(isInterface(access)? "extends ":"implements ");
+        for (String s : interfaces) {
+            sb.append(s).append(',');
+        }
+        sb.setLength(sb.length() -1);
+        return sb;
     }
 
     @Override
@@ -134,7 +164,7 @@ public class InterfaceParser implements ASMParser {
         }
 
         sb.append(" throws ");
-        for(String ex : exceptions) {
+        for (String ex : exceptions) {
             sb.append(getShortName(ex)).append(", ");
         }
         sb.setLength(sb.length() - 2);

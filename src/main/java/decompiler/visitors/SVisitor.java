@@ -6,10 +6,11 @@ import org.objectweb.asm.signature.SignatureVisitor;
  * Created by Rafa on 27.02.2016.
  */
 public class SVisitor extends AbstactVisitor implements SignatureVisitor {
+    public static final String formalTypeParameter = "formalTypeParameter";
     @Override
     public void visitFormalTypeParameter(String name) {
-        putToMap("visitFormalTypeParameter", name);
-        System.out.println("visitFormalTypeParameter| name:" + name );
+        putToMap(formalTypeParameter, name);
+        System.out.println("formalTypeParameter| name:" + name );
     }
 
     @Override
