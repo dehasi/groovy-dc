@@ -8,9 +8,9 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-public class CVisitor implements ClassVisitor {
+public class CVisitor extends AbstactVisitor implements ClassVisitor {
 
-    private StringBuilder buffer = new StringBuilder();
+
 
     private ASMParser parser;
     @Override
@@ -62,7 +62,5 @@ public class CVisitor implements ClassVisitor {
         buffer.append('}');
     }
 
-    public StringBuilder getBuffer() {
-        return buffer;
-    }
+
 }

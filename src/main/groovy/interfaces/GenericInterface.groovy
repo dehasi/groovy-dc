@@ -3,7 +3,7 @@ package interfaces
 /**
  * Created by Rafa on 23.02.2016.
  */
-interface GenericInterface<E> {
+interface GenericInterface<E,S> {
     E e
     def o
     public <T> T getT(T t)

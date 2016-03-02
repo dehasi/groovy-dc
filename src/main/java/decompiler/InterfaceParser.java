@@ -1,6 +1,8 @@
 package decompiler;
 
+import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.signature.SignatureReader;
 
 import static decompiler.ParserUtils.getShortName;
 import static decompiler.ParserUtils.parseInterfaceName;
@@ -85,10 +87,18 @@ public class InterfaceParser implements ASMParser {
                 .append(parseInterfaceName(name))
                 //TODO: exdends implements
                 .append(" {\n");
+        SignatureReader signatureReader = new SignatureReader(signature);
+        SVisitor sVisitor = new SVisitor();
+        signatureReader.accept(sVisitor);
+        sVisitor.getBuffer();
         return sb;
     }
 
 
+    private String parseInterfaceSignature(String signature) {
+
+        return "";
+    }
 
     private String parseSuperclassClassName(String superName) {
         return "";
@@ -100,8 +110,10 @@ public class InterfaceParser implements ASMParser {
 
     @Override
     public StringBuilder parseMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        if (name.indexOf('<') != -1) {
+            return new StringBuilder();
+        }
         StringBuilder sb = new StringBuilder("\t");
-//        Method
         if (signature != null) {
             //TODO: generics
         } else {

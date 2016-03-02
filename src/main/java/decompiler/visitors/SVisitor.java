@@ -5,70 +5,76 @@ import org.objectweb.asm.signature.SignatureVisitor;
 /**
  * Created by Rafa on 27.02.2016.
  */
-public class SVisitor implements SignatureVisitor {
+public class SVisitor extends AbstactVisitor implements SignatureVisitor {
     @Override
-    public void visitFormalTypeParameter(String s) {
-
+    public void visitFormalTypeParameter(String name) {
+        putToMap("visitFormalTypeParameter", name);
+        System.out.println("visitFormalTypeParameter| name:" + name );
     }
 
     @Override
     public SignatureVisitor visitClassBound() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
     public SignatureVisitor visitInterfaceBound() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
     public SignatureVisitor visitSuperclass() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
     public SignatureVisitor visitInterface() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
     public SignatureVisitor visitParameterType() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
     public SignatureVisitor visitReturnType() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
     public SignatureVisitor visitExceptionType() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
-    public void visitBaseType(char c) {
-
+    public void visitBaseType(char descriptor) {
+        putToMap("visitBaseType", String.valueOf(descriptor));
+        System.out.println("visitBaseType| descriptor:" + descriptor);
     }
 
     @Override
-    public void visitTypeVariable(String s) {
-
+    public void visitTypeVariable(String name) {
+        putToMap("visitTypeVariable", name);
+        System.out.println("visitTypeVariable| name:" + name );
     }
 
     @Override
     public SignatureVisitor visitArrayType() {
-        return null;
+        return new SVisitor();
     }
 
     @Override
-    public void visitClassType(String s) {
+    public void visitClassType(String name) {
+        putToMap("visitClassType", name);
+        System.out.println("visitClassType| name:" + name );
 
     }
 
     @Override
-    public void visitInnerClassType(String s) {
-
+    public void visitInnerClassType(String name) {
+        putToMap("visitInnerClassType", name);
+        System.out.println("visitInnerClassType| name:" + name );
     }
 
     @Override
@@ -77,12 +83,15 @@ public class SVisitor implements SignatureVisitor {
     }
 
     @Override
-    public SignatureVisitor visitTypeArgument(char c) {
-        return null;
+    public SignatureVisitor visitTypeArgument(char wildcard) {
+        putToMap("visitTypeArgument", String.valueOf(wildcard));
+        System.out.println("visitTypeArgument| wildcard:" + wildcard);
+        return new SVisitor();
     }
 
     @Override
     public void visitEnd() {
 
     }
+
 }
