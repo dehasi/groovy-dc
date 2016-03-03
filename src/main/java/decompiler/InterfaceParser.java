@@ -55,6 +55,9 @@ public class InterfaceParser implements ASMParser {
         StringBuilder sb = new StringBuilder();
         sb.append('\t');
         if (signature != null) {
+            SVisitor sVisitor = new SVisitor();
+            SignatureReader signatureReader = new SignatureReader(signature);
+            signatureReader.accept(sVisitor);
             //TODO <generic> magic
             int t = 0;
             t++;
