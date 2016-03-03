@@ -2,12 +2,20 @@ package decompiler.visitors;
 
 import org.objectweb.asm.signature.SignatureVisitor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Rafa on 27.02.2016.
  */
 public class SVisitor extends AbstactVisitor implements SignatureVisitor {
+    protected Map<String, List<String>> signatureMap = new HashMap<>();
+
     public static final String formalTypeParameter = "formalTypeParameter";
     public static final String typeVariable = "typeVariable";
+
     @Override
     public void visitFormalTypeParameter(String name) {
         putToMap(formalTypeParameter, name);
@@ -68,7 +76,8 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
 
     @Override
     public void visitClassType(String name) {
-        putToMap("visitClassType", name);
+        String classType = "сlassType";
+        putToMap(classType, name);
         System.out.println("visitClassType| name:" + name );
 
     }
@@ -95,5 +104,13 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
     public void visitEnd() {
 
     }
-
+    public Map<String, List<String>> getSignatureMap() {
+        return signatureMap;
+    }
+    protected void putToMap(String key, String value) {
+        if (!signatureMap.containsKey(key)) {
+            signatureMap.put(key, new ArrayList<>());
+        }
+        signatureMap.get(key).add(value);
+    }
 }
