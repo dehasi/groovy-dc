@@ -4,6 +4,7 @@ import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class InterfaceParser implements ASMParser {
         sb.append('\t');
         if (signature != null) {
             Map<String, List<String>> stringListMap = getSignature(signature);
-            sb.append(stringListMap.get(SVisitor.typeVariable));
+            sb.append(stringListMap.get(SVisitor.typeVariable).get(0));
         } else {
             Type t = Type.getType(desc);
             if (desc.length() > 1) {
@@ -190,8 +191,9 @@ public class InterfaceParser implements ASMParser {
     }
 
     private Map<String, List<String>> getSignature(String signature) {
+        Map<String, List<String>> signatureMap = new HashMap<>();
         SignatureReader signatureReader = new SignatureReader(signature);
-        SVisitor sVisitor = new SVisitor();
+        SVisitor sVisitor = new SVisitor(signatureMap);
         signatureReader.accept(sVisitor);
         return sVisitor.getSignatureMap();
     }
