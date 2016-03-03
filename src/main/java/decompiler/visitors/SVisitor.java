@@ -17,7 +17,9 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
     public static final String formalTypeParameter = "formalTypeParameter";
     public static final String typeVariable = "typeVariable";
     public static final String classType = "сlassType";
-
+    public static final String typeArgument = "typeArgument";
+    public static final String innerClassType = "innerClassType";
+    public static final String baseType = "baseType";
 
     @Override
     public void visitFormalTypeParameter(String name) {
@@ -61,7 +63,7 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
 
     @Override
     public void visitBaseType(char descriptor) {
-        putToMap("visitBaseType", String.valueOf(descriptor));
+        putToMap(baseType, String.valueOf(descriptor));
     }
 
     @Override
@@ -82,7 +84,7 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
 
     @Override
     public void visitInnerClassType(String name) {
-        putToMap("visitInnerClassType", name);
+        putToMap(innerClassType, name);
         System.out.println("visitInnerClassType| name:" + name );
     }
 
@@ -93,7 +95,7 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
 
     @Override
     public SignatureVisitor visitTypeArgument(char wildcard) {
-        putToMap("visitTypeArgument", String.valueOf(wildcard));
+        putToMap(typeArgument, String.valueOf(wildcard));
         System.out.println("visitTypeArgument| wildcard:" + wildcard);
         return new SVisitor(this.signatureMap);
     }
