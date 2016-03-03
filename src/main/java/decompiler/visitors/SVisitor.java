@@ -7,6 +7,7 @@ import org.objectweb.asm.signature.SignatureVisitor;
  */
 public class SVisitor extends AbstactVisitor implements SignatureVisitor {
     public static final String formalTypeParameter = "formalTypeParameter";
+    public static final String typeVariable = "typeVariable";
     @Override
     public void visitFormalTypeParameter(String name) {
         putToMap(formalTypeParameter, name);
@@ -56,8 +57,8 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
 
     @Override
     public void visitTypeVariable(String name) {
-        putToMap("visitTypeVariable", name);
-        System.out.println("visitTypeVariable| name:" + name );
+        putToMap(typeVariable, name);
+        System.out.println("typeVariable| name:" + name );
     }
 
     @Override

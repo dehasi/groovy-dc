@@ -5,6 +5,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
 
 import java.util.List;
+import java.util.Map;
 
 import static decompiler.ParserUtils.getShortName;
 import static decompiler.ParserUtils.isInterface;
@@ -35,7 +36,7 @@ public class InterfaceParser implements ASMParser {
     public StringBuilder parseField(int access, String name, String desc, String signature, Object value) {
         StringBuilder sb = new StringBuilder();
         sb
-                .append(Field(desc, signature))
+                .append(parseFieldSignature(desc, signature))
                 .append(' ')
                 .append(name)
                 .append(parseValue(value))
@@ -51,16 +52,12 @@ public class InterfaceParser implements ASMParser {
         return sb.append(" = ").append(value);
     }
 
-    protected StringBuilder Field(String desc, String signature) {
+    protected StringBuilder parseFieldSignature(String desc, String signature) {
         StringBuilder sb = new StringBuilder();
         sb.append('\t');
         if (signature != null) {
-            SVisitor sVisitor = new SVisitor();
-            SignatureReader signatureReader = new SignatureReader(signature);
-            signatureReader.accept(sVisitor);
-            //TODO <generic> magic
-            int t = 0;
-            t++;
+            Map<String, List<String>> stringListMap = getSignature(signature);
+            sb.append(stringListMap.get(SVisitor.typeVariable));
         } else {
             Type t = Type.getType(desc);
             if (desc.length() > 1) {
@@ -68,7 +65,6 @@ public class InterfaceParser implements ASMParser {
             } else {
                 sb.append(t.getClassName());
             }
-
         }
         return sb;
     }
@@ -104,10 +100,7 @@ public class InterfaceParser implements ASMParser {
         if (signature == null) {
             return sb;
         }
-        SignatureReader signatureReader = new SignatureReader(signature);
-        SVisitor sVisitor = new SVisitor();
-        signatureReader.accept(sVisitor);
-        List<String> res = sVisitor.getSignatureMap().get(SVisitor.formalTypeParameter);
+        List<String> res = getSignature(signature).get(SVisitor.formalTypeParameter);
         //TODO: refactor
         if (res != null) {
             sb.append('<');
@@ -194,5 +187,12 @@ public class InterfaceParser implements ASMParser {
             sb.setLength(sb.length() - 2);
         }
         return sb.append(')');
+    }
+
+    private Map<String, List<String>> getSignature(String signature) {
+        SignatureReader signatureReader = new SignatureReader(signature);
+        SVisitor sVisitor = new SVisitor();
+        signatureReader.accept(sVisitor);
+        return sVisitor.getSignatureMap();
     }
 }

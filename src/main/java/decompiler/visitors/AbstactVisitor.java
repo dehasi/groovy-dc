@@ -19,6 +19,8 @@ public abstract class AbstactVisitor {
         if (!signatureMap.containsKey(key)) {
             signatureMap.put(key, new ArrayList<String>());
         }
-        signatureMap.get(key).add(value);
+        List<String> strings = signatureMap.get(key);
+        strings.add(value);
+        signatureMap.put(key, strings);
     }
 }
