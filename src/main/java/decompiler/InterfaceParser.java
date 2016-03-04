@@ -102,7 +102,6 @@ public class InterfaceParser implements ASMParser {
             return sb;
         }
         List<String> res = getSignature(signature).get(SVisitor.formalTypeParameter);
-        //TODO: refactor
         if (res != null) {
             sb.append('<');
             int i = 0;
@@ -142,7 +141,7 @@ public class InterfaceParser implements ASMParser {
         }
         StringBuilder sb = new StringBuilder("\t");
         if (signature != null) {
-            //TODO: generics
+            parseMthodSignature(signature);
         } else {
             sb
                     .append(parseMethodReturnType(desc, signature))
@@ -188,6 +187,21 @@ public class InterfaceParser implements ASMParser {
             sb.setLength(sb.length() - 2);
         }
         return sb.append(')');
+    }
+
+    private StringBuilder parseMthodSignature(String signature) {
+        StringBuilder sb = new StringBuilder();
+        Map<String, List<String>> signatureMap =  getSignature(signature);
+
+        if (signatureMap.get(SVisitor.formalTypeParameter) != null) {
+            sb.append('<');
+            for (String t : signatureMap.get(SVisitor.formalTypeParameter)) {
+                sb.append(t).append(',');
+            }
+            sb.setLength(sb.length() - 1);
+            sb.append('>');
+        }
+        return sb;
     }
 
     private Map<String, List<String>> getSignature(String signature) {
