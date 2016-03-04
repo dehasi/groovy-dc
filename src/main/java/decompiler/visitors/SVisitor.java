@@ -28,37 +28,37 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
 
     @Override
     public SignatureVisitor visitClassBound() {
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
     public SignatureVisitor visitInterfaceBound() {
-        return new SVisitor(this.signatureMap);
+            return this;
     }
 
     @Override
     public SignatureVisitor visitSuperclass() {
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
     public SignatureVisitor visitInterface() {
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
     public SignatureVisitor visitParameterType() {
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
     public SignatureVisitor visitReturnType() {
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
     public SignatureVisitor visitExceptionType() {
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
 
     @Override
     public SignatureVisitor visitArrayType() {
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class SVisitor extends AbstactVisitor implements SignatureVisitor {
     public SignatureVisitor visitTypeArgument(char wildcard) {
         putToMap(typeArgument, String.valueOf(wildcard));
         System.out.println("visitTypeArgument| wildcard:" + wildcard);
-        return new SVisitor(this.signatureMap);
+        return this;
     }
 
     @Override
