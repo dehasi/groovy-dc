@@ -128,7 +128,7 @@ public class InterfaceParser implements ASMParser {
         }
         sb.append(isInterface(access)? "extends ":"implements ");
         for (String s : interfaces) {
-            sb.append(s).append(',');
+            sb.append(s.replace('/', '.')).append(',');
         }
         sb.setLength(sb.length() -1);
         return sb;

@@ -12,7 +12,7 @@ import static decompiler.TestUtils.TESTS_DIRECTORY;
 import static decompiler.TestUtils.compile;
 import static decompiler.TestUtils.writeDecompiledFile;
 
-public class DecompilerTest {
+public class InterfacesTest {
     //TODO: DI
     Decompiler decompiler = new Decompiler();
     Loader loader = new Loader();
@@ -25,6 +25,11 @@ public class DecompilerTest {
     @Test
     public void testEmptyInterface() throws IOException {
         routine("EmptyInterface");
+    }
+
+    @Test
+    public void testInterfaceExtend() throws IOException {
+        routine("InterfaceExtend");
     }
 
     @Test
