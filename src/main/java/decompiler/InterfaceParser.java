@@ -57,7 +57,7 @@ public class InterfaceParser implements ASMParser {
         StringBuilder sb = new StringBuilder();
         sb.append('\t');
         if (signature != null) {
-            Map<String, List<String>> stringListMap = getSignature(signature);
+            Map<String, List<String>> stringListMap = getSignatureMap(signature);
             sb.append(stringListMap.get(SVisitor.typeVariable).get(0));
         } else {
             Type t = Type.getType(desc);
@@ -101,7 +101,7 @@ public class InterfaceParser implements ASMParser {
         if (signature == null) {
             return sb;
         }
-        List<String> res = getSignature(signature).get(SVisitor.formalTypeParameter);
+        List<String> res = getSignatureMap(signature).get(SVisitor.formalTypeParameter);
         if (res != null) {
             sb.append('<');
             int i = 0;
@@ -126,11 +126,11 @@ public class InterfaceParser implements ASMParser {
         if (interfaces == null || interfaces.length == 0) {
             return sb;
         }
-        sb.append(isInterface(access)? "extends ":"implements ");
+        sb.append(isInterface(access) ? "extends " : "implements ");
         for (String s : interfaces) {
             sb.append(s.replace('/', '.')).append(',');
         }
-        sb.setLength(sb.length() -1);
+        sb.setLength(sb.length() - 1);
         return sb;
     }
 
@@ -140,16 +140,12 @@ public class InterfaceParser implements ASMParser {
             return new StringBuilder();
         }
         StringBuilder sb = new StringBuilder("\t");
-        if (signature != null) {
-            parseMthodSignature(signature);
-        } else {
-            sb
-                    .append(parseMethodReturnType(desc, signature))
-                    .append(' ')
-                    .append(name)
-                    .append(parseMethodArgs(desc, signature))
-                    .append(parseExceptions(exceptions));
-        }
+        sb.append(parseMthodSignature(signature))
+                .append(parseMethodReturnType(desc, signature))
+                .append(' ')
+                .append(name)
+                .append(parseMethodArgs(desc, signature))
+                .append(parseExceptions(exceptions));
         return sb.append('\n');
     }
 
@@ -169,7 +165,9 @@ public class InterfaceParser implements ASMParser {
 
     private StringBuilder parseMethodReturnType(String desc, String signature) {
         StringBuilder sb = new StringBuilder();
+        Map<String, List<String>> stringListMap = getSignatureMap(signature);
         Type t = Type.getReturnType(desc);
+
         return sb.append(parseObjName(t));
     }
 
@@ -191,7 +189,10 @@ public class InterfaceParser implements ASMParser {
 
     private StringBuilder parseMthodSignature(String signature) {
         StringBuilder sb = new StringBuilder();
-        Map<String, List<String>> signatureMap =  getSignature(signature);
+        if (signature == null) {
+            return sb;
+        }
+        Map<String, List<String>> signatureMap = getSignatureMap(signature);
 
         if (signatureMap.get(SVisitor.formalTypeParameter) != null) {
             sb.append('<');
@@ -201,14 +202,14 @@ public class InterfaceParser implements ASMParser {
             sb.setLength(sb.length() - 1);
             sb.append('>');
         }
-        return sb;
+        return sb.append(' ');
     }
 
-    private Map<String, List<String>> getSignature(String signature) {
+    private Map<String, List<String>> getSignatureMap(String signature) {
         Map<String, List<String>> signatureMap = new HashMap<>();
         SignatureReader signatureReader = new SignatureReader(signature);
         SVisitor sVisitor = new SVisitor(signatureMap);
         signatureReader.accept(sVisitor);
-        return sVisitor.getSignatureMap();
+        return signatureMap;
     }
 }
