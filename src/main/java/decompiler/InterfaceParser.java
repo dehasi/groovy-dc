@@ -74,7 +74,11 @@ public class InterfaceParser implements ASMParser {
         StringBuilder sb = new StringBuilder();
         if (type.getClassName().equals("java.lang.Object")) {
             sb.append(DEF);
-        } else {
+        } else if (type.getClassName().startsWith("java.lang.")) {
+            sb.append(type.getClassName().substring(10));
+
+        }
+        else {
             sb.append(type.getClassName());
         }
         return sb;
@@ -165,7 +169,9 @@ public class InterfaceParser implements ASMParser {
 
     private StringBuilder parseMethodReturnType(String desc, String signature) {
         StringBuilder sb = new StringBuilder();
-        Map<String, List<String>> stringListMap = getSignatureMap(signature);
+        if (signature != null) {
+            Map<String, List<String>> stringListMap = getSignatureMap(signature);
+        }
         Type t = Type.getReturnType(desc);
 
         return sb.append(parseObjName(t));
