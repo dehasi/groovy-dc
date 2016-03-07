@@ -15,7 +15,7 @@ import java.io.Writer;
  */
 
 public class TestUtils {
-    static final public String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\interfaces\\";
+    static final public String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\";
     static final public String OUTPUT_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\temp";
     static final public String GROOVY_FILES_DIRECTORY = "resources/test/groovy";
 

@@ -60,7 +60,7 @@ public class InterfacesTest {
     }
 
     public void routine (String name) throws IOException {
-        final String path = TESTS_DIRECTORY + name + ".class";
+        final String path = TESTS_DIRECTORY  +"interfaces\\" + name + ".class";
         String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
         String res = writeDecompiledFile(name + ".groovy", content);
         System.out.println(content);
