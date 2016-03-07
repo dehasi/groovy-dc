@@ -19,7 +19,7 @@ public class ParserUtils {
     }
 
     public static ObjectType getType(int access) {
-        if ((access & (ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT )) != 0) {
+        if ((access  ==  (ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT ))) {
             return ObjectType.INTERFACE;
         } else {
             throw new UnsupportedOperationException("I can create only interface parser");
