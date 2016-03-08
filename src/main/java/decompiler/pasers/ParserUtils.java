@@ -66,6 +66,7 @@ public class ParserUtils {
         return (access == (ACC_PUBLIC + ACC_INTERFACE + ACC_ABSTRACT));
     }
 
+    //TODO may be useful in future
     public static String decodeMethod(int access, String name, String desc, String signature, String[] exceptions) {
         if (signature == null) signature = desc;
         StringBuilder sb = new StringBuilder();
