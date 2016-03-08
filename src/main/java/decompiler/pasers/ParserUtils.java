@@ -25,13 +25,12 @@ public class ParserUtils {
     }
 
     public static ObjectType getType(int access) {
-        if ((access  ==  (ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT ))) {
+        if ((access == (ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT))) {
             return ObjectType.INTERFACE;
         } else {
             throw new UnsupportedOperationException("I can create only interface parser");
         }
     }
-
 
 
     public static String getShortName(String name, String toImport) {
@@ -48,7 +47,7 @@ public class ParserUtils {
 
     public static String parsePackagaName(String name) {
         int i = name.lastIndexOf('/');
-        return "package " + name.substring(0,i).replace('/', '.') + ";";
+        return "package " + name.substring(0, i).replace('/', '.') + ";";
     }
 
     public static String parseInterfaceName(String name) {
@@ -63,53 +62,77 @@ public class ParserUtils {
         return collection;
     }
 
-    public static boolean isInterface (int access) {
+    public static boolean isInterface(int access) {
         return (access == (ACC_PUBLIC + ACC_INTERFACE + ACC_ABSTRACT));
     }
 
-    public static String decode(int access, String name, String desc, String signature, String[] exceptions) {
-        if(signature==null) signature=desc;
-        StringBuilder sb=new StringBuilder();
-        appendModifiers(sb, access);
+    public static String decodeMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        if (signature == null) signature = desc;
+        StringBuilder sb = new StringBuilder();
+        if (access != -1) {
+            appendModifiers(sb, access);
+        }
         TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
         new SignatureReader(signature).accept(v);
 
         String declaration = v.getDeclaration(), rType = v.getReturnType();
-        if(declaration.charAt(0)=='<')
+        if (declaration.charAt(0) == '<') {
             sb.append(declaration, 0, declaration.indexOf("(")).append(' ');
-        else if(rType.isEmpty() || rType.charAt(0)=='[')
+        } else if (rType.isEmpty() || rType.charAt(0) == '[') {
             sb.append("java.lang.Object");
+        }
         sb.append(rType).append(' ').append(name)
                 .append(declaration, declaration.indexOf('('), declaration.length());
-        if((access&Opcodes.ACC_VARARGS)!=0 && declaration.endsWith("[])"))
-            sb.replace(sb.length()-3, sb.length(), "...)");
+
+        if ((access & Opcodes.ACC_VARARGS) != 0 && declaration.endsWith("[])")) {
+            sb.replace(sb.length() - 3, sb.length(), "...)");
+        }
         String genericExceptions = v.getExceptions();
-        if(genericExceptions!=null && !v.getDeclaration().isEmpty())
+
+        if (genericExceptions != null && !v.getDeclaration().isEmpty()) {
             sb.append(" throws ").append(genericExceptions);
-        else if(exceptions!=null && exceptions.length>0) {
+        } else if (exceptions != null && exceptions.length > 0) {
             sb.append(" throws ");
-            int pos=sb.length();
-            for(String e: exceptions) sb.append(e).append(", ");
-            int e=sb.length()-2;
+            int pos = sb.length();
+            for (String e : exceptions) sb.append(e).append(", ");
+            int e = sb.length() - 2;
             sb.setLength(e);
-            for(; pos<e; pos++) if(sb.charAt(pos)=='/') sb.setCharAt(pos, '.');
+            for (; pos < e; pos++) if (sb.charAt(pos) == '/') sb.setCharAt(pos, '.');
         }
         return sb.toString();
     }
 
     private static void appendModifiers(StringBuilder buf, int access) {
-        for(int bit; access!=0; access-=bit) {
-            bit=access & -access;
-            switch(bit) {
-                case Opcodes.ACC_PUBLIC:    buf.append("public "); break;
-                case Opcodes.ACC_PRIVATE:   buf.append("private "); break;
-                case Opcodes.ACC_PROTECTED: buf.append("protected "); break;
-                case Opcodes.ACC_STATIC:    buf.append("static "); break;
-                case Opcodes.ACC_FINAL:     buf.append("final "); break;
-                case Opcodes.ACC_ABSTRACT:  buf.append("abstract "); break;
-                case Opcodes.ACC_NATIVE:    buf.append("native "); break;
-                case Opcodes.ACC_STRICT:    buf.append("strictfp "); break;
-                case Opcodes.ACC_SYNCHRONIZED: buf.append("synchronized "); break;
+        for (int bit; access != 0; access -= bit) {
+            bit = access & -access;
+            switch (bit) {
+                case Opcodes.ACC_PUBLIC:
+                    buf.append("public ");
+                    break;
+                case Opcodes.ACC_PRIVATE:
+                    buf.append("private ");
+                    break;
+                case Opcodes.ACC_PROTECTED:
+                    buf.append("protected ");
+                    break;
+                case Opcodes.ACC_STATIC:
+                    buf.append("static ");
+                    break;
+                case Opcodes.ACC_FINAL:
+                    buf.append("final ");
+                    break;
+                case Opcodes.ACC_ABSTRACT:
+                    buf.append("abstract ");
+                    break;
+                case Opcodes.ACC_NATIVE:
+                    buf.append("native ");
+                    break;
+                case Opcodes.ACC_STRICT:
+                    buf.append("strictfp ");
+                    break;
+                case Opcodes.ACC_SYNCHRONIZED:
+                    buf.append("synchronized ");
+                    break;
             }
         }
     }
