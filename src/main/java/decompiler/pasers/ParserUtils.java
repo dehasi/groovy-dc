@@ -38,6 +38,7 @@ public class ParserUtils {
     }
 
     public static String getShortName(String name) {
+        if (name.equals("java.lang.Object")) return "def";
         return name.replace("/", ".").replace("java.lang.", "");
     }
 

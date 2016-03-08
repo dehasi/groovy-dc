@@ -78,8 +78,7 @@ public class InterfaceParser implements ASMParser {
         } else if (type.getClassName().startsWith("java.lang.")) {
             sb.append(type.getClassName().substring(10));
 
-        }
-        else {
+        } else {
             sb.append(type.getClassName());
         }
         return sb;
@@ -94,9 +93,9 @@ public class InterfaceParser implements ASMParser {
                 .append('\n')
                 .append(parseInterfaceName(name));
         if (signature != null) {
-           sb .append(getDeclatation(signature));
+            sb.append(getDeclatation(signature));
         }
-                sb.append(' ')
+        sb.append(' ')
                 .append(parseInterfaces(access, interfaces))
                 .append(" {\n");
         return sb;
@@ -147,16 +146,23 @@ public class InterfaceParser implements ASMParser {
             return new StringBuilder();
         }
 
-//        String s = decodeMethod(-1, name, desc, signature, exceptions);
+        String declatation = ParserUtils.getDeclatation(signature != null ? signature : desc);
+        String generic = "";
         if (signature != null) {
-            String ss = ParserUtils.getDeclatation(signature);
+            int begin = declatation.indexOf('<');
+            if (begin != -1) {
+                generic = declatation.substring(declatation.indexOf('<'), declatation.indexOf('>') + 1) + " ";
+            }
         }
+
+
+
         StringBuilder sb = new StringBuilder("\t");
-        sb.append(parseMthodSignature(signature))
-                .append(parseMethodReturnType(desc, signature))
+        sb.append(generic)
+                .append(parseMethodReturnType(desc))
                 .append(' ')
                 .append(name)
-                .append(parseMethodArgs(desc, signature))
+                .append(parseMethodArgs(declatation))
                 .append(parseExceptions(exceptions));
         return sb.append('\n');
     }
@@ -175,25 +181,28 @@ public class InterfaceParser implements ASMParser {
         return sb;
     }
 
-    private StringBuilder parseMethodReturnType(String desc, String signature) {
+    private StringBuilder parseMethodReturnType(String desc) {
         StringBuilder sb = new StringBuilder();
-        if (signature != null) {
-            Map<String, List<String>> stringListMap = getSignatureMap(signature);
-        }
         Type t = Type.getReturnType(desc);
-
         return sb.append(parseObjName(t));
     }
 
-    private StringBuilder parseMethodArgs(String desc, String signature) {
+    private StringBuilder parseMethodArgs(String declatation) {
         StringBuilder sb = new StringBuilder();
+        if (declatation == null || declatation.length() == 0) {
+            return sb;
+        }
+        int begin = declatation.indexOf('(');
+        int end =  declatation.indexOf(')');
+        if (end - begin == 1 ) {
+            return sb.append(declatation);
+        }
+        String args = declatation.substring(begin + 1,end);
         int i = 0;
         final String var = "var";
         sb.append('(');
-        for (Type t : Type.getArgumentTypes(desc)) {
-            sb.append(parseObjName(t))
-                    .append(' ')
-                    .append(var).append(i).append(',').append(' ');
+        for (String t : args.split(",")) {
+            sb.append(getShortName(t.trim())).append(' ').append(var).append(i).append(',').append(' ');
         }
         if (sb.length() > 2) {
             sb.setLength(sb.length() - 2);
