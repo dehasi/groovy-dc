@@ -147,13 +147,13 @@ public class InterfaceParser implements ASMParser {
 
         String s = decodeMethod(-1, name, desc, signature, exceptions);
         StringBuilder sb = new StringBuilder("\t");
-        sb.append(parseMthodSignature(signature))
-                .append(parseMethodReturnType(desc, signature))
-                .append(' ')
-                .append(name)
-                .append(parseMethodArgs(desc, signature))
-                .append(parseExceptions(exceptions));
-        return sb.append('\n');
+//        sb.append(parseMthodSignature(signature))
+//                .append(parseMethodReturnType(desc, signature))
+//                .append(' ')
+//                .append(name)
+//                .append(parseMethodArgs(desc, signature))
+//                .append(parseExceptions(exceptions));
+        return sb.append(s).append('\n');
     }
 
     private StringBuilder parseExceptions(String[] exceptions) {

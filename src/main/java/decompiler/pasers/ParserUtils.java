@@ -81,9 +81,18 @@ public class ParserUtils {
         } else if (rType.isEmpty() || rType.charAt(0) == '[') {
             sb.append("java.lang.Object");
         }
-        sb.append(rType).append(' ').append(name)
-                .append(declaration, declaration.indexOf('('), declaration.length());
+        sb.append(rType).append(' ').append(name).append('(');
 
+        // TODO: deep magic. refactor and clariify what if arrays
+        int i = 0;
+        for (String s :  declaration.substring(declaration.indexOf('(')+1,declaration.length() -1).split(",")) {
+            sb.append(s).append(" var").append(i).append(", ");
+            ++i;
+        }
+        if (i > 0) {
+            sb.setLength(sb.length() - 2);
+        }
+        sb.append(')');
         if ((access & Opcodes.ACC_VARARGS) != 0 && declaration.endsWith("[])")) {
             sb.replace(sb.length() - 3, sb.length(), "...)");
         }
