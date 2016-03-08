@@ -146,23 +146,21 @@ public class InterfaceParser implements ASMParser {
             return new StringBuilder();
         }
 
-        String declatation = ParserUtils.getDeclatation(signature != null ? signature : desc);
+        String declaration = ParserUtils.getDeclatation(signature != null ? signature : desc);
         String generic = "";
         if (signature != null) {
-            int begin = declatation.indexOf('<');
+            int begin = declaration.indexOf('<');
             if (begin != -1) {
-                generic = declatation.substring(declatation.indexOf('<'), declatation.indexOf('>') + 1) + " ";
+                generic = declaration.substring(declaration.indexOf('<'), declaration.indexOf('>') + 1) + " ";
             }
         }
-
-
 
         StringBuilder sb = new StringBuilder("\t");
         sb.append(generic)
                 .append(parseMethodReturnType(desc))
                 .append(' ')
                 .append(name)
-                .append(parseMethodArgs(declatation))
+                .append(parseMethodArgs(declaration))
                 .append(parseExceptions(exceptions));
         return sb.append('\n');
     }
