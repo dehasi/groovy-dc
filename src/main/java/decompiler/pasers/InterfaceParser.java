@@ -201,7 +201,7 @@ public class InterfaceParser implements ASMParser {
         final String var = "var";
         sb.append('(');
         for (String t : args.split(",")) {
-            sb.append(getShortName(t.trim())).append(' ').append(var).append(i).append(',').append(' ');
+            sb.append(getShortName(t.trim())).append(' ').append(var).append(i++).append(',').append(' ');
         }
         if (sb.length() > 2) {
             sb.setLength(sb.length() - 2);

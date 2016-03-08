@@ -2,7 +2,6 @@ package decompiler;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -43,7 +42,6 @@ public class InterfacesTest {
     }
 
     @Test
-    @Ignore("nothig to test")
     public void testGenericInterface() throws IOException {
         routine("GenericInterface");
     }
