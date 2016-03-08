@@ -6,9 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class SVisitor extends AbstactVisitor implements SignatureVisitor {
+public class SVisitor extends  SignatureVisitor {
+    public SVisitor(int api, Map<String, List<String>> signatureMap) {
+        super(api);
+        this.signatureMap = signatureMap;
+    }
 
     public SVisitor(Map<String, List<String>> signatureMap) {
+        super(org.objectweb.asm.Opcodes.ASM4);
         this.signatureMap = signatureMap;
     }
 

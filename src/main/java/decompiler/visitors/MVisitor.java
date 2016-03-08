@@ -5,10 +5,15 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-/**
- * Created by Rafa on 27.02.2016.
- */
-public class MVisitor implements MethodVisitor {
+public class MVisitor extends MethodVisitor {
+    public MVisitor(int api) {
+        super(api);
+    }
+
+    public MVisitor(int api, MethodVisitor mv) {
+        super(api, mv);
+    }
+
     @Override
     public AnnotationVisitor visitAnnotationDefault() {
         return null;
@@ -64,10 +69,6 @@ public class MVisitor implements MethodVisitor {
 
     }
 
-    @Override
-    public void visitMethodInsn(int i, String s, String s1, String s2) {
-
-    }
 
     @Override
     public void visitJumpInsn(int i, Label label) {

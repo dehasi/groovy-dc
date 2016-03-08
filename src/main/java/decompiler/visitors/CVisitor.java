@@ -8,11 +8,23 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
-public class CVisitor extends AbstactVisitor implements ClassVisitor {
+public class CVisitor extends ClassVisitor {
 
-
+    protected StringBuilder buffer = new StringBuilder();
+    public StringBuilder getBuffer() {
+        return buffer;
+    }
 
     private ASMParser parser;
+
+    public CVisitor(int api) {
+        super(api);
+    }
+
+    public CVisitor(int api, ClassVisitor cv) {
+        super(api, cv);
+    }
+
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
@@ -47,14 +59,14 @@ public class CVisitor extends AbstactVisitor implements ClassVisitor {
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         buffer.append(parser.parseField(access, name, desc, signature, value));
-        return (new FVisitor());
+        return null;
     }
 
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         buffer.append(parser.parseMethod(access, name, desc, signature, exceptions));
-        return new MVisitor();
+        return null;
     }
 
     @Override

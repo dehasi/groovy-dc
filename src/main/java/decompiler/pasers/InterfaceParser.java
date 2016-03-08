@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static decompiler.pasers.ParserUtils.decode;
 import static decompiler.pasers.ParserUtils.getShortName;
 import static decompiler.pasers.ParserUtils.isInterface;
 import static decompiler.pasers.ParserUtils.parseInterfaceName;
@@ -143,6 +144,8 @@ public class InterfaceParser implements ASMParser {
         if (name.indexOf('<') != -1) {
             return new StringBuilder();
         }
+
+        String s = decode(access, name, desc, signature, exceptions);
         StringBuilder sb = new StringBuilder("\t");
         sb.append(parseMthodSignature(signature))
                 .append(parseMethodReturnType(desc, signature))

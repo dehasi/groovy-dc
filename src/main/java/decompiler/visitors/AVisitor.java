@@ -5,7 +5,15 @@ import org.objectweb.asm.AnnotationVisitor;
 /**
  * Created by Rafa on 27.02.2016.
  */
-public class AVisitor implements AnnotationVisitor {
+public class AVisitor extends AnnotationVisitor {
+
+    public AVisitor(int api) {
+        super(api);
+    }
+
+    public AVisitor(int api, AnnotationVisitor av) {
+        super(api, av);
+    }
 
     @Override
     public void visit(String s, Object o) {
@@ -19,12 +27,12 @@ public class AVisitor implements AnnotationVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String s, String s1) {
-        return new AVisitor();
+        return this;
     }
 
     @Override
     public AnnotationVisitor visitArray(String s) {
-        return new AVisitor();
+        return this;
     }
 
     @Override
