@@ -22,5 +22,14 @@ public class TraitsTest {
         Assert.assertTrue(compile(res));
     }
 
+    @Test
+    public void testOneFuncTrait() throws IOException {
+        final String path = TESTS_DIRECTORY + "traits\\" +"OneFuncTrait" + ".class";
+        String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
+        String res = writeDecompiledFile("OneFuncTrait" + ".groovy", content);
+        System.out.println(content);
+        Assert.assertTrue(compile(res));
+    }
+
 
 }
