@@ -147,6 +147,7 @@ public class InterfaceParser implements ASMParser {
         }
 
         String declaration = ParserUtils.getDeclatation(signature != null ? signature : desc);
+        String rv = ParserUtils.getReturnValue(signature != null ? signature : desc);
         String generic = "";
         if (signature != null) {
             int begin = declaration.indexOf('<');
@@ -157,7 +158,7 @@ public class InterfaceParser implements ASMParser {
 
         StringBuilder sb = new StringBuilder("\t");
         sb.append(generic)
-                .append(parseMethodReturnType(desc))
+                .append(rv)
                 .append(' ')
                 .append(name)
                 .append(parseMethodArgs(declaration))

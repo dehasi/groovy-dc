@@ -153,4 +153,11 @@ public class ParserUtils {
         new SignatureReader(signature).accept(v);
         return v.getDeclaration();
     }
+
+
+    public static String getReturnValue(String signature) {
+        TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
+        new SignatureReader(signature).accept(v);
+        return v.getReturnType().length() != 0?v.getReturnType():"void";
+    }
 }
