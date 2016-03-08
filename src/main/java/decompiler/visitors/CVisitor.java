@@ -1,7 +1,7 @@
 package decompiler.visitors;
 
-import decompiler.ASMParser;
-import decompiler.ParserUtils;
+import decompiler.pasers.ASMParser;
+import decompiler.pasers.ParserUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;

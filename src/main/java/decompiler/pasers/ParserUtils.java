@@ -1,4 +1,6 @@
-package decompiler;
+package decompiler.pasers;
+
+import decompiler.ObjectType;
 
 import java.util.Collection;
 import java.util.Collections;

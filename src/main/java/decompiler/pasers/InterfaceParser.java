@@ -1,4 +1,4 @@
-package decompiler;
+package decompiler.pasers;
 
 import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Type;
@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static decompiler.ParserUtils.getShortName;
-import static decompiler.ParserUtils.isInterface;
-import static decompiler.ParserUtils.parseInterfaceName;
-import static decompiler.ParserUtils.parsePackagaName;
+import static decompiler.pasers.ParserUtils.getShortName;
+import static decompiler.pasers.ParserUtils.isInterface;
+import static decompiler.pasers.ParserUtils.parseInterfaceName;
+import static decompiler.pasers.ParserUtils.parsePackagaName;
 
 /**
  * Created by Rafa on 28.02.2016.
