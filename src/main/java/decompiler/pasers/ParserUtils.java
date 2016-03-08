@@ -145,4 +145,10 @@ public class ParserUtils {
             }
         }
     }
+
+    public static String getDeclatation(String signature) {
+        TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
+        new SignatureReader(signature).accept(v);
+        return v.getDeclaration();
+    }
 }

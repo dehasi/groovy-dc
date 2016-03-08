@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static decompiler.pasers.ParserUtils.decodeMethod;
+import static decompiler.pasers.ParserUtils.getDeclatation;
 import static decompiler.pasers.ParserUtils.getShortName;
 import static decompiler.pasers.ParserUtils.isInterface;
 import static decompiler.pasers.ParserUtils.parseInterfaceName;
@@ -93,7 +94,7 @@ public class InterfaceParser implements ASMParser {
                 .append(parsePackagaName(name))
                 .append('\n')
                 .append(parseInterfaceName(name))
-                .append(parseInterfaceSignature(signature))
+                .append(getDeclatation(signature))
                 .append(' ')
                 .append(parseInterfaces(access, interfaces))
                 .append(" {\n");
