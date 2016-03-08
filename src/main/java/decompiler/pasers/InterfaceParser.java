@@ -92,9 +92,11 @@ public class InterfaceParser implements ASMParser {
         sb
                 .append(parsePackagaName(name))
                 .append('\n')
-                .append(parseInterfaceName(name))
-                .append(getDeclatation(signature))
-                .append(' ')
+                .append(parseInterfaceName(name));
+        if (signature != null) {
+           sb .append(getDeclatation(signature));
+        }
+                sb.append(' ')
                 .append(parseInterfaces(access, interfaces))
                 .append(" {\n");
         return sb;
