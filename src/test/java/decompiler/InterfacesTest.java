@@ -50,6 +50,7 @@ public class InterfacesTest {
 
         File file = new File(path);
         File[] files = file.listFiles();
+        assert files != null;
         for (File f : files) {
             if (f.isFile() && f.exists()) {
                 f.delete();

@@ -1,8 +1,8 @@
 package decompiler;
 
 import decompiler.visitors.CVisitor;
-import jdk.internal.org.objectweb.asm.Opcodes;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
 
 public class Decompiler {
 
