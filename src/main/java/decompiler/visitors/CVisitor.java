@@ -42,7 +42,7 @@ public class CVisitor extends ClassVisitor {
     }
 
     @Override
-    public AnnotationVisitor visitAnnotation(String s, boolean b) {
+    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         return null;
     }
 

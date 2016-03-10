@@ -46,6 +46,11 @@ public class InterfacesTest {
         routine("GenericInterface");
     }
 
+    @Test
+    public void testAnnotationInterface() throws IOException {
+        routine("AnnotationInterface");
+    }
+
     public static void purgeDirectory(String path) {
 
         File file = new File(path);
