@@ -153,6 +153,7 @@ public class InterfaceParser implements ASMParser {
             int begin = declaration.indexOf('<');
             if (begin != -1) {
                 generic = declaration.substring(declaration.indexOf('<'), declaration.indexOf('>') + 1) + " ";
+                generic = "public " + generic;
             }
         }
 
