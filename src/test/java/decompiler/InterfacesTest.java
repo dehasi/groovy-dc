@@ -1,11 +1,14 @@
 package decompiler;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Properties;
 
 import static decompiler.TestUtils.TESTS_DIRECTORY;
 import static decompiler.TestUtils.compile;
@@ -16,9 +19,11 @@ public class InterfacesTest {
     Decompiler decompiler = new Decompiler();
     Loader loader = new Loader();
 
-    @BeforeClass //TODO inherit from abstract test
+    @AfterClass //TODO inherit from abstract test
     public static void clear() {
-        purgeDirectory(TestUtils.OUTPUT_DIRECTORY);
+
+//        purgeDirectory(TestUtils.OUTPUT_DIRECTORY);
+//        Files.createDirectory("temp", null);
     }
 
     @Test

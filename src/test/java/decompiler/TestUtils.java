@@ -1,22 +1,25 @@
 package decompiler;
 
+import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.control.CompilationUnit;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.Phases;
+import org.codehaus.groovy.tools.GroovyClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.Writer;
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Properties;
+import java.util.jar.JarInputStream;
 
-/**
- * Created by Rafa on 01.03.2016.
- */
-
+import org.codehaus.groovy.tools.Compiler;
 public class TestUtils {
-    static final public String TESTS_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\build\\classes\\main\\";
-    static final public String OUTPUT_DIRECTORY = "G:\\CSCLocal\\groovy-dc\\temp";
+    static final public String TESTS_DIRECTORY = "build\\classes\\main\\";
+    static final public String OUTPUT_DIRECTORY = "temp";
     static final public String GROOVY_FILES_DIRECTORY = "resources/test/groovy";
 
     @BeforeClass
@@ -24,25 +27,26 @@ public class TestUtils {
         Process compileProcess = null;
         String compiler = "groovyc";
         String classpath = " -cp " + OUTPUT_DIRECTORY;
-
-        StringBuilder cmd = new StringBuilder("groovyc");
-        cmd.append(" -cp ")
-                .append(OUTPUT_DIRECTORY)
-                .append(" ")
-                .append(path)
-                .append(" -d ")
-                .append(OUTPUT_DIRECTORY);
+        Properties properties = new Properties();
+        properties.setProperty("-cp", OUTPUT_DIRECTORY);
+        properties.setProperty("-d", OUTPUT_DIRECTORY);
+        CompilerConfiguration configuration = new CompilerConfiguration(properties);
+        Compiler c = new Compiler(configuration);
+        File file = new File(path);
         try {
-            compileProcess = Runtime.getRuntime().exec(cmd.toString());
-            int returnCode = compileProcess.waitFor();
-            PrintStream prtStrm = new PrintStream(compileProcess.getOutputStream());
-            prtStrm.println();
-            compileProcess.destroy();
-            return returnCode == 0;
-        } catch (InterruptedException | IOException e) {
+//            c.compile(file);
+            CompilationUnit unit = new CompilationUnit( configuration );
+            unit.addSources(new File[]{file});
+            unit.compile(Phases.CLASS_GENERATION);
+            final GroovyClass gclass = (GroovyClass) unit.getClasses().get(0);
+            JarInputStream jarInputStream = new JarInputStream(new ByteArrayInputStream(gclass.getBytes()));
+            ClassLoader classLoader = new URLClassLoader(new URL[]{});
+            return true;
+        } catch (CompilationFailedException | IOException e){
             e.printStackTrace();
+            return false;
         }
-        return false;
+
     }
 
     @BeforeClass
@@ -59,4 +63,10 @@ public class TestUtils {
         return path;
     }
 
+    @Test
+    public void pwdTest() {
+        Path currentRelativePath = Paths.get("build\\src\\main\\");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current relative path is: " + s);
+    }
 }
