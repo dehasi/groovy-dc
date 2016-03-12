@@ -2,13 +2,10 @@ package decompiler;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Properties;
 
 import static decompiler.TestUtils.TESTS_DIRECTORY;
 import static decompiler.TestUtils.compile;
@@ -71,7 +68,7 @@ public class InterfacesTest {
     public void routine (String name) throws IOException {
         final String path = TESTS_DIRECTORY  +"interfaces\\" + name + ".class";
         String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
-        String res = writeDecompiledFile(name + ".groovy", content);
+        String res = writeDecompiledFile(name, content);
         System.out.println(content);
         Assert.assertTrue(compile(res));
     }

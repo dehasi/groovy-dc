@@ -17,7 +17,7 @@ public class TraitsTest {
     public void testEmptyTrait() throws IOException {
         final String path = TESTS_DIRECTORY + "traits\\" +"EmptyTrait" + ".class";
         String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
-        String res = writeDecompiledFile("EmptyTrait" + ".groovy", content);
+        String res = writeDecompiledFile("EmptyTrait", content);
         System.out.println(content);
         Assert.assertTrue(compile(res));
     }
@@ -26,7 +26,7 @@ public class TraitsTest {
     public void testOneFuncTrait() throws IOException {
         final String path = TESTS_DIRECTORY + "traits\\" +"OneFuncTrait" + ".class";
         String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
-        String res = writeDecompiledFile("OneFuncTrait" + ".groovy", content);
+        String res = writeDecompiledFile("OneFuncTrait", content);
         System.out.println(content);
         Assert.assertTrue(compile(res));
     }
