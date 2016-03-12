@@ -1,75 +1,43 @@
 package decompiler;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 
-import static decompiler.TestUtils.TESTS_DIRECTORY;
-import static decompiler.TestUtils.compile;
-import static decompiler.TestUtils.writeDecompiledFile;
+import static utils.TestUtils.routine;
 
 public class InterfacesTest {
-    //TODO: DI
-    Decompiler decompiler = new Decompiler();
-    Loader loader = new Loader();
 
-    @AfterClass //TODO inherit from abstract test
-    public static void clear() {
-
-//        purgeDirectory(TestUtils.OUTPUT_DIRECTORY);
-//        Files.createDirectory("temp", null);
-    }
+    private static final String packageName = "interfaces";
 
     @Test
     public void testEmptyInterface() throws IOException {
-        routine("EmptyInterface");
+        routine("EmptyInterface", packageName);
     }
 
     @Test
     public void testInterfaceExtend() throws IOException {
-        routine("InterfaceExtend");
+        routine("InterfaceExtend", packageName);
     }
 
     @Test
     public void testInterfaceWithFields() throws IOException {
-        routine("InterfaceWithFields");
+        routine("InterfaceWithFields", packageName);
     }
 
     @Test
     public void testFullInterface() throws IOException {
-        routine("FullInterface");
+        routine("FullInterface", packageName);
     }
 
     @Test
     public void testGenericInterface() throws IOException {
-        routine("GenericInterface");
+        routine("GenericInterface", packageName);
     }
 
     @Test
     public void testAnnotationInterface() throws IOException {
-        routine("AnnotationInterface");
+        routine("AnnotationInterface", packageName);
     }
 
-    public static void purgeDirectory(String path) {
-
-        File file = new File(path);
-        File[] files = file.listFiles();
-        assert files != null;
-        for (File f : files) {
-            if (f.isFile() && f.exists()) {
-                f.delete();
-            }
-        }
-    }
-
-    public void routine (String name) throws IOException {
-        final String path = TESTS_DIRECTORY  +"interfaces\\" + name + ".class";
-        String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
-        String res = writeDecompiledFile(name, content);
-        System.out.println(content);
-        Assert.assertTrue(compile(res));
-    }
 }

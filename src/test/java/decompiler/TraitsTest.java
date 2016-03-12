@@ -1,35 +1,23 @@
 package decompiler;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static decompiler.TestUtils.TESTS_DIRECTORY;
-import static decompiler.TestUtils.compile;
-import static decompiler.TestUtils.writeDecompiledFile;
+import static utils.TestUtils.routine;
 
 public class TraitsTest {
-    //TODO: DI
-    Decompiler decompiler = new Decompiler();
-    Loader loader = new Loader();
+
+    private static final String packageName = "traits";
+
     @Test
     public void testEmptyTrait() throws IOException {
-        final String path = TESTS_DIRECTORY + "traits\\" +"EmptyTrait" + ".class";
-        String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
-        String res = writeDecompiledFile("EmptyTrait", content);
-        System.out.println(content);
-        Assert.assertTrue(compile(res));
+        routine("EmptyTrait", packageName);
     }
 
     @Test
     public void testOneFuncTrait() throws IOException {
-        final String path = TESTS_DIRECTORY + "traits\\" +"OneFuncTrait" + ".class";
-        String content = decompiler.decompile(loader.loadFromFileSystem(path)).toString();
-        String res = writeDecompiledFile("OneFuncTrait", content);
-        System.out.println(content);
-        Assert.assertTrue(compile(res));
+        routine("OneFuncTrait", packageName);
     }
-
 
 }
