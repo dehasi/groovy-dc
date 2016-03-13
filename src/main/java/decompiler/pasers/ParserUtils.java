@@ -14,6 +14,7 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ASM4;
 
 public class ParserUtils {
+    private static final String TRAINT_ANNOTATION = "Lgroovy/transform/Trait;";
 
     public static ASMParser getParser(ObjectType type) {
         switch (type) {
@@ -159,5 +160,8 @@ public class ParserUtils {
         TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
         new SignatureReader(signature).accept(v);
         return v.getReturnType().length() != 0?v.getReturnType():"void";
+    }
+    public static boolean isTrait(String desc, boolean visible) {
+        return TRAINT_ANNOTATION.equals(desc);
     }
 }

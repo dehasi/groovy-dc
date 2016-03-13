@@ -1,6 +1,8 @@
 package decompiler.pasers;
 
+import decompiler.visitors.AVisitor;
 import decompiler.visitors.SVisitor;
+import jdk.internal.org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
 
@@ -98,6 +100,18 @@ public class InterfaceParser implements ASMParser {
         sb.append(' ')
                 .append(parseInterfaces(access, interfaces))
                 .append(" {\n");
+        return sb;
+    }
+
+    @Override
+    public StringBuilder parseAnnotation(String desc, boolean visible) {
+        StringBuilder sb = new StringBuilder("@");
+        AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
+
+//        TraceAnnotationVisitor v = new TraceAnnotationVisitor(ASM4);
+//        new (signature).accept(v);
+
+        System.err.println(desc);
         return sb;
     }
 
@@ -235,4 +249,7 @@ public class InterfaceParser implements ASMParser {
         signatureReader.accept(sVisitor);
         return signatureMap;
     }
+
+
+
 }

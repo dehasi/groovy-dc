@@ -1,5 +1,6 @@
 package decompiler.visitors;
 
+import decompiler.ObjectType;
 import decompiler.pasers.ASMParser;
 import decompiler.pasers.ParserUtils;
 import org.objectweb.asm.AnnotationVisitor;
@@ -7,6 +8,8 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+
+import static decompiler.pasers.ParserUtils.isTrait;
 
 public class CVisitor extends ClassVisitor {
 
@@ -43,6 +46,11 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        if(isTrait(desc, visible)) {
+            parser = ParserUtils.getParser(ObjectType.TRAIT);
+        }
+        parser.parseAnnotation(desc, visible);
+
         return null;
     }
 

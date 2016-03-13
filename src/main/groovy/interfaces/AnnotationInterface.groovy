@@ -1,5 +1,6 @@
 package interfaces
 
+import annotations.SimpleAnnotation
 import com.sun.istack.internal.NotNull
 import groovy.transform.NotYetImplemented
 
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement
 
 @Resource
 @XmlRootElement
+@SimpleAnnotation(name = "SimpleAnnotationName")
 interface AnnotationInterface {
     @XmlID
     def field
