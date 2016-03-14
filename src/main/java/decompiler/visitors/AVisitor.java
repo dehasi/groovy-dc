@@ -1,10 +1,7 @@
 package decompiler.visitors;
 
-import org.objectweb.asm.AnnotationVisitor;
+import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 
-/**
- * Created by Rafa on 27.02.2016.
- */
 public class AVisitor extends AnnotationVisitor {
 
     public AVisitor(int api) {
