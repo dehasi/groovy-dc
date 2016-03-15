@@ -110,15 +110,14 @@ public class InterfaceParser implements ASMParser {
     @Override
     public StringBuilder parseAnnotation(String desc, boolean visible) {
         StringBuilder sb = new StringBuilder("@");
+        //TODO: implement parsing internals
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
-
         Printer printer = new Textifier();
-
         TraceAnnotationVisitor v = new TraceAnnotationVisitor(aVisitor,printer);
 
 //        new (signature).accept(v);
-
-        err.println(desc);
+        sb.append(desc.substring(1).replace('/','.').replace(';','\n'));
+        err.println(sb);
         return sb;
     }
 

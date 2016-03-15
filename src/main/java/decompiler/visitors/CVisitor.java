@@ -14,6 +14,7 @@ import static decompiler.pasers.ParserUtils.isTrait;
 public class CVisitor extends ClassVisitor {
 
     protected StringBuilder buffer = new StringBuilder();
+
     public StringBuilder getBuffer() {
         return buffer;
     }
@@ -46,11 +47,16 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        if(isTrait(desc, visible)) {
+        if (isTrait(desc, visible)) {
             parser = ParserUtils.getParser(ObjectType.TRAIT);
         }
-        parser.parseAnnotation(desc, visible);
-
+        int i = buffer.indexOf("@");
+        StringBuilder annotation = parser.parseAnnotation(desc, visible);
+        if (i > 0) {
+            buffer.insert(i , annotation);
+        } else {
+            buffer.insert(buffer.indexOf(";")+1 , "\n" + annotation);
+        }
         return null;
     }
 
