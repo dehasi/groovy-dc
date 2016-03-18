@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement
 
 @Resource
 @XmlRootElement
-@SimpleAnnotation(name = "SimpleAnnotationName")
+@SimpleAnnotation(n = "SimpleAnnotationName", v= "42")
 interface AnnotationInterface {
     @XmlID
     def field
