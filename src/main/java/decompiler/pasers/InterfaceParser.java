@@ -5,7 +5,6 @@ import decompiler.visitors.SVisitor;
 import jdk.internal.org.objectweb.asm.Opcodes;
 import jdk.internal.org.objectweb.asm.util.Printer;
 import jdk.internal.org.objectweb.asm.util.Textifier;
-import jdk.internal.org.objectweb.asm.util.TraceAnnotationVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
 
@@ -18,7 +17,6 @@ import static decompiler.pasers.ParserUtils.getShortName;
 import static decompiler.pasers.ParserUtils.isInterface;
 import static decompiler.pasers.ParserUtils.parseInterfaceName;
 import static decompiler.pasers.ParserUtils.parsePackagaName;
-import static java.lang.System.err;
 
 /**
  * Created by Rafa on 28.02.2016.
@@ -113,11 +111,10 @@ public class InterfaceParser implements ASMParser {
         //TODO: implement parsing internals
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
         Printer printer = new Textifier();
-        TraceAnnotationVisitor v = new TraceAnnotationVisitor(aVisitor,printer);
+//        TraceAnnotationVisitor v = new TraceAnnotationVisitor(aVisitor,printer);
 
 //        new (signature).accept(v);
         sb.append(desc.substring(1).replace('/','.').replace(';','\n'));
-        err.println(sb);
         return sb;
     }
 

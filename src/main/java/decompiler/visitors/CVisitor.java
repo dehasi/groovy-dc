@@ -8,6 +8,7 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 import static decompiler.pasers.ParserUtils.isTrait;
 
@@ -57,7 +58,7 @@ public class CVisitor extends ClassVisitor {
         } else {
             buffer.insert(buffer.indexOf(";")+1 , "\n" + annotation);
         }
-        return null;
+        return new AVisitor(Opcodes.ASM4);
     }
 
     @Override
