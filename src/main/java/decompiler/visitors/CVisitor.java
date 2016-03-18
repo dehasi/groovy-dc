@@ -10,9 +10,16 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static decompiler.pasers.ParserUtils.isTrait;
 
 public class CVisitor extends ClassVisitor {
+
+    Map<String, AVisitor> classAnnotationsMap = new HashMap<>();
+    Map<String, FVisitor> fieldAnnotationsMap = new HashMap<>();
+    Map<String, MVisitor> methodAnnotationsMap = new HashMap<>();
 
     protected StringBuilder buffer = new StringBuilder();
 
@@ -58,7 +65,9 @@ public class CVisitor extends ClassVisitor {
         } else {
             buffer.insert(buffer.indexOf(";")+1 , "\n" + annotation);
         }
-        return new AVisitor(Opcodes.ASM4);
+        AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
+        classAnnotationsMap.put(desc, aVisitor);
+        return aVisitor;
     }
 
     @Override
@@ -67,21 +76,25 @@ public class CVisitor extends ClassVisitor {
     }
 
     @Override
-    public void visitInnerClass(String s, String s1, String s2, int i) {
+    public void visitInnerClass(String name, String outerName, String innerName, int access) {
 
     }
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         buffer.append(parser.parseField(access, name, desc, signature, value));
-        return null;
+        FVisitor fVisitor = new FVisitor(Opcodes.ASM4);
+        fieldAnnotationsMap.put(name,fVisitor);
+        return fVisitor;
     }
 
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         buffer.append(parser.parseMethod(access, name, desc, signature, exceptions));
-        return null;
+        MVisitor mVisitor = new MVisitor(Opcodes.ASM4);
+        methodAnnotationsMap.put(name, mVisitor);
+        return mVisitor;
     }
 
     @Override
@@ -89,5 +102,15 @@ public class CVisitor extends ClassVisitor {
         buffer.append('}');
     }
 
+    public Map<String, AVisitor> getClassAnnotaitonsMap() {
+        return classAnnotationsMap;
+    }
 
+    public Map<String, FVisitor> getFieldAnnotationsMap() {
+        return fieldAnnotationsMap;
+    }
+
+    public Map<String, MVisitor> getMethodAnnotationsMap() {
+        return methodAnnotationsMap;
+    }
 }

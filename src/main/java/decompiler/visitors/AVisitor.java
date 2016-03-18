@@ -2,8 +2,11 @@ package decompiler.visitors;
 
 import org.objectweb.asm.AnnotationVisitor;
 
-public class AVisitor extends AnnotationVisitor {
+import java.util.ArrayList;
+import java.util.List;
 
+public class AVisitor extends AnnotationVisitor {
+    List<String> bf = new ArrayList<>();
     public AVisitor(int api) {
         super(api);
     }
@@ -14,7 +17,9 @@ public class AVisitor extends AnnotationVisitor {
 
     @Override
     public void visit(String name, Object value) {
-        System.err.println("visit| name : " + name + " value" + value);
+        String x = "visit| name : " + name + " value" + value;
+        System.err.println(x);
+        bf.add(x);
     }
 
     @Override
@@ -37,5 +42,9 @@ public class AVisitor extends AnnotationVisitor {
     @Override
     public void visitEnd() {
 
+    }
+
+    public List<String> getBf() {
+        return bf;
     }
 }
