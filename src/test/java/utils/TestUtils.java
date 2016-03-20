@@ -25,14 +25,11 @@ public class TestUtils {
         unit.addSource(name, source);
         try {
             unit.compile(Phases.CLASS_GENERATION);
-            if (unit.getClasses() != null && unit.getClasses().size() == 1) {
-                return (GroovyClass) unit.getClasses().get(0);
-            }
-        } catch (CompilationFailedException e) {
+            return (GroovyClass) unit.getClasses().get(0);
+        } catch (CompilationFailedException | NullPointerException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        //TODO: may be null is redundant? May be excetion is enouth?
-        return null;
     }
 
 
@@ -41,21 +38,28 @@ public class TestUtils {
         try {
             return classLoader.loadClass(name);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        //TODO may be excetion is enouth?
-        return null;
     }
 
+    //TODO split to few small functions
     public static boolean compareClazzes(Class<?> c1, Class<?> c2) {
         if (c1 == null || c2 == null) {
             return false;
         }
         /** compare name*/
-        if (!c1.getSimpleName().equals(c2.getSimpleName())) {return false;}
-        if (!c1.getCanonicalName().equals(c2.getCanonicalName())) {return false;}
-        if (!c1.getName().equals(c2.getName())) {return false;}
-        if (!c1.getTypeName().equals(c2.getTypeName())) {return false;}
+        if (!c1.getSimpleName().equals(c2.getSimpleName())) {
+            return false;
+        }
+        if (!c1.getCanonicalName().equals(c2.getCanonicalName())) {
+            return false;
+        }
+        if (!c1.getName().equals(c2.getName())) {
+            return false;
+        }
+        if (!c1.getTypeName().equals(c2.getTypeName())) {
+            return false;
+        }
 
         //TODO: implement
         return true;
