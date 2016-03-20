@@ -4,8 +4,13 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MVisitor extends MethodVisitor {
+    Map<String, AVisitor> classAnnotationsMap = new HashMap<>();
     public MVisitor(int api) {
         super(api);
     }
@@ -16,22 +21,24 @@ public class MVisitor extends MethodVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotationDefault() {
-        return null;
+        return new AVisitor(Opcodes.ASM4);
     }
 
     @Override
-    public AnnotationVisitor visitAnnotation(String s, boolean b) {
-        return null;
+    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        System.err.println("desc: " + desc);
+        return new AVisitor(Opcodes.ASM4);
     }
 
     @Override
-    public AnnotationVisitor visitParameterAnnotation(int i, String s, boolean b) {
-        return null;
+    public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
+        System.err.println("param: " +parameter +  "desc: " + desc);
+        return new AVisitor(Opcodes.ASM4);
     }
 
     @Override
     public void visitAttribute(Attribute attribute) {
-
+        System.err.println("Attribute: " + attribute );
     }
 
     @Override
