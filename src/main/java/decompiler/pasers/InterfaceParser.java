@@ -1,10 +1,6 @@
 package decompiler.pasers;
 
-import decompiler.visitors.AVisitor;
 import decompiler.visitors.SVisitor;
-import jdk.internal.org.objectweb.asm.Opcodes;
-import jdk.internal.org.objectweb.asm.util.Printer;
-import jdk.internal.org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.signature.SignatureReader;
 
@@ -107,13 +103,7 @@ public class InterfaceParser implements ASMParser {
     @Override
     public StringBuilder parseAnnotation(String desc, boolean visible) {
         StringBuilder sb = new StringBuilder("@");
-        //TODO: implement parsing internals
-        AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
-        Printer printer = new Textifier();
-//        TraceAnnotationVisitor v = new TraceAnnotationVisitor(aVisitor,printer);
-
-//        new (signature).accept(v);
-        sb.append(desc.substring(1).replace('/','.').replace(';','\n'));
+        sb.append(desc.substring(1).replace('/','.').replace(';',' '));
         return sb;
     }
 

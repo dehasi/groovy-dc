@@ -22,7 +22,7 @@ import static decompiler.pasers.ParserUtils.parsePackagaName;
 
 public class CVisitor extends ClassVisitor {
 
-    Map<String, AVisitor> classAnnotationsMap = new HashMap<>();
+    Map<StringBuilder, AVisitor> classAnnotationsMap = new HashMap<>();
     Map<String, FVisitor> fieldAnnotationsMap = new HashMap<>();
     Map<String, MVisitor> methodAnnotationsMap = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class CVisitor extends ClassVisitor {
     StringBuilder header = new StringBuilder();
     StringBuilder pack = new StringBuilder();
     StringBuilder clazz = new StringBuilder();
-    StringBuilder annt = new StringBuilder();
+    List<StringBuilder> annt = new ArrayList<>();
 
     protected StringBuilder buffer = new StringBuilder();
 
@@ -71,11 +71,10 @@ public class CVisitor extends ClassVisitor {
         if (isTrait(desc, visible)) {
             parser = ParserUtils.getParser(ObjectType.TRAIT);
         }
-        int i = buffer.indexOf("@");
         StringBuilder annotation = parser.parseAnnotation(desc, visible);
-        annt.append(annotation);
+        annt.add(annotation);
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
-        classAnnotationsMap.put(desc, aVisitor);
+        classAnnotationsMap.put(annotation, aVisitor);
         return aVisitor;
     }
 
@@ -109,10 +108,12 @@ public class CVisitor extends ClassVisitor {
     @Override
     public void visitEnd() {
         buffer.append(CVisitorUtils.toStringFiels(fields, fieldAnnotationsMap));
-        clazz.append(pack).append(annt).append(header).append(buffer).append('}');
+        clazz.append(pack).append(
+                CVisitorUtils.toStringAnnts(annt, classAnnotationsMap)
+        ).append(header).append(buffer).append('}');
     }
 
-    public Map<String, AVisitor> getClassAnnotaitonsMap() {
+    public Map<StringBuilder, AVisitor> getClassAnnotaitonsMap() {
         return classAnnotationsMap;
     }
 

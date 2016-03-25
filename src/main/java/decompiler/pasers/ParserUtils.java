@@ -49,7 +49,7 @@ public class ParserUtils {
 
     public static String parsePackagaName(String name) {
         int i = name.lastIndexOf('/');
-        return "package " + name.substring(0, i).replace('/', '.') + ";";
+        return "package " + name.substring(0, i).replace('/', '.') + ";\n";
     }
 
     public static String parseInterfaceName(String name) {

@@ -19,7 +19,8 @@ public class AVisitor extends AnnotationVisitor {
     public void visit(String name, Object value) {
         String x = "visit| name : " + name + " value" + value;
         System.err.println(x);
-        bf.add(x);
+        //TODO value has diff types
+        bf.add(name + " = " + parseValue(value)) ;
     }
 
     @Override
@@ -46,5 +47,12 @@ public class AVisitor extends AnnotationVisitor {
 
     public List<String> getBf() {
         return bf;
+    }
+
+    private String parseValue (Object val) {
+        if (val.getClass() == String.class) {
+            return "\"" + val + "\"";
+        }
+        return val + ""; //FACEPALM
     }
 }
