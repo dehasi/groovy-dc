@@ -16,7 +16,6 @@ import static decompiler.pasers.ParserUtils.getDeclatation;
 import static decompiler.pasers.ParserUtils.getShortName;
 import static decompiler.pasers.ParserUtils.isInterface;
 import static decompiler.pasers.ParserUtils.parseInterfaceName;
-import static decompiler.pasers.ParserUtils.parsePackagaName;
 
 /**
  * Created by Rafa on 28.02.2016.
@@ -93,7 +92,7 @@ public class InterfaceParser implements ASMParser {
                                      String signature, String superName, String[] interfaces) {
         StringBuilder sb = new StringBuilder();
         sb
-                .append(parsePackagaName(name))
+
                 .append('\n')
                 .append(parseInterfaceName(name));
         if (signature != null) {

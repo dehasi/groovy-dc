@@ -1,8 +1,10 @@
 package decompiler.visitors;
 
 import decompiler.ObjectType;
+import decompiler.holders.FieldHolder;
 import decompiler.pasers.ASMParser;
 import decompiler.pasers.ParserUtils;
+import decompiler.utils.CVisitorUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
@@ -10,10 +12,13 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static decompiler.pasers.ParserUtils.isTrait;
+import static decompiler.pasers.ParserUtils.parsePackagaName;
 
 public class CVisitor extends ClassVisitor {
 
@@ -21,10 +26,17 @@ public class CVisitor extends ClassVisitor {
     Map<String, FVisitor> fieldAnnotationsMap = new HashMap<>();
     Map<String, MVisitor> methodAnnotationsMap = new HashMap<>();
 
+    List<FieldHolder> fields = new ArrayList<>();
+
+    StringBuilder header = new StringBuilder();
+    StringBuilder pack = new StringBuilder();
+    StringBuilder clazz = new StringBuilder();
+    StringBuilder annt = new StringBuilder();
+
     protected StringBuilder buffer = new StringBuilder();
 
-    public StringBuilder getBuffer() {
-        return buffer;
+    public StringBuilder getClazz() {
+        return clazz;
     }
 
     private ASMParser parser;
@@ -41,7 +53,8 @@ public class CVisitor extends ClassVisitor {
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
         parser = ParserUtils.getParser(ParserUtils.getType(access));
-        buffer.append(parser.parseHeader(version, access, name, signature, superName, interfaces));
+        pack = new StringBuilder(parsePackagaName(name));
+        header = parser.parseHeader(version, access, name, signature, superName, interfaces);
     }
 
     @Override
@@ -60,11 +73,7 @@ public class CVisitor extends ClassVisitor {
         }
         int i = buffer.indexOf("@");
         StringBuilder annotation = parser.parseAnnotation(desc, visible);
-        if (i > 0) {
-            buffer.insert(i , annotation);
-        } else {
-            buffer.insert(buffer.indexOf(";")+1 , "\n" + annotation);
-        }
+        annt.append(annotation);
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
         classAnnotationsMap.put(desc, aVisitor);
         return aVisitor;
@@ -82,9 +91,9 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        buffer.append(parser.parseField(access, name, desc, signature, value));
+        fields.add(new FieldHolder(name, parser.parseField(access, name, desc, signature, value)));
         FVisitor fVisitor = new FVisitor(Opcodes.ASM4);
-        fieldAnnotationsMap.put(name,fVisitor);
+        fieldAnnotationsMap.put(name, fVisitor);
         return fVisitor;
     }
 
@@ -99,7 +108,8 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public void visitEnd() {
-        buffer.append('}');
+        buffer.append(CVisitorUtils.toStringFiels(fields, fieldAnnotationsMap));
+        clazz.append(pack).append(annt).append(header).append(buffer).append('}');
     }
 
     public Map<String, AVisitor> getClassAnnotaitonsMap() {

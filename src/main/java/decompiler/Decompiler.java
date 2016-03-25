@@ -9,7 +9,7 @@ public class Decompiler {
     public StringBuilder decompile(ClassReader classReader) {
         CVisitor cVisitor = new CVisitor(Opcodes.ASM4);
         classReader.accept(cVisitor, Opcodes.ASM4);
-        return cVisitor.getBuffer();
+        return cVisitor.getClazz();
     }
 
 }
