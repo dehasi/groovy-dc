@@ -1,16 +1,20 @@
 package decompiler.visitors;
 
+import decompiler.pasers.ASMParser;
+import decompiler.utils.AVisitorEntry;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MVisitor extends MethodVisitor {
-    Map<String, AVisitor> classAnnotationsMap = new HashMap<>();
+    Map<StringBuilder, AVisitor> methodAnnotationsMap = new HashMap<>();
+    List<AVisitorEntry> parameters = new ArrayList<>();
     public MVisitor(int api) {
         super(api);
     }
@@ -27,13 +31,19 @@ public class MVisitor extends MethodVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         System.err.println("desc: " + desc);
-        return new AVisitor(Opcodes.ASM4);
+        StringBuilder annotation = ASMParser.parseAnnotation(desc, visible);
+        AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
+        methodAnnotationsMap.put(annotation, aVisitor);
+       return aVisitor;
     }
 
     @Override
     public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
         System.err.println("param: " +parameter +  "desc: " + desc);
-        return new AVisitor(Opcodes.ASM4);
+        StringBuilder annt = ASMParser.parseAnnotation(desc, visible);
+        AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
+        parameters.add(new AVisitorEntry(annt, aVisitor));
+        return aVisitor;
     }
 
     @Override
@@ -42,98 +52,15 @@ public class MVisitor extends MethodVisitor {
     }
 
     @Override
-    public void visitCode() {
-
-    }
-
-    @Override
-    public void visitFrame(int i, int i1, Object[] objects, int i2, Object[] objects1) {
-
-    }
-
-    @Override
-    public void visitInsn(int i) {
-
-    }
-
-    @Override
-    public void visitIntInsn(int i, int i1) {
-
-    }
-
-    @Override
-    public void visitVarInsn(int i, int i1) {
-
-    }
-
-    @Override
-    public void visitTypeInsn(int i, String s) {
-
-    }
-
-    @Override
-    public void visitFieldInsn(int i, String s, String s1, String s2) {
-
-    }
-
-
-    @Override
-    public void visitJumpInsn(int i, Label label) {
-
-    }
-
-    @Override
-    public void visitLabel(Label label) {
-
-    }
-
-    @Override
-    public void visitLdcInsn(Object o) {
-
-    }
-
-    @Override
-    public void visitIincInsn(int i, int i1) {
-
-    }
-
-    @Override
-    public void visitTableSwitchInsn(int i, int i1, Label label, Label[] labels) {
-
-    }
-
-    @Override
-    public void visitLookupSwitchInsn(Label label, int[] ints, Label[] labels) {
-
-    }
-
-    @Override
-    public void visitMultiANewArrayInsn(String s, int i) {
-
-    }
-
-    @Override
-    public void visitTryCatchBlock(Label label, Label label1, Label label2, String s) {
-
-    }
-
-    @Override
-    public void visitLocalVariable(String s, String s1, String s2, Label label, Label label1, int i) {
-
-    }
-
-    @Override
-    public void visitLineNumber(int i, Label label) {
-
-    }
-
-    @Override
-    public void visitMaxs(int i, int i1) {
-
-    }
-
-    @Override
     public void visitEnd() {
 
+    }
+
+    public Map<StringBuilder, AVisitor> getMethodAnnotationsMap() {
+        return methodAnnotationsMap;
+    }
+
+    public List<AVisitorEntry> getParameters() {
+        return parameters;
     }
 }
