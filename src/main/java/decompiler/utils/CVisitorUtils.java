@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CVisitorUtils {
+
     public static StringBuilder toStringFiels(List<FieldHolder> fieldHolders, Map<String, FVisitor> annoattion) {
         StringBuilder sb = new StringBuilder();
         for (FieldHolder f : fieldHolders) {
@@ -17,8 +18,19 @@ public class CVisitorUtils {
         return sb;
     }
 
-    public static  StringBuilder toStringFiel(FieldHolder field, FVisitor fVisitor) {
-        return field.field;
+    public static StringBuilder toStringFiel(FieldHolder field, FVisitor fVisitor) {
+        if (fVisitor == null) {
+            return field.field;
+        }
+        StringBuilder sb = new StringBuilder();
+        fVisitor.getFieldAnnotationsMap().entrySet();
+        for (Map.Entry<StringBuilder, AVisitor> entry : fVisitor.getFieldAnnotationsMap().entrySet()) {
+            StringBuilder key = entry.getKey();
+            AVisitor value = entry.getValue();
+            StringBuilder annt = toStringAnnt(key, value);
+            sb.append(annt);
+        }
+        return sb.append(field.field);
     }
 
 
@@ -31,9 +43,9 @@ public class CVisitorUtils {
     }
 
     private static StringBuilder toStringAnnt(StringBuilder annt, AVisitor aVisitor) {
-    if (aVisitor == null) {
-        return annt;
-    }
+        if (aVisitor == null) {
+            return annt;
+        }
         List<String> bf = aVisitor.getBf();
         StringBuilder body = new StringBuilder();
         if (bf.size() > 0) {

@@ -13,25 +13,9 @@ import static decompiler.pasers.ParserUtils.getShortName;
 import static decompiler.pasers.ParserUtils.isInterface;
 import static decompiler.pasers.ParserUtils.parseInterfaceName;
 
-/**
- * Created by Rafa on 28.02.2016.
- */
-public class InterfaceParser implements ASMParser {
-    public static final String DEF = "def";
-
-    private static String[] simpleTypeNames = {
-            "void",
-            "boolean",
-            "char",
-            "byte",
-            "short",
-            "int",
-            "float",
-            "long",
-            "double",
-            "array",
-            "Object"
-    };
+//TODO: split
+// half to parnent half to utils
+public class InterfaceParser extends ASMParser {
 
     @Override
     public StringBuilder parseField(int access, String name, String desc, String signature, Object value) {
@@ -100,12 +84,7 @@ public class InterfaceParser implements ASMParser {
         return sb;
     }
 
-    @Override
-    public StringBuilder parseAnnotation(String desc, boolean visible) {
-        StringBuilder sb = new StringBuilder("@");
-        sb.append(desc.substring(1).replace('/','.').replace(';',' '));
-        return sb;
-    }
+
 
 
     private StringBuilder parseInterfaceSignature(String signature) {

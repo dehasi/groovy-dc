@@ -1,12 +1,19 @@
 package decompiler.visitors;
 
+import decompiler.pasers.ASMParser;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class FVisitor extends FieldVisitor {
+
+    Map<StringBuilder, AVisitor> fieldAnnotationsMap = new HashMap<>();
+
     public FVisitor(int api) {
         super(api);
     }
@@ -17,8 +24,12 @@ public class FVisitor extends FieldVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String s, boolean b) {
+
         System.err.println("Visit annotation: s" + s + " b" + b);
-        return new AVisitor(Opcodes.ASM4);
+        AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
+        StringBuilder head = ASMParser.parseAnnotation(s,b);
+        fieldAnnotationsMap.put(head, aVisitor);
+        return aVisitor;
     }
 
     @Override
@@ -29,5 +40,9 @@ public class FVisitor extends FieldVisitor {
     @Override
     public void visitEnd() {
 
+    }
+
+    public Map<StringBuilder, AVisitor> getFieldAnnotationsMap() {
+        return fieldAnnotationsMap;
     }
 }
