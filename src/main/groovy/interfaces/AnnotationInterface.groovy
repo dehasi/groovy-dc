@@ -1,11 +1,16 @@
 package interfaces
 
+import annotations.SimpleAnnotation
 import groovy.transform.NotYetImplemented
-//@Resource
-//@XmlRootElement
-//@SimpleAnnotation(n = "SimpleAnnotationName", v= "42")
+
+import javax.annotation.Resource
+import javax.xml.bind.annotation.XmlID
+import javax.xml.bind.annotation.XmlRootElement
+@Resource
+@XmlRootElement
+@SimpleAnnotation(n = "SimpleAnnotationName", v= "42")
 interface AnnotationInterface {
-//    @XmlID
+    @XmlID
     def field
 
     @NotYetImplemented
