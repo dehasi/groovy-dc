@@ -2,6 +2,7 @@ package decompiler.visitors;
 
 import decompiler.ObjectType;
 import decompiler.holders.FieldHolder;
+import decompiler.holders.MethodHolder;
 import decompiler.pasers.ASMParser;
 import decompiler.pasers.ParserUtils;
 import decompiler.utils.CVisitorUtils;
@@ -27,6 +28,7 @@ public class CVisitor extends ClassVisitor {
     Map<String, MVisitor> methodAnnotationsMap = new HashMap<>();
 
     List<FieldHolder> fields = new ArrayList<>();
+    List<MethodHolder> methods= new ArrayList<>();
 
     StringBuilder header = new StringBuilder();
     StringBuilder pack = new StringBuilder();
