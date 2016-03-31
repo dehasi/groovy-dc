@@ -13,6 +13,7 @@ import java.util.Map;
 import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_INTERFACE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_SUPER;
 import static org.objectweb.asm.Opcodes.ASM4;
 
 public class ParserUtils {
@@ -23,6 +24,8 @@ public class ParserUtils {
         switch (type) {
             case INTERFACE:
                 return new InterfaceParser();
+            case CLASS:
+                return new ClassParser();
             default:
                 throw new UnsupportedOperationException("I can parse only interface");
         }
@@ -31,6 +34,8 @@ public class ParserUtils {
     public static ObjectType getType(int access) {
         if ((access == (ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT))) {
             return ObjectType.INTERFACE;
+        } else if (((ACC_PUBLIC & access) != 0) && ((ACC_SUPER & access) != 0)) {
+            return ObjectType.CLASS;
         } else {
             throw new UnsupportedOperationException("I can create only interface parser");
         }
@@ -50,10 +55,6 @@ public class ParserUtils {
         return "package " + name.substring(0, i).replace('/', '.') + ";\n";
     }
 
-    public static String parseInterfaceName(String name) {
-        int i = name.lastIndexOf('/');
-        return "interface " + name.substring(++i);
-    }
 
 
 
@@ -98,5 +99,18 @@ public class ParserUtils {
         SVisitor sVisitor = new SVisitor(signatureMap);
         signatureReader.accept(sVisitor);
         return signatureMap;
+    }
+
+    public static StringBuilder parseInterfaces(int access, String[] interfaces, String extOrImp) {
+        StringBuilder sb = new StringBuilder();
+        if (interfaces == null || interfaces.length == 0) {
+            return sb;
+        }
+        sb.append(extOrImp);
+        for (String s : interfaces) {
+            sb.append(s.replace('/', '.')).append(',');
+        }
+        sb.setLength(sb.length() - 1);
+        return sb;
     }
 }

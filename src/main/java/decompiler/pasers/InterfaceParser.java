@@ -2,8 +2,7 @@ package decompiler.pasers;
 
 import static decompiler.pasers.ParserUtils.getDeclatation;
 import static decompiler.pasers.ParserUtils.getShortName;
-import static decompiler.pasers.ParserUtils.isInterface;
-import static decompiler.pasers.ParserUtils.parseInterfaceName;
+import static decompiler.pasers.ParserUtils.parseInterfaces;
 
 //TODO: split
 // half to parnent half to utils
@@ -21,23 +20,25 @@ public class InterfaceParser extends ASMParser {
             sb.append(getDeclatation(signature));
         }
         sb.append(' ')
-                .append(parseInterfaces(access, interfaces))
+                .append(parseInterfaces(access, interfaces, "extends "))
                 .append(" {\n");
         return sb;
     }
 
-    private StringBuilder parseInterfaces(int access, String[] interfaces) {
-        StringBuilder sb = new StringBuilder();
-        if (interfaces == null || interfaces.length == 0) {
-            return sb;
-        }
-        sb.append(isInterface(access) ? "extends " : "implements ");
-        for (String s : interfaces) {
-            sb.append(s.replace('/', '.')).append(',');
-        }
-        sb.setLength(sb.length() - 1);
-        return sb;
-    }
+
+
+//    private StringBuilder parseInterfaces(int access, String[] interfaces) {
+//        StringBuilder sb = new StringBuilder();
+//        if (interfaces == null || interfaces.length == 0) {
+//            return sb;
+//        }
+//        sb.append(isInterface(access) ? "extends " : "implements ");
+//        for (String s : interfaces) {
+//            sb.append(s.replace('/', '.')).append(',');
+//        }
+//        sb.setLength(sb.length() - 1);
+//        return sb;
+//    }
 
     @Override
     public StringBuilder parseMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -106,6 +107,10 @@ public class InterfaceParser extends ASMParser {
 
 
 
+    public static String parseInterfaceName(String name) {
+        int i = name.lastIndexOf('/');
+        return "interface " + name.substring(++i);
+    }
 
 
 

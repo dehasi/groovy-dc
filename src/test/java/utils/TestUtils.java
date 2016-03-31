@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class TestUtils {
-    static final public String TESTS_DIRECTORY = "build\\classes\\main\\";
+    static final public String TESTS_DIRECTORY = "build/classes/main/";
 
     public static Class<?> convertGroovyClass2Java(GroovyClass groovyClass) {
         ByteArrayClassLoader classLoader = new ByteArrayClassLoader();
