@@ -7,6 +7,7 @@ import static decompiler.pasers.ParserUtils.parseInterfaces;
 public class ClassParser extends ASMParser {
     @Override
     public StringBuilder parseMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        System.err.println("parseMethod = " + name);
         return new StringBuilder();
     }
 
@@ -32,6 +33,8 @@ public class ClassParser extends ASMParser {
 
     @Override
     public StringBuilder parseField(int access, String name, String desc, String signature, Object value) {
+
+        System.err.println("parseField = " + name);
         if (name.contains("$")) {
             return new StringBuilder();
         }
