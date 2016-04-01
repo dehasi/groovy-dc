@@ -2,8 +2,8 @@ package decompiler.pasers;
 
 
 import static decompiler.pasers.ParserUtils.EMPTY_STRING_BUILDER;
-import static decompiler.pasers.ParserUtils.getDeclatation;
 import static decompiler.pasers.ParserUtils.parseInterfaces;
+import static decompiler.utils.MethodParserUtils.getMethod;
 
 public class ClassParser extends ASMParser {
 
@@ -23,7 +23,7 @@ public class ClassParser extends ASMParser {
                 .append(parseClassName(access, name));
 
         if (signature != null) {
-            sb.append(getDeclatation(signature));
+            sb.append(getMethod(signature));
         }
         sb.append(' ')
                 .append(parseInterfaces(access, interfaces, "implements "))

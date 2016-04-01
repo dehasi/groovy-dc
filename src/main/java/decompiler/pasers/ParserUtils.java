@@ -2,8 +2,6 @@ package decompiler.pasers;
 
 import decompiler.ObjectType;
 import decompiler.visitors.SVisitor;
-import jdk.internal.org.objectweb.asm.signature.SignatureReader;
-import jdk.internal.org.objectweb.asm.util.TraceSignatureVisitor;
 import org.objectweb.asm.Type;
 
 import java.util.HashMap;
@@ -14,7 +12,6 @@ import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_INTERFACE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_SUPER;
-import static org.objectweb.asm.Opcodes.ASM4;
 
 public class ParserUtils {
     public static final String TRAINT_ANNOTATION = "Lgroovy/transform/Trait;";
@@ -62,18 +59,7 @@ public class ParserUtils {
     }
 
 
-    public static String getDeclatation(String signature) {
-        TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
-        new SignatureReader(signature).accept(v);
-        return v.getDeclaration();
-    }
 
-
-    public static String getReturnValue(String signature) {
-        TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
-        new SignatureReader(signature).accept(v);
-        return v.getReturnType().length() != 0 ? v.getReturnType() : "void";
-    }
 
     public static boolean isTrait(String desc, boolean visible) {
         return TRAINT_ANNOTATION.equals(desc);

@@ -109,7 +109,7 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public void visitEnd() {
-        buffer.append(CVisitorUtils.toStringFiels(fields, fieldAnnotationsMap));
+        buffer.append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap));
         clazz.append(pack).append(
                 CVisitorUtils.toStringAnnts(annt, classAnnotationsMap)
         ).append(header).append(buffer).append('}');

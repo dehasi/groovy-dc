@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class MVisitor extends MethodVisitor {
     Map<StringBuilder, AVisitor> methodAnnotationsMap = new HashMap<>();
-    List<AVisitorEntry> parameters = new ArrayList<>();
+    Map<Integer, List<AVisitorEntry>> parameters = new HashMap<>();
     public MVisitor(int api) {
         super(api);
     }
@@ -42,7 +42,8 @@ public class MVisitor extends MethodVisitor {
         System.err.println("param: " +parameter +  "desc: " + desc);
         StringBuilder annt = ASMParser.parseAnnotation(desc, visible);
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
-        parameters.add(new AVisitorEntry(annt, aVisitor));
+        if (parameters.get(parameter) == null) parameters.put(parameter, new ArrayList<>());
+        parameters.get(parameter).add(new AVisitorEntry(annt, aVisitor));
         return aVisitor;
     }
 
@@ -60,7 +61,7 @@ public class MVisitor extends MethodVisitor {
         return methodAnnotationsMap;
     }
 
-    public List<AVisitorEntry> getParameters() {
+    public Map<Integer, List<AVisitorEntry>> getParameters() {
         return parameters;
     }
 }

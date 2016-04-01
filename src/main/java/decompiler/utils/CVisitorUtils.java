@@ -2,23 +2,25 @@ package decompiler.utils;
 
 
 import decompiler.holders.FieldHolder;
+import decompiler.holders.MethodHolder;
 import decompiler.visitors.AVisitor;
 import decompiler.visitors.FVisitor;
+import decompiler.visitors.MVisitor;
 
 import java.util.List;
 import java.util.Map;
 
 public class CVisitorUtils {
 
-    public static StringBuilder toStringFiels(List<FieldHolder> fieldHolders, Map<String, FVisitor> annoattion) {
+    public static StringBuilder toStringFields(List<FieldHolder> fieldHolders, Map<String, FVisitor> annoattion) {
         StringBuilder sb = new StringBuilder();
         for (FieldHolder f : fieldHolders) {
-            sb.append(toStringFiel(f, annoattion.get(f.name)));
+            sb.append(toStringField(f, annoattion.get(f.name)));
         }
         return sb;
     }
 
-    public static StringBuilder toStringFiel(FieldHolder field, FVisitor fVisitor) {
+    public static StringBuilder toStringField(FieldHolder field, FVisitor fVisitor) {
         if (fVisitor == null) {
             return field.field;
         }
@@ -31,6 +33,12 @@ public class CVisitorUtils {
             sb.append(annt);
         }
         return sb.append(field.field);
+    }
+
+    public static StringBuilder toStringMethods(List<MethodHolder> methodHolders, Map<String, MVisitor> annoattion) {
+        StringBuilder sb = new StringBuilder();
+
+        return sb;
     }
 
 

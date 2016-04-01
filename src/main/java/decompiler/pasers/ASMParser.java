@@ -1,10 +1,16 @@
 package decompiler.pasers;
 
+import decompiler.holders.MethodHolder;
 import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Type;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static decompiler.pasers.ParserUtils.getShortName;
+import static decompiler.utils.MethodParserUtils.getMethod;
+import static decompiler.utils.MethodParserUtils.parseExceptions;
 
 public abstract class ASMParser {
 
@@ -48,6 +54,9 @@ public abstract class ASMParser {
         return sb;
     }
 
+
+
+
     protected StringBuilder parseValue(Object value) {
         StringBuilder sb = new StringBuilder();
         if (value == null) {
@@ -56,4 +65,32 @@ public abstract class ASMParser {
         return sb.append(" = ").append(value);
     }
 
+    public static MethodHolder createMethodHolder(int access, String name, String desc, String signature, String[] exceptions) {
+        MethodHolder holder = new MethodHolder();
+        holder.name = name;
+        holder.exceiptions = parseExceptions(exceptions);
+        holder.args = createMethodArgsArray(getMethod(signature != null ? signature : desc));
+
+
+        return holder;
+    }
+
+
+    private static String[] createMethodArgsArray(String declatation) {
+        if (declatation == null || declatation.length() == 0) return new String[0];
+        List<String> argList = new ArrayList<>();
+        int begin = declatation.indexOf('(');
+        int end =  declatation.indexOf(')');
+        if (end - begin == 1 ) {
+            return new String[0];
+        }
+        String args = declatation.substring(begin + 1,end);
+        int i = 0;
+        final String var = "var";
+
+        for (String t : args.split(",")) {
+            argList.add(getShortName(t.trim()) + ' ' + var + i++);
+        }
+        return (String[]) argList.toArray();
+    }
 }
