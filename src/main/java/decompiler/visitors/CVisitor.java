@@ -112,7 +112,7 @@ public class CVisitor extends ClassVisitor {
         result.append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap));
         clazz
                 .append(pack)
-                .append(CVisitorUtils.toStringAnnts(annt, classAnnotationsMap))
+                .append(CVisitorUtils.toStringAnntotations(annt, classAnnotationsMap))
                 .append(header)
                 .append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap))
                 .append(CVisitorUtils.toStringMethods(methods, methodAnnotationsMap))

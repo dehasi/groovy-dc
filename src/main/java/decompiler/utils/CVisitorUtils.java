@@ -9,6 +9,7 @@ import decompiler.visitors.MVisitor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CVisitorUtils {
 
@@ -20,19 +21,12 @@ public class CVisitorUtils {
         return sb;
     }
 
-    public static StringBuilder toStringField(FieldHolder field, FVisitor fVisitor) {
-        if (fVisitor == null) {
-            return field.field;
-        }
-        StringBuilder sb = new StringBuilder();
-        fVisitor.getFieldAnnotationsMap().entrySet();
-        for (Map.Entry<StringBuilder, AVisitor> entry : fVisitor.getFieldAnnotationsMap().entrySet()) {
-            StringBuilder key = entry.getKey();
-            AVisitor value = entry.getValue();
-            StringBuilder annt = toStringAnnt(key, value);
-            sb.append(annt);
-        }
-        return sb.append(field.field);
+    private static StringBuilder toStringField(FieldHolder field, FVisitor fVisitor) {
+        if (fVisitor == null) return field.field;
+        return
+                new StringBuilder()
+                        .append(createAnnotations(fVisitor.getFieldAnnotationsMap().entrySet()))
+                        .append(field.field);
     }
 
     public static StringBuilder toStringMethods(List<MethodHolder> methodHolders, Map<String, MVisitor> annoattion) {
@@ -43,14 +37,30 @@ public class CVisitorUtils {
         return sb;
     }
 
-    public static StringBuilder toStringMethod(MethodHolder methodHolders, MVisitor mVisitor) {
+    public static StringBuilder toStringMethod(MethodHolder method, MVisitor mVisitor) {
         StringBuilder sb = new StringBuilder();
 
+        if (method.name.contains("init>")) {
+            return sb;
+        }
+        Set<Map.Entry<StringBuilder, AVisitor>> entries = mVisitor.getMethodAnnotationsMap().entrySet();
+        method.parsedAnnotations = createAnnotations(entries);
 
+        return method.toStringBuilder();
+    }
+
+    private static StringBuilder createAnnotations(Set<Map.Entry<StringBuilder, AVisitor>> entries) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<StringBuilder, AVisitor> entry : entries) {
+            StringBuilder key = entry.getKey();
+            AVisitor value = entry.getValue();
+            StringBuilder annt = toStringAnnt(key, value);
+            sb.append(annt);
+        }
         return sb;
     }
 
-    public static StringBuilder toStringAnnts(List<StringBuilder> annts, Map<StringBuilder, AVisitor> body) {
+    public static StringBuilder toStringAnntotations(List<StringBuilder> annts, Map<StringBuilder, AVisitor> body) {
         StringBuilder sb = new StringBuilder();
         for (StringBuilder annt : annts) {
             sb.append(toStringAnnt(annt, body.get(annt)));
@@ -72,6 +82,6 @@ public class CVisitorUtils {
             body.setLength(body.length() - 1);
             body.append(')');
         }
-        return annt.append(body).append('\n');
+        return annt.append('\t').append(body).append('\n');
     }
 }

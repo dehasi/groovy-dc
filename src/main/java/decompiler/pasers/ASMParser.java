@@ -1,6 +1,7 @@
 package decompiler.pasers;
 
 import decompiler.holders.MethodHolder;
+import decompiler.utils.MethodParserUtils;
 import decompiler.utils.ParserUtils;
 import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Type;
@@ -72,8 +73,11 @@ public abstract class ASMParser {
         holder.signature = signature;
         holder.exceptions = exceptions;
 
-        holder.parsedExceiptions = parseExceptions(exceptions);
+        holder.parsedModifiers = ParserUtils.getModifiers(access);
+        holder.parsedGenericDeclaration = MethodParserUtils.getMethodGeneticDeclatation(signature, getMethod(signature != null ? signature : desc));
+        holder.parsedReturnValue = MethodParserUtils.getMethodReturnValue(signature != null ? signature : desc);
         holder.parsedArgs = createMethodArgsArray(getMethod(signature != null ? signature : desc));
+        holder.parsedExceiptions = parseExceptions(exceptions);
         return holder;
     }
 

@@ -5,6 +5,7 @@ import decompiler.pasers.ASMParser;
 import decompiler.pasers.ClassParser;
 import decompiler.pasers.InterfaceParser;
 import decompiler.visitors.SVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 import java.util.HashMap;
@@ -109,4 +110,41 @@ public class ParserUtils {
             if (i.equals(name)) return true;
         return false;
      }
+
+    public static StringBuilder getModifiers(int access) {
+        StringBuilder buf = new StringBuilder();
+        for (int bit; access != 0; access -= bit) {
+            bit = access & -access;
+            switch (bit) {
+                case Opcodes.ACC_PUBLIC:
+                    buf.append("public ");
+                    break;
+                case Opcodes.ACC_PRIVATE:
+                    buf.append("private ");
+                    break;
+                case Opcodes.ACC_PROTECTED:
+                    buf.append("protected ");
+                    break;
+                case Opcodes.ACC_STATIC:
+                    buf.append("static ");
+                    break;
+                case Opcodes.ACC_FINAL:
+                    buf.append("final ");
+                    break;
+                case Opcodes.ACC_ABSTRACT:
+                    buf.append("abstract ");
+                    break;
+                case Opcodes.ACC_NATIVE:
+                    buf.append("native ");
+                    break;
+                case Opcodes.ACC_STRICT:
+                    buf.append("strictfp ");
+                    break;
+                case Opcodes.ACC_SYNCHRONIZED:
+                    buf.append("synchronized ");
+                    break;
+            }
+        }
+        return buf;
+    }
 }

@@ -122,37 +122,6 @@ public class TrashUtils {
     }
 
     private static void appendModifiers(StringBuilder buf, int access) {
-        for (int bit; access != 0; access -= bit) {
-            bit = access & -access;
-            switch (bit) {
-                case Opcodes.ACC_PUBLIC:
-                    buf.append("public ");
-                    break;
-                case Opcodes.ACC_PRIVATE:
-                    buf.append("private ");
-                    break;
-                case Opcodes.ACC_PROTECTED:
-                    buf.append("protected ");
-                    break;
-                case Opcodes.ACC_STATIC:
-                    buf.append("static ");
-                    break;
-                case Opcodes.ACC_FINAL:
-                    buf.append("final ");
-                    break;
-                case Opcodes.ACC_ABSTRACT:
-                    buf.append("abstract ");
-                    break;
-                case Opcodes.ACC_NATIVE:
-                    buf.append("native ");
-                    break;
-                case Opcodes.ACC_STRICT:
-                    buf.append("strictfp ");
-                    break;
-                case Opcodes.ACC_SYNCHRONIZED:
-                    buf.append("synchronized ");
-                    break;
-            }
-        }
+        buf.append(ParserUtils.getModifiers(access));
     }
 }
