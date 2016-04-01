@@ -46,6 +46,7 @@ public class CVisitorUtils {
         Set<Map.Entry<StringBuilder, AVisitor>> entries = mVisitor.getMethodAnnotationsMap().entrySet();
         method.parsedAnnotations = createAnnotations(entries);
 
+        mVisitor.getParameters();
         return method.toStringBuilder();
     }
 

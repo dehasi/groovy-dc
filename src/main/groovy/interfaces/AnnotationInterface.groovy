@@ -2,6 +2,7 @@ package interfaces
 
 import annotations.SimpleAnnotation
 import groovy.transform.NotYetImplemented
+import org.jetbrains.annotations.NotNull
 
 import javax.annotation.Resource
 import javax.xml.bind.annotation.XmlID
@@ -15,6 +16,6 @@ interface AnnotationInterface {
 
     @NotYetImplemented
     def method (
-//            @NotNull
+            @NotNull
             def arg)
 }
