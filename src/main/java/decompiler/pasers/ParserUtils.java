@@ -17,8 +17,10 @@ import static org.objectweb.asm.Opcodes.ACC_SUPER;
 import static org.objectweb.asm.Opcodes.ASM4;
 
 public class ParserUtils {
-    private static final String TRAINT_ANNOTATION = "Lgroovy/transform/Trait;";
-    private static final String DEF = "def";
+    public static final String TRAINT_ANNOTATION = "Lgroovy/transform/Trait;";
+    public static final String DEF = "def";
+    public static final StringBuilder EMPTY_STRING_BUILDER = new StringBuilder();
+    public static final String EMPTY_STRING = "";
 
     public static ASMParser getParser(ObjectType type) {
         switch (type) {
@@ -34,7 +36,7 @@ public class ParserUtils {
     public static ObjectType getType(int access) {
         if ((access == (ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT))) {
             return ObjectType.INTERFACE;
-        } else if (((ACC_PUBLIC & access) != 0) && ((ACC_SUPER & access) != 0)) {
+        } else if (((ACC_PUBLIC & access) == ACC_PUBLIC) && ((ACC_SUPER & access) == ACC_SUPER)) {
             return ObjectType.CLASS;
         } else {
             throw new UnsupportedOperationException("I can create only interface parser");
@@ -54,9 +56,6 @@ public class ParserUtils {
         int i = name.lastIndexOf('/');
         return "package " + name.substring(0, i).replace('/', '.') + ";\n";
     }
-
-
-
 
     public static boolean isInterface(int access) {
         return (access == (ACC_PUBLIC + ACC_INTERFACE + ACC_ABSTRACT));
@@ -102,10 +101,9 @@ public class ParserUtils {
     }
 
     public static StringBuilder parseInterfaces(int access, String[] interfaces, String extOrImp) {
+        if (interfaces == null || interfaces.length == 0) return EMPTY_STRING_BUILDER;
+
         StringBuilder sb = new StringBuilder();
-        if (interfaces == null || interfaces.length == 0) {
-            return sb;
-        }
         sb.append(extOrImp);
         for (String s : interfaces) {
             sb.append(s.replace('/', '.')).append(',');
@@ -113,4 +111,13 @@ public class ParserUtils {
         sb.setLength(sb.length() - 1);
         return sb;
     }
+
+    private static boolean needSkipInterface (String name) {
+        final String[] forSkip = {
+                "groovy.lang.GroovyObject"
+        };
+        for (String i : forSkip)
+            if (i.equals(name)) return true;
+        return false;
+     }
 }

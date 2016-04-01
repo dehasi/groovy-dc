@@ -1,13 +1,18 @@
 package decompiler.pasers;
 
 
+import static decompiler.pasers.ParserUtils.EMPTY_STRING_BUILDER;
 import static decompiler.pasers.ParserUtils.getDeclatation;
 import static decompiler.pasers.ParserUtils.parseInterfaces;
 
 public class ClassParser extends ASMParser {
+
+
+
     @Override
     public StringBuilder parseMethod(int access, String name, String desc, String signature, String[] exceptions) {
         System.err.println("parseMethod = " + name);
+        if (needSkipMethod(name)) return EMPTY_STRING_BUILDER;
         return new StringBuilder();
     }
 
@@ -35,9 +40,54 @@ public class ClassParser extends ASMParser {
     public StringBuilder parseField(int access, String name, String desc, String signature, Object value) {
 
         System.err.println("parseField = " + name);
-        if (name.contains("$")) {
-            return new StringBuilder();
-        }
+        if (needSkipField(name)) return EMPTY_STRING_BUILDER;
+
         return super.parseField(access, name, desc, signature, value);
+    }
+
+    private static boolean needSkipMethod(String methodName) {
+        final String[] methodsForSkip = {
+//                "<init>",
+//                "<cinit>",
+
+                "this$dist$invoke$1",
+                "this$dist$set$1",
+                "this$dist$get$1",
+                "$getStaticMetaClass",
+                "getMetaClass",
+                "setMetaClass",
+                "invokeMethod",
+                "getProperty",
+                "setProperty",
+                "__$swapInit",
+                "super$1$notify",
+                "super$1$hashCode",
+                "super$1$toString",
+                "super$1$clone",
+                "super$1$wait",
+                "super$1$wait",
+                "super$1$wait",
+                "super$1$notifyAll",
+                "super$1$equals",
+                "super$1$finalize",
+                "super$1$getClass",
+                "$createCallSiteArray",
+                "$getCallSiteArray",
+                "class$"
+        };
+        for (String skip : methodsForSkip)
+            if (skip.equals(methodName)) return true;
+        return false;
+    }
+
+    private static boolean needSkipField(String fieldName) {
+        final String[] skippedFields = {
+                "metaClass",
+                "__timeStamp",
+                "__timeStamp__239_neverHappen1458945160610"
+        };
+        for (String f : skippedFields)
+            if (f.equals(fieldName)) return true;
+        return fieldName.contains("$");
     }
 }

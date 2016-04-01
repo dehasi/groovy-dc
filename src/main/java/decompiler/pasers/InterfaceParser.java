@@ -1,11 +1,9 @@
 package decompiler.pasers;
 
+import static decompiler.pasers.ParserUtils.EMPTY_STRING_BUILDER;
 import static decompiler.pasers.ParserUtils.getDeclatation;
 import static decompiler.pasers.ParserUtils.getShortName;
 import static decompiler.pasers.ParserUtils.parseInterfaces;
-
-//TODO: split
-// half to parnent half to utils
 public class InterfaceParser extends ASMParser {
 
     @Override
@@ -25,20 +23,6 @@ public class InterfaceParser extends ASMParser {
         return sb;
     }
 
-
-
-//    private StringBuilder parseInterfaces(int access, String[] interfaces) {
-//        StringBuilder sb = new StringBuilder();
-//        if (interfaces == null || interfaces.length == 0) {
-//            return sb;
-//        }
-//        sb.append(isInterface(access) ? "extends " : "implements ");
-//        for (String s : interfaces) {
-//            sb.append(s.replace('/', '.')).append(',');
-//        }
-//        sb.setLength(sb.length() - 1);
-//        return sb;
-//    }
 
     @Override
     public StringBuilder parseMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -68,11 +52,9 @@ public class InterfaceParser extends ASMParser {
     }
 
     private StringBuilder parseExceptions(String[] exceptions) {
-        StringBuilder sb = new StringBuilder();
-        if (exceptions == null || exceptions.length == 0) {
-            return sb;
-        }
+        if (exceptions == null || exceptions.length == 0) { return EMPTY_STRING_BUILDER; }
 
+        StringBuilder sb = new StringBuilder();
         sb.append(" throws ");
         for (String ex : exceptions) {
             sb.append(getShortName(ex)).append(", ");
@@ -83,10 +65,8 @@ public class InterfaceParser extends ASMParser {
 
 
     private StringBuilder parseMethodArgs(String declatation) {
+        if (declatation == null || declatation.length() == 0) return EMPTY_STRING_BUILDER;
         StringBuilder sb = new StringBuilder();
-        if (declatation == null || declatation.length() == 0) {
-            return sb;
-        }
         int begin = declatation.indexOf('(');
         int end =  declatation.indexOf(')');
         if (end - begin == 1 ) {
