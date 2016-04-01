@@ -1,9 +1,9 @@
 package decompiler.pasers;
 
 
-import static decompiler.pasers.ParserUtils.EMPTY_STRING_BUILDER;
-import static decompiler.pasers.ParserUtils.parseInterfaces;
 import static decompiler.utils.MethodParserUtils.getMethod;
+import static decompiler.utils.ParserUtils.EMPTY_STRING_BUILDER;
+import static decompiler.utils.ParserUtils.parseInterfaces;
 
 public class ClassParser extends ASMParser {
 

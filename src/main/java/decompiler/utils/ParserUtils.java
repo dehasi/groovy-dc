@@ -1,6 +1,9 @@
-package decompiler.pasers;
+package decompiler.utils;
 
 import decompiler.ObjectType;
+import decompiler.pasers.ASMParser;
+import decompiler.pasers.ClassParser;
+import decompiler.pasers.InterfaceParser;
 import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Type;
 

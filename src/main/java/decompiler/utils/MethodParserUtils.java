@@ -3,9 +3,9 @@ package decompiler.utils;
 import jdk.internal.org.objectweb.asm.signature.SignatureReader;
 import jdk.internal.org.objectweb.asm.util.TraceSignatureVisitor;
 
-import static decompiler.pasers.ParserUtils.EMPTY_STRING;
-import static decompiler.pasers.ParserUtils.EMPTY_STRING_BUILDER;
-import static decompiler.pasers.ParserUtils.getShortName;
+import static decompiler.utils.ParserUtils.EMPTY_STRING;
+import static decompiler.utils.ParserUtils.EMPTY_STRING_BUILDER;
+import static decompiler.utils.ParserUtils.getShortName;
 import static org.objectweb.asm.Opcodes.ASM4;
 
 public class MethodParserUtils {

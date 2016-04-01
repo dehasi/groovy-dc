@@ -37,10 +37,18 @@ public class CVisitorUtils {
 
     public static StringBuilder toStringMethods(List<MethodHolder> methodHolders, Map<String, MVisitor> annoattion) {
         StringBuilder sb = new StringBuilder();
-
+        for (MethodHolder method : methodHolders) {
+            sb.append(toStringMethod(method, annoattion.get(method.name + method.signature)));
+        }
         return sb;
     }
 
+    public static StringBuilder toStringMethod(MethodHolder methodHolders, MVisitor mVisitor) {
+        StringBuilder sb = new StringBuilder();
+
+
+        return sb;
+    }
 
     public static StringBuilder toStringAnnts(List<StringBuilder> annts, Map<StringBuilder, AVisitor> body) {
         StringBuilder sb = new StringBuilder();

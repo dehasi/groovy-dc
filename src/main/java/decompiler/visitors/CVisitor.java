@@ -4,8 +4,8 @@ import decompiler.ObjectType;
 import decompiler.holders.FieldHolder;
 import decompiler.holders.MethodHolder;
 import decompiler.pasers.ASMParser;
-import decompiler.pasers.ParserUtils;
 import decompiler.utils.CVisitorUtils;
+import decompiler.utils.ParserUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static decompiler.pasers.ParserUtils.isTrait;
-import static decompiler.pasers.ParserUtils.parsePackagaName;
+import static decompiler.utils.ParserUtils.isTrait;
+import static decompiler.utils.ParserUtils.parsePackagaName;
 
 public class CVisitor extends ClassVisitor {
 
@@ -35,7 +35,7 @@ public class CVisitor extends ClassVisitor {
     StringBuilder clazz = new StringBuilder();
     List<StringBuilder> annt = new ArrayList<>();
 
-    protected StringBuilder buffer = new StringBuilder();
+    protected StringBuilder result = new StringBuilder();
 
     public StringBuilder getClazz() {
         return clazz;
@@ -73,7 +73,7 @@ public class CVisitor extends ClassVisitor {
         if (isTrait(desc, visible)) {
             parser = ParserUtils.getParser(ObjectType.TRAIT);
         }
-        StringBuilder annotation = parser.parseAnnotation(desc, visible);
+        StringBuilder annotation = ASMParser.parseAnnotation(desc, visible);
         annt.add(annotation);
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
         classAnnotationsMap.put(annotation, aVisitor);
@@ -101,18 +101,22 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        buffer.append(parser.parseMethod(access, name, desc, signature, exceptions));
+        methods.add(ASMParser.createMethodHolder(access, name, desc, signature, exceptions));
         MVisitor mVisitor = new MVisitor(Opcodes.ASM4);
-        methodAnnotationsMap.put(name, mVisitor);
+        methodAnnotationsMap.put(name+signature, mVisitor);
         return mVisitor;
     }
 
     @Override
     public void visitEnd() {
-        buffer.append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap));
-        clazz.append(pack).append(
-                CVisitorUtils.toStringAnnts(annt, classAnnotationsMap)
-        ).append(header).append(buffer).append('}');
+        result.append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap));
+        clazz
+                .append(pack)
+                .append(CVisitorUtils.toStringAnnts(annt, classAnnotationsMap))
+                .append(header)
+                .append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap))
+                .append(CVisitorUtils.toStringMethods(methods, methodAnnotationsMap))
+                .append('}');
     }
 
     public Map<StringBuilder, AVisitor> getClassAnnotaitonsMap() {

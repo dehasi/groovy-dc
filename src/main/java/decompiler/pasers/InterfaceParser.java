@@ -1,11 +1,11 @@
 package decompiler.pasers;
 
-import static decompiler.pasers.ParserUtils.parseInterfaces;
 import static decompiler.utils.MethodParserUtils.getMethod;
 import static decompiler.utils.MethodParserUtils.getMethodGeneticDeclatation;
 import static decompiler.utils.MethodParserUtils.getMethodReturnValue;
 import static decompiler.utils.MethodParserUtils.parseExceptions;
 import static decompiler.utils.MethodParserUtils.parseMethodArgs;
+import static decompiler.utils.ParserUtils.parseInterfaces;
 
 public class InterfaceParser extends ASMParser {
 
