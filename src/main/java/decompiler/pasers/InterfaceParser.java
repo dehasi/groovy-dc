@@ -1,5 +1,6 @@
 package decompiler.pasers;
 
+import static decompiler.pasers.ParserUtils.EMPTY_STRING;
 import static decompiler.pasers.ParserUtils.EMPTY_STRING_BUILDER;
 import static decompiler.pasers.ParserUtils.getDeclatation;
 import static decompiler.pasers.ParserUtils.getShortName;
@@ -32,7 +33,7 @@ public class InterfaceParser extends ASMParser {
 
         String declaration = ParserUtils.getDeclatation(signature != null ? signature : desc);
         String rv = ParserUtils.getReturnValue(signature != null ? signature : desc);
-        String generic = "";
+        String generic = EMPTY_STRING;
         if (signature != null) {
             int begin = declaration.indexOf('<');
             if (begin != -1) {
