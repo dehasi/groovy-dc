@@ -6,6 +6,8 @@ import static decompiler.utils.ParserUtils.EMPTY_STRING_BUILDER;
 
 public class MethodHolder {
     public ObjectType parent;
+    public boolean skip;
+
     public int access;
     public String name;
     public String desc;
@@ -18,8 +20,10 @@ public class MethodHolder {
     public String parsedReturnValue;
     public String[] parsedArgs;
     public StringBuilder parsedExceiptions;
+    public String parsedBody;
 
     public StringBuilder toStringBuilder() {
+        if (skip) return EMPTY_STRING_BUILDER;
         return new StringBuilder()
                 .append(parsedAnnotations)
                 .append(modifiersIfNeed())
@@ -31,7 +35,7 @@ public class MethodHolder {
                 .append(createArgs())
                 .append(')')
                 .append(parsedExceiptions)
-                .append(createBody())
+                .append(parsedBody)
                 .append('\n');
     }
 
@@ -50,8 +54,4 @@ public class MethodHolder {
         sb.setLength(sb.length() - 2);
         return sb;
     }
-    private StringBuilder createBody() {
-        return EMPTY_STRING_BUILDER;
-    }
-
 }

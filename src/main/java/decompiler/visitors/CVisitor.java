@@ -34,7 +34,7 @@ public class CVisitor extends ClassVisitor {
     StringBuilder pack = new StringBuilder();
     StringBuilder clazz = new StringBuilder();
     List<StringBuilder> annt = new ArrayList<>();
-
+    ObjectType type;
     protected StringBuilder result = new StringBuilder();
 
     public StringBuilder getClazz() {
@@ -54,7 +54,8 @@ public class CVisitor extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
-        parser = ParserUtils.getParser(ParserUtils.getType(access));
+        type = ParserUtils.getType(access);
+        parser = ParserUtils.getParser(type);
         pack = new StringBuilder(parsePackagaName(name));
         header = parser.parseHeader(version, access, name, signature, superName, interfaces);
     }
@@ -115,7 +116,7 @@ public class CVisitor extends ClassVisitor {
                 .append(CVisitorUtils.toStringAnntotations(annt, classAnnotationsMap))
                 .append(header)
                 .append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap))
-                .append(CVisitorUtils.toStringMethods(methods, methodAnnotationsMap))
+                .append(CVisitorUtils.toStringMethods(methods, methodAnnotationsMap, type))
                 .append('}');
     }
 

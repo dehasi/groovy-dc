@@ -4,6 +4,7 @@ package decompiler.holders;
 import java.util.List;
 
 public class FieldHolder {
+    public boolean visible = true;
     public List<AnnotationHolder> annotations;
     public StringBuilder field;
     public String name;

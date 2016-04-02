@@ -1,6 +1,7 @@
 package decompiler.utils;
 
 
+import decompiler.ObjectType;
 import decompiler.holders.FieldHolder;
 import decompiler.holders.MethodHolder;
 import decompiler.visitors.AVisitor;
@@ -29,15 +30,16 @@ public class CVisitorUtils {
                         .append(field.field);
     }
 
-    public static StringBuilder toStringMethods(List<MethodHolder> methodHolders, Map<String, MVisitor> annoattion) {
+    public static StringBuilder toStringMethods(List<MethodHolder> methodHolders,
+                                                Map<String, MVisitor> annoattion, ObjectType type) {
         StringBuilder sb = new StringBuilder();
         for (MethodHolder method : methodHolders) {
-            sb.append(toStringMethod(method, annoattion.get(method.name + method.signature)));
+            sb.append(toStringMethod(method, annoattion.get(method.name + method.signature), type));
         }
         return sb;
     }
 
-    public static StringBuilder toStringMethod(MethodHolder method, MVisitor mVisitor) {
+    public static StringBuilder toStringMethod(MethodHolder method, MVisitor mVisitor, ObjectType type) {
         StringBuilder sb = new StringBuilder();
 
         if (method.name.contains("init>")) {
@@ -45,7 +47,7 @@ public class CVisitorUtils {
         }
         Set<Map.Entry<StringBuilder, AVisitor>> entries = mVisitor.getMethodAnnotationsMap().entrySet();
         method.parsedAnnotations = createAnnotations(entries);
-
+        method.parsedBody = createMethodBody(type);
 
 
         for (int i = 0; i < method.parsedArgs.length; ++i) {
@@ -92,5 +94,16 @@ public class CVisitorUtils {
             body.append(')');
         }
         return annt.append('\t').append(body).append('\n');
+    }
+
+    private static String createMethodBody(ObjectType type) {
+        switch (type) {
+            case INTERFACE:
+                return ParserUtils.EMPTY_STRING;
+            case CLASS:
+                return "{throw new UnsupportedOperationException(\"I can't parse body\");}";
+            default:
+                throw new UnsupportedOperationException("I can parse only interface");
+        }
     }
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static decompiler.pasers.ClassParser.needSkipMethod;
 import static decompiler.utils.MethodParserUtils.getMethod;
 import static decompiler.utils.MethodParserUtils.parseExceptions;
 import static decompiler.utils.ParserUtils.getShortName;
@@ -67,6 +68,7 @@ public abstract class ASMParser {
 
     public static MethodHolder createMethodHolder(int access, String name, String desc, String signature, String[] exceptions) {
         MethodHolder holder = new MethodHolder();
+        holder.skip = needSkipMethod(name);
         holder.access = access;
         holder.name = name;
         holder.desc = desc;

@@ -45,7 +45,7 @@ public class ClassParser extends ASMParser {
         return super.parseField(access, name, desc, signature, value);
     }
 
-    private static boolean needSkipMethod(String methodName) {
+    public static boolean needSkipMethod(String methodName) {
         final String[] methodsForSkip = {
 //                "<init>",
 //                "<cinit>",
@@ -77,7 +77,7 @@ public class ClassParser extends ASMParser {
         };
         for (String skip : methodsForSkip)
             if (skip.equals(methodName)) return true;
-        return false;
+        return methodName.contains("$");
     }
 
     private static boolean needSkipField(String fieldName) {
