@@ -40,7 +40,14 @@ public class MethodHolder {
         } else return EMPTY_STRING_BUILDER;
     }
     private StringBuilder createArgsBody() {
-        return EMPTY_STRING_BUILDER;
+        if (parsedArgs.length == 0 ) return EMPTY_STRING_BUILDER;
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < parsedArgs.length; i++) {
+            sb.append(parsedArgs[i]).append(',').append(' ');
+        }
+        sb.setLength(sb.length() - 2);
+        return sb;
     }
 
 }

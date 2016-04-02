@@ -17,5 +17,5 @@ interface AnnotationInterface {
     @NotYetImplemented
     def method (
             @NotNull
-            def arg)
+            def arg, def arg2)
 }
