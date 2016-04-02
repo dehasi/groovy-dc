@@ -28,9 +28,10 @@ public class MethodHolder {
                 .append(' ')
                 .append(name)
                 .append('(')
-                .append(createArgsBody())
+                .append(createArgs())
                 .append(')')
                 .append(parsedExceiptions)
+                .append(createBody())
                 .append('\n');
     }
 
@@ -39,7 +40,7 @@ public class MethodHolder {
             return parsedModifiers;
         } else return EMPTY_STRING_BUILDER;
     }
-    private StringBuilder createArgsBody() {
+    private StringBuilder createArgs() {
         if (parsedArgs.length == 0 ) return EMPTY_STRING_BUILDER;
         StringBuilder sb = new StringBuilder();
 
@@ -48,6 +49,9 @@ public class MethodHolder {
         }
         sb.setLength(sb.length() - 2);
         return sb;
+    }
+    private StringBuilder createBody() {
+        return EMPTY_STRING_BUILDER;
     }
 
 }
