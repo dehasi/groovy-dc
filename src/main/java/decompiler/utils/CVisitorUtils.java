@@ -7,6 +7,7 @@ import decompiler.holders.MethodHolder;
 import decompiler.visitors.AVisitor;
 import decompiler.visitors.FVisitor;
 import decompiler.visitors.MVisitor;
+import org.objectweb.asm.Opcodes;
 
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class CVisitorUtils {
         }
         Set<Map.Entry<StringBuilder, AVisitor>> entries = mVisitor.getMethodAnnotationsMap().entrySet();
         method.parsedAnnotations = createAnnotations(entries);
-        method.parsedBody = createMethodBody(type);
+        method.parsedBody = ((method.access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT)?"": createMethodBody(type);
 
 
         for (int i = 0; i < method.parsedArgs.length; ++i) {
@@ -105,5 +106,9 @@ public class CVisitorUtils {
             default:
                 throw new UnsupportedOperationException("I can parse only interface");
         }
+    }
+
+    private static String processModifiers (ObjectType type) {
+        return null;
     }
 }

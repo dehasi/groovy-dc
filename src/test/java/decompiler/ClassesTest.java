@@ -24,4 +24,10 @@ public class ClassesTest {
     public void MethodClassTest() throws IOException {
         routine("MethodClass", packageName);
     }
+
+    @Test
+    public void GenericClassTest() throws IOException {
+        routine("GenericClass", packageName);
+    }
+
 }

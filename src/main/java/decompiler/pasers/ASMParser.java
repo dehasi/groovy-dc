@@ -1,5 +1,6 @@
 package decompiler.pasers;
 
+import decompiler.holders.FieldHolder;
 import decompiler.holders.MethodHolder;
 import decompiler.utils.MethodParserUtils;
 import decompiler.utils.ParserUtils;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import static decompiler.pasers.ClassParser.needSkipMethod;
-import static decompiler.utils.MethodParserUtils.getMethod;
 import static decompiler.utils.MethodParserUtils.parseExceptions;
+import static decompiler.utils.MethodParserUtils.parseSignature;
 import static decompiler.utils.ParserUtils.getShortName;
 
 public abstract class ASMParser {
@@ -76,13 +77,23 @@ public abstract class ASMParser {
         holder.exceptions = exceptions;
 
         holder.parsedModifiers = ParserUtils.getModifiers(access);
-        holder.parsedGenericDeclaration = MethodParserUtils.getMethodGeneticDeclatation(signature, getMethod(signature != null ? signature : desc));
+        holder.parsedGenericDeclaration = MethodParserUtils.getMethodGeneticDeclatation(signature, parseSignature(signature != null ? signature : desc));
         holder.parsedReturnValue = MethodParserUtils.getMethodReturnValue(signature != null ? signature : desc);
-        holder.parsedArgs = createMethodArgsArray(getMethod(signature != null ? signature : desc));
+        holder.parsedArgs = createMethodArgsArray(parseSignature(signature != null ? signature : desc));
         holder.parsedExceiptions = parseExceptions(exceptions);
         return holder;
     }
 
+    public static FieldHolder createFiledHolder (int access, String name, String desc, String signature, Object value){
+        FieldHolder holder = new FieldHolder();
+        holder.access = access;
+        holder.name = name;
+        holder.desc = desc;
+        holder.signature = signature;
+        holder.value = value;
+
+        return holder;
+    }
 
     private static String[] createMethodArgsArray(String declatation) {
         if (declatation == null || declatation.length() == 0) return new String[0];

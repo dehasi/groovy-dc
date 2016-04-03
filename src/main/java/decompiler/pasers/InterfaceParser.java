@@ -1,10 +1,10 @@
 package decompiler.pasers;
 
-import static decompiler.utils.MethodParserUtils.getMethod;
 import static decompiler.utils.MethodParserUtils.getMethodGeneticDeclatation;
 import static decompiler.utils.MethodParserUtils.getMethodReturnValue;
 import static decompiler.utils.MethodParserUtils.parseExceptions;
 import static decompiler.utils.MethodParserUtils.parseMethodArgs;
+import static decompiler.utils.MethodParserUtils.parseSignature;
 import static decompiler.utils.ParserUtils.parseInterfaces;
 
 public class InterfaceParser extends ASMParser {
@@ -15,7 +15,7 @@ public class InterfaceParser extends ASMParser {
         StringBuilder sb = new StringBuilder();
         sb.append('\n').append(parseInterfaceName(name));
 
-        if (signature != null) { sb.append(getMethod(signature)); }
+        if (signature != null) { sb.append(parseSignature(signature)); }
 
         sb.append(' ')
                 .append(parseInterfaces(access, interfaces, "extends "))
@@ -30,7 +30,7 @@ public class InterfaceParser extends ASMParser {
         }
 
         String rv = getMethodReturnValue(signature != null ? signature : desc);
-        String declaration = getMethod(signature != null ? signature : desc);
+        String declaration = parseSignature(signature != null ? signature : desc);
         String generic = getMethodGeneticDeclatation(signature, declaration);
 
         StringBuilder sb = new StringBuilder("\t");

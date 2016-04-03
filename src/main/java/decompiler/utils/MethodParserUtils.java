@@ -10,7 +10,7 @@ import static org.objectweb.asm.Opcodes.ASM4;
 
 public class MethodParserUtils {
 
-    public static String getMethod(String signature) {
+    public static String parseSignature(String signature) {
         TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
         new SignatureReader(signature).accept(v);
         return v.getDeclaration();
@@ -62,7 +62,6 @@ public class MethodParserUtils {
             int begin = declaration.indexOf('<');
             if (begin != -1) {
                 generic = declaration.substring(declaration.indexOf('<'), declaration.indexOf('>') + 1) + " ";
-                generic = "public " + generic;
             }
         }
         return generic;

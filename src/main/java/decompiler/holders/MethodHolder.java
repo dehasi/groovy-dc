@@ -26,7 +26,7 @@ public class MethodHolder {
         if (skip) return EMPTY_STRING_BUILDER;
         return new StringBuilder()
                 .append(parsedAnnotations)
-                .append(modifiersIfNeed())
+                .append(parsedModifiers)
                 .append(parsedGenericDeclaration)
                 .append(parsedReturnValue)
                 .append(' ')
@@ -39,11 +39,6 @@ public class MethodHolder {
                 .append('\n');
     }
 
-    private StringBuilder modifiersIfNeed() {
-        if (parent == ObjectType.CLASS) {
-            return parsedModifiers;
-        } else return EMPTY_STRING_BUILDER;
-    }
     private StringBuilder createArgs() {
         if (parsedArgs.length == 0 ) return EMPTY_STRING_BUILDER;
         StringBuilder sb = new StringBuilder();

@@ -1,17 +1,16 @@
 package decompiler.pasers;
 
 
-import static decompiler.utils.MethodParserUtils.getMethod;
+import static decompiler.utils.MethodParserUtils.parseSignature;
 import static decompiler.utils.ParserUtils.EMPTY_STRING_BUILDER;
+import static decompiler.utils.ParserUtils.getModifiers;
 import static decompiler.utils.ParserUtils.parseInterfaces;
 
 public class ClassParser extends ASMParser {
 
-
-
     @Override
     public StringBuilder parseMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        System.err.println("parseMethod = " + name);
+//        System.err.println("parseMethod = " + name);
         if (needSkipMethod(name)) return EMPTY_STRING_BUILDER;
         return new StringBuilder();
     }
@@ -23,23 +22,24 @@ public class ClassParser extends ASMParser {
                 .append(parseClassName(access, name));
 
         if (signature != null) {
-            sb.append(getMethod(signature));
+            sb.append(parseSignature(signature));
         }
         sb.append(' ')
-                .append(parseInterfaces(access, interfaces, "implements "))
+                .append(interfaces.length > 1?parseInterfaces(access, interfaces, "implements "):EMPTY_STRING_BUILDER)
                 .append(" {\n");
         return sb;
     }
 
     private String parseClassName(int access, String name) {
         int i = name.lastIndexOf('/');
-        return "class " + name.substring(++i);
+
+        return getModifiers(access).toString().replace("synchronized", "") + "class " + name.substring(++i);
     }
 
     @Override
     public StringBuilder parseField(int access, String name, String desc, String signature, Object value) {
 
-        System.err.println("parseField = " + name);
+//        System.err.println("parseField = " + name);
         if (needSkipField(name)) return EMPTY_STRING_BUILDER;
 
         return super.parseField(access, name, desc, signature, value);
