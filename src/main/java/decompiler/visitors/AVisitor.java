@@ -18,7 +18,7 @@ public class AVisitor extends AnnotationVisitor {
     @Override
     public void visit(String name, Object value) {
         String x = "visit| name : " + name + " value" + value;
-        System.err.println(x);
+//        System.err.println(x);
         //TODO value has diff types
         bf.add(name + " = " + parseValue(value)) ;
     }

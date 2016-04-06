@@ -4,6 +4,7 @@ import decompiler.ObjectType;
 import decompiler.pasers.ASMParser;
 import decompiler.pasers.ClassParser;
 import decompiler.pasers.InterfaceParser;
+import decompiler.pasers.TraitParser;
 import decompiler.visitors.SVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -29,6 +30,8 @@ public class ParserUtils {
                 return new InterfaceParser();
             case CLASS:
                 return new ClassParser();
+            case TRAIT:
+                return new TraitParser();
             default:
                 throw new UnsupportedOperationException("I can parse only interface");
         }

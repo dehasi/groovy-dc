@@ -25,7 +25,7 @@ public class FVisitor extends FieldVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String s, boolean b) {
 
-        System.err.println("Visit annotation: s" + s + " b" + b);
+//        System.err.println("Visit annotation: s" + s + " b" + b);
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
         StringBuilder head = ASMParser.parseAnnotation(s,b);
         fieldAnnotationsMap.put(head, aVisitor);

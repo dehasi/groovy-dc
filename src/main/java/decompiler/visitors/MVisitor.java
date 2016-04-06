@@ -30,7 +30,7 @@ public class MVisitor extends MethodVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        System.err.println("desc: " + desc);
+//        System.err.println("desc: " + desc);
         StringBuilder annotation = ASMParser.parseAnnotation(desc, visible);
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
         methodAnnotationsMap.put(annotation, aVisitor);
@@ -39,7 +39,7 @@ public class MVisitor extends MethodVisitor {
 
     @Override
     public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
-        System.err.println("param: " +parameter +  "desc: " + desc);
+//        System.err.println("param: " +parameter +  "desc: " + desc);
         StringBuilder annt = ASMParser.parseAnnotation(desc, visible);
         AVisitor aVisitor = new AVisitor(Opcodes.ASM4);
         if (parameters.get(parameter) == null) parameters.put(parameter, new ArrayList<>());
