@@ -30,4 +30,9 @@ public class ClassesTest {
         routine("GenericClass", packageName);
     }
 
+    @Test
+    public void InheritClassTest() throws IOException {
+        routine("InheritClass", packageName);
+    }
+
 }

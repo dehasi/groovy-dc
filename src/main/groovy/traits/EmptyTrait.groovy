@@ -1,5 +1,5 @@
 package traits
 
-trait EmptyTrait {
+trait EmptyTrait implements OneFuncTrait{
 
 }
