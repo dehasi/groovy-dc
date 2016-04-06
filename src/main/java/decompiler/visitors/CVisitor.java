@@ -2,6 +2,7 @@ package decompiler.visitors;
 
 import decompiler.ObjectType;
 import decompiler.holders.FieldHolder;
+import decompiler.holders.HeadHolder;
 import decompiler.holders.MethodHolder;
 import decompiler.pasers.ASMParser;
 import decompiler.utils.CVisitorUtils;
@@ -30,7 +31,7 @@ public class CVisitor extends ClassVisitor {
     List<FieldHolder> fields = new ArrayList<>();
     List<MethodHolder> methods= new ArrayList<>();
 
-    StringBuilder header = new StringBuilder();
+    HeadHolder header;
     StringBuilder pack = new StringBuilder();
     StringBuilder clazz = new StringBuilder();
     List<StringBuilder> annt = new ArrayList<>();
@@ -73,6 +74,9 @@ public class CVisitor extends ClassVisitor {
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (isTrait(desc, visible)) {
             parser = ParserUtils.getParser(ObjectType.TRAIT);
+            header = parser.parseHeader(header.version,
+                    header.access, header.name, header.signature,
+                    header.superName, header.interfaces);
         }
         StringBuilder annotation = ASMParser.parseAnnotation(desc, visible);
         annt.add(annotation);
@@ -114,7 +118,7 @@ public class CVisitor extends ClassVisitor {
         clazz
                 .append(pack)
                 .append(CVisitorUtils.toStringAnntotations(annt, classAnnotationsMap))
-                .append(header)
+                .append(header.toString())
                 .append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap))
                 .append(CVisitorUtils.toStringMethods(methods, methodAnnotationsMap, type))
                 .append('}');

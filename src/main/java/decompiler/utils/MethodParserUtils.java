@@ -11,6 +11,7 @@ import static org.objectweb.asm.Opcodes.ASM4;
 public class MethodParserUtils {
 
     public static String parseSignature(String signature) {
+        if (signature == null) return ParserUtils.EMPTY_STRING;
         TraceSignatureVisitor v = new TraceSignatureVisitor(ASM4);
         new SignatureReader(signature).accept(v);
         return v.getDeclaration();

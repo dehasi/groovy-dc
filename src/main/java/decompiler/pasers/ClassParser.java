@@ -1,6 +1,9 @@
 package decompiler.pasers;
 
 
+import decompiler.holders.HeadHolder;
+import decompiler.utils.ParserUtils;
+
 import static decompiler.utils.MethodParserUtils.parseSignature;
 import static decompiler.utils.ParserUtils.EMPTY_STRING_BUILDER;
 import static decompiler.utils.ParserUtils.getModifiers;
@@ -16,8 +19,24 @@ public class ClassParser extends ASMParser {
     }
 
     @Override
-    public StringBuilder parseHeader(int version, int access, String name, String signature, String superName, String[] interfaces) {
+    public HeadHolder parseHeader(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        HeadHolder holder = new HeadHolder();
+        holder.version = version;
+        holder.access = access;
+        holder.name = name;
+        holder.signature = signature;
+        holder.superName = superName;
+        holder.interfaces = interfaces;
+
+        holder.parsedName = parseClassName(access, name);
+        holder.parsedSignature = parseSignature(signature);
+        holder.parsedInterface = interfaces.length > 1 ?
+                parseInterfaces(access, interfaces, "implements ").toString()
+                :
+                ParserUtils.EMPTY_STRING;
+
         StringBuilder sb = new StringBuilder();
+
         sb.append('\n')
                 .append(parseClassName(access, name));
 
@@ -25,9 +44,9 @@ public class ClassParser extends ASMParser {
             sb.append(parseSignature(signature));
         }
         sb.append(' ')
-                .append(interfaces.length > 1?parseInterfaces(access, interfaces, "implements "):EMPTY_STRING_BUILDER)
+                .append(interfaces.length > 1 ? parseInterfaces(access, interfaces, "implements ") : EMPTY_STRING_BUILDER)
                 .append(" {\n");
-        return sb;
+        return holder;
     }
 
     private String parseClassName(int access, String name) {

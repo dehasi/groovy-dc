@@ -1,5 +1,7 @@
 package decompiler.pasers;
 
+import decompiler.holders.HeadHolder;
+
 import static decompiler.utils.MethodParserUtils.getMethodGeneticDeclatation;
 import static decompiler.utils.MethodParserUtils.getMethodReturnValue;
 import static decompiler.utils.MethodParserUtils.parseExceptions;
@@ -10,17 +12,28 @@ import static decompiler.utils.ParserUtils.parseInterfaces;
 public class InterfaceParser extends ASMParser {
 
     @Override
-    public StringBuilder parseHeader(int version, int access, String name,
-                                     String signature, String superName, String[] interfaces) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('\n').append(parseInterfaceName(name));
+    public HeadHolder parseHeader(int version, int access, String name,
+                                  String signature, String superName, String[] interfaces) {
+        HeadHolder holder = new HeadHolder();
+        holder.version = version;
+        holder.access = access;
+        holder.name = name;
+        holder.signature = signature;
+        holder.superName = superName;
+        holder.interfaces = interfaces;
 
-        if (signature != null) { sb.append(parseSignature(signature)); }
-
-        sb.append(' ')
-                .append(parseInterfaces(access, interfaces, "extends "))
-                .append(" {\n");
-        return sb;
+        holder.parsedName = parseInterfaceName(name);
+        holder.parsedSignature = parseSignature(signature);
+        holder.parsedInterface = parseInterfaces(access, interfaces, "extends ").toString();
+//        StringBuilder sb = new StringBuilder();
+//        sb.append('\n').append(parseInterfaceName(name));
+//
+//        if (signature != null) { sb.append(parseSignature(signature)); }
+//
+//        sb.append(' ')
+//                .append(parseInterfaces(access, interfaces, "extends "))
+//                .append(" {\n");
+        return holder;
     }
 
     @Override
