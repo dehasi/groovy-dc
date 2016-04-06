@@ -15,6 +15,7 @@ import java.util.Map;
 import static decompiler.pasers.ClassParser.needSkipMethod;
 import static decompiler.utils.MethodParserUtils.parseExceptions;
 import static decompiler.utils.MethodParserUtils.parseSignature;
+import static decompiler.utils.ParserUtils.EMPTY_STRING;
 import static decompiler.utils.ParserUtils.getShortName;
 
 public abstract class ASMParser {
@@ -85,7 +86,7 @@ public abstract class ASMParser {
         return holder;
     }
 
-    public static FieldHolder createFiledHolder (int access, String name, String desc, String signature, Object value){
+    public static FieldHolder createFiledHolder(int access, String name, String desc, String signature, Object value) {
         FieldHolder holder = new FieldHolder();
         holder.access = access;
         holder.name = name;
@@ -112,5 +113,21 @@ public abstract class ASMParser {
             argList.add(getShortName(t.trim()) + ' ' + var + i++);
         }
         return argList.toArray(new String[argList.size()]);
+    }
+
+    protected static HeadHolder createHeadHolder(int version, int access, String name,
+                                                 String signature, String superName, String[] interfaces) {
+        HeadHolder holder = new HeadHolder();
+        holder.version = version;
+        holder.access = access;
+        holder.name = name;
+        holder.signature = signature;
+        holder.superName = superName;
+        holder.interfaces = interfaces;
+
+        holder.parsedName = EMPTY_STRING;
+        holder.parsedSignature = EMPTY_STRING;
+        holder.parsedInterface = EMPTY_STRING;
+        return holder;
     }
 }

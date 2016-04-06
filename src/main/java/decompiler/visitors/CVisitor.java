@@ -77,6 +77,7 @@ public class CVisitor extends ClassVisitor {
             header = parser.parseHeader(header.version,
                     header.access, header.name, header.signature,
                     header.superName, header.interfaces);
+            return null;
         }
         StringBuilder annotation = ASMParser.parseAnnotation(desc, visible);
         annt.add(annotation);

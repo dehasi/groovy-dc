@@ -20,32 +20,13 @@ public class ClassParser extends ASMParser {
 
     @Override
     public HeadHolder parseHeader(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        HeadHolder holder = new HeadHolder();
-        holder.version = version;
-        holder.access = access;
-        holder.name = name;
-        holder.signature = signature;
-        holder.superName = superName;
-        holder.interfaces = interfaces;
+        HeadHolder holder = createHeadHolder(version, access, name, signature, superName, interfaces);
 
         holder.parsedName = parseClassName(access, name);
         holder.parsedSignature = parseSignature(signature);
         holder.parsedInterface = interfaces.length > 1 ?
                 parseInterfaces(access, interfaces, "implements ").toString()
-                :
-                ParserUtils.EMPTY_STRING;
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append('\n')
-                .append(parseClassName(access, name));
-
-        if (signature != null) {
-            sb.append(parseSignature(signature));
-        }
-        sb.append(' ')
-                .append(interfaces.length > 1 ? parseInterfaces(access, interfaces, "implements ") : EMPTY_STRING_BUILDER)
-                .append(" {\n");
+                :ParserUtils.EMPTY_STRING;
         return holder;
     }
 

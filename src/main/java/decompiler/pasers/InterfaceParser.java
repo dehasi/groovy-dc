@@ -14,25 +14,11 @@ public class InterfaceParser extends ASMParser {
     @Override
     public HeadHolder parseHeader(int version, int access, String name,
                                   String signature, String superName, String[] interfaces) {
-        HeadHolder holder = new HeadHolder();
-        holder.version = version;
-        holder.access = access;
-        holder.name = name;
-        holder.signature = signature;
-        holder.superName = superName;
-        holder.interfaces = interfaces;
 
+        HeadHolder holder = createHeadHolder(version, access, name, signature, superName, interfaces);
         holder.parsedName = parseInterfaceName(name);
         holder.parsedSignature = parseSignature(signature);
         holder.parsedInterface = parseInterfaces(access, interfaces, "extends ").toString();
-//        StringBuilder sb = new StringBuilder();
-//        sb.append('\n').append(parseInterfaceName(name));
-//
-//        if (signature != null) { sb.append(parseSignature(signature)); }
-//
-//        sb.append(' ')
-//                .append(parseInterfaces(access, interfaces, "extends "))
-//                .append(" {\n");
         return holder;
     }
 

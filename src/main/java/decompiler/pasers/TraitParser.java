@@ -10,6 +10,8 @@ public class TraitParser  extends ASMParser {
 
     @Override
     public HeadHolder parseHeader(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        return null;
+        HeadHolder holder = createHeadHolder(version, access, name, signature, superName, interfaces);
+
+        return holder;
     }
 }
