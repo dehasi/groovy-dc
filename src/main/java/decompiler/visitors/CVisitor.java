@@ -120,6 +120,7 @@ public class CVisitor extends ClassVisitor {
                 .append(pack)
                 .append(CVisitorUtils.toStringAnntotations(annt, classAnnotationsMap))
                 .append(header.toString())
+                .append("{\n")
                 .append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap))
                 .append(CVisitorUtils.toStringMethods(methods, methodAnnotationsMap, type))
                 .append('}');

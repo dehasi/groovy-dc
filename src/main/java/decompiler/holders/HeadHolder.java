@@ -12,11 +12,12 @@ public class HeadHolder {
 
     public String parsedName;
     public String parsedSignature;
+    public String parsedSuper;
     public String parsedInterface;
 
     @Override
     public String toString() {
 
-        return parsedName  + " " +  parsedSignature  + " " +  parsedInterface + "{\n";
+        return parsedName  + " " + parsedSuper + " " +  parsedSignature  + " " +  parsedInterface;
     }
 }

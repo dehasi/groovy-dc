@@ -127,6 +127,7 @@ public abstract class ASMParser {
 
         holder.parsedName = EMPTY_STRING;
         holder.parsedSignature = EMPTY_STRING;
+        holder.parsedSuper = EMPTY_STRING;
         holder.parsedInterface = EMPTY_STRING;
         return holder;
     }
