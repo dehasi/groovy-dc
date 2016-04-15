@@ -18,6 +18,6 @@ public class HeadHolder {
     @Override
     public String toString() {
 
-        return parsedName  + " " + parsedSuper + " " +  parsedSignature  + " " +  parsedInterface;
+        return parsedName  + " " + parsedSignature + " " +  parsedSuper  + " " +  parsedInterface;
     }
 }

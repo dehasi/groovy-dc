@@ -5,6 +5,7 @@ import decompiler.holders.HeadHolder;
 import decompiler.utils.ParserUtils;
 
 import static decompiler.utils.MethodParserUtils.parseSignature;
+import static decompiler.utils.ParserUtils.EMPTY_STRING;
 import static decompiler.utils.ParserUtils.EMPTY_STRING_BUILDER;
 import static decompiler.utils.ParserUtils.getModifiers;
 import static decompiler.utils.ParserUtils.parseInterfaces;
@@ -24,8 +25,9 @@ public class ClassParser extends ASMParser {
 
         holder.parsedName = parseClassName(access, name);
         holder.parsedSignature = parseSignature(signature);
-        holder.parsedInterface = interfaces.length > 1 ?
-                parseInterfaces(access, interfaces, "implements ").toString()
+        holder.parsedSuper = (signature  != null) ? "extends " +  superName.replace('/', '.') : EMPTY_STRING;
+        holder.parsedInterface = interfaces.length > 0 ?
+                parseInterfaces(access, interfaces, (signature  == null) ?" implements ":EMPTY_STRING).toString()
                 :ParserUtils.EMPTY_STRING;
         return holder;
     }
