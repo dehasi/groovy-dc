@@ -77,6 +77,7 @@ public class CVisitor extends ClassVisitor {
             header = parser.parseHeader(header.version,
                     header.access, header.name, header.signature,
                     header.superName, header.interfaces);
+            type = ObjectType.TRAIT;
             return null;
         }
         StringBuilder annotation = ASMParser.parseAnnotation(desc, visible);
@@ -107,7 +108,9 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        methods.add(ASMParser.createMethodHolder(access, name, desc, signature, exceptions));
+        MethodHolder method = ASMParser.createMethodHolder(access, name, desc, signature, exceptions);
+        method.parent = type;
+        methods.add(method);
         MVisitor mVisitor = new MVisitor(Opcodes.ASM4);
         methodAnnotationsMap.put(name+signature, mVisitor);
         return mVisitor;

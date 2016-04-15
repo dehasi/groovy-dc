@@ -15,6 +15,9 @@ import java.util.Set;
 
 public class CVisitorUtils {
 
+    public static final String TRAIT_ANNOTATION = "@org.codehaus.groovy.transform.trait.Traits$Implemented";
+    public static final String ABSTRACT = "abstract";
+
     public static StringBuilder toStringFields(List<FieldHolder> fieldHolders, Map<String, FVisitor> annoattion) {
         StringBuilder sb = new StringBuilder();
         for (FieldHolder f : fieldHolders) {
@@ -48,17 +51,37 @@ public class CVisitorUtils {
         }
         Set<Map.Entry<StringBuilder, AVisitor>> entries = mVisitor.getMethodAnnotationsMap().entrySet();
         method.parsedAnnotations = createAnnotations(entries);
-        method.parsedBody = ((method.access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT)?"": createMethodBody(type);
+        method.parsedBody = ((method.access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) ? "" : createMethodBody(type);
 
+        if (method.parent == ObjectType.TRAIT) {
 
+            if (isTraint(method.parsedAnnotations)) {
+                method.parsedBody = createMethodBody(type);
+                int start = method.parsedModifiers.indexOf(ABSTRACT);
+                method.parsedModifiers.replace(start, start + ABSTRACT.length(), ParserUtils.EMPTY_STRING);
+            }
+        }
         for (int i = 0; i < method.parsedArgs.length; ++i) {
             if (mVisitor.getParameters().get(i) == null) continue;
             for (AVisitorEntry entry : mVisitor.getParameters().get(i)) {
                 StringBuilder annt = toStringAnnt(entry.name, entry.aVisitor);
+
+
                 method.parsedArgs[i] = annt.append(' ').append(method.parsedArgs[i]).toString();
             }
         }
         return method.toStringBuilder();
+    }
+
+    private static boolean isTraint(StringBuilder annt) {
+        if (annt == null) return false;
+        if (annt.toString().contains(TRAIT_ANNOTATION)) {
+            int start = annt.indexOf(TRAIT_ANNOTATION);
+            int length = TRAIT_ANNOTATION.length();
+            annt.replace(start, start + length, ParserUtils.EMPTY_STRING);
+            return true;
+        }
+        return false;
     }
 
     private static StringBuilder createAnnotations(Set<Map.Entry<StringBuilder, AVisitor>> entries) {
@@ -101,6 +124,7 @@ public class CVisitorUtils {
         switch (type) {
             case INTERFACE:
                 return ParserUtils.EMPTY_STRING;
+            case TRAIT:
             case CLASS:
                 return "{throw new UnsupportedOperationException(\"I can't parse body\");}";
             default:
@@ -108,7 +132,7 @@ public class CVisitorUtils {
         }
     }
 
-    private static String processModifiers (ObjectType type) {
+    private static String processModifiers(ObjectType type) {
         return null;
     }
 }

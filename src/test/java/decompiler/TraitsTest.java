@@ -21,4 +21,9 @@ public class TraitsTest {
         routine("OneFuncTrait", packageName);
     }
 
+    @Test
+    public void testFullTrait() throws IOException {
+        routine("FullTrait", packageName);
+    }
+
 }
