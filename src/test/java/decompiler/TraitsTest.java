@@ -26,4 +26,16 @@ public class TraitsTest {
         routine("FullTrait", packageName);
     }
 
+
+    @Test
+    public void testFullTrait1() throws IOException {
+        routine("FullTrait$Trait$Helper", packageName);
+    }
+
+
+    @Test
+    public void testFullTrait2() throws IOException {
+        routine("FullTrait$Trait$FieldHelper", packageName);
+    }
+
 }

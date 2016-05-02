@@ -1,8 +1,8 @@
 package decompiler.visitors;
 
 import decompiler.ObjectType;
+import decompiler.holders.ClassHolder;
 import decompiler.holders.FieldHolder;
-import decompiler.holders.HeadHolder;
 import decompiler.holders.MethodHolder;
 import decompiler.pasers.ASMParser;
 import decompiler.utils.CVisitorUtils;
@@ -28,14 +28,11 @@ public class CVisitor extends ClassVisitor {
     Map<String, FVisitor> fieldAnnotationsMap = new HashMap<>();
     Map<String, MVisitor> methodAnnotationsMap = new HashMap<>();
 
-    List<FieldHolder> fields = new ArrayList<>();
-    List<MethodHolder> methods= new ArrayList<>();
-
-    HeadHolder header;
+    ClassHolder classHolder = new ClassHolder();
     StringBuilder pack = new StringBuilder();
     StringBuilder clazz = new StringBuilder();
     List<StringBuilder> annt = new ArrayList<>();
-    ObjectType type;
+
     protected StringBuilder result = new StringBuilder();
 
     public StringBuilder getClazz() {
@@ -55,29 +52,36 @@ public class CVisitor extends ClassVisitor {
     @Override
     public void visit(int version, int access, String name,
                       String signature, String superName, String[] interfaces) {
-        type = ParserUtils.getType(access);
-        parser = ParserUtils.getParser(type);
+        classHolder.type = ParserUtils.getType(access);
+        parser = ParserUtils.getParser(classHolder.type);
         pack = new StringBuilder(parsePackagaName(name));
-        header = parser.parseHeader(version, access, name, signature, superName, interfaces);
+        classHolder.header = parser.parseHeader(version, access, name, signature, superName, interfaces);
     }
 
     @Override
     public void visitSource(String s, String s1) {
+        System.err.println(parser.getClass().getSimpleName());
+        System.err.println(s);
+        System.err.println(s1);
+
     }
 
     @Override
     public void visitOuterClass(String s, String s1, String s2) {
-
+        System.err.println(parser.getClass().getSimpleName());
+        System.err.println(s);
+        System.err.println(s1);
+        System.err.println(s2);
     }
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (isTrait(desc, visible)) {
             parser = ParserUtils.getParser(ObjectType.TRAIT);
-            header = parser.parseHeader(header.version,
-                    header.access, header.name, header.signature,
-                    header.superName, header.interfaces);
-            type = ObjectType.TRAIT;
+            classHolder.header = parser.parseHeader(classHolder.header.version,
+                    classHolder.header.access, classHolder.header.name, classHolder.header.signature,
+                    classHolder.header.superName, classHolder.header.interfaces);
+            classHolder.type = ObjectType.TRAIT;
             return null;
         }
         StringBuilder annotation = ASMParser.parseAnnotation(desc, visible);
@@ -94,12 +98,16 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
-
+//        System.err.println("visitInnerClass name: " + name);
+//        String path = getClass().getResource("/").toString().replace("test", "main");
+//        String s = "build/classes/main/" + name + ".class";
+//        ClassReader classReader = loadFromFileSystemOrNull(s);
+//        classHolder.inner.add((new Decompiler()).decompileToHolser(classReader));
     }
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        fields.add(new FieldHolder(name, parser.parseField(access, name, desc, signature, value)));
+        classHolder.fields.add(new FieldHolder(name, parser.parseField(access, name, desc, signature, value)));
         FVisitor fVisitor = new FVisitor(Opcodes.ASM4);
         fieldAnnotationsMap.put(name, fVisitor);
         return fVisitor;
@@ -109,8 +117,8 @@ public class CVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodHolder method = ASMParser.createMethodHolder(access, name, desc, signature, exceptions);
-        method.parent = type;
-        methods.add(method);
+        method.parent = classHolder.type;
+        classHolder.methods.add(method);
         MVisitor mVisitor = new MVisitor(Opcodes.ASM4);
         methodAnnotationsMap.put(name+signature, mVisitor);
         return mVisitor;
@@ -118,14 +126,14 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public void visitEnd() {
-        result.append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap));
+        result.append(CVisitorUtils.toStringFields(classHolder.fields, fieldAnnotationsMap));
         clazz
                 .append(pack)
                 .append(CVisitorUtils.toStringAnntotations(annt, classAnnotationsMap))
-                .append(header.toString())
+                .append(classHolder.header.toString())
                 .append("{\n")
-                .append(CVisitorUtils.toStringFields(fields, fieldAnnotationsMap))
-                .append(CVisitorUtils.toStringMethods(methods, methodAnnotationsMap, type))
+                .append(CVisitorUtils.toStringFields(classHolder.fields, fieldAnnotationsMap))
+                .append(CVisitorUtils.toStringMethods(classHolder.methods, methodAnnotationsMap, classHolder.type))
                 .append('}');
     }
 
@@ -139,5 +147,9 @@ public class CVisitor extends ClassVisitor {
 
     public Map<String, MVisitor> getMethodAnnotationsMap() {
         return methodAnnotationsMap;
+    }
+
+    public ClassHolder getClassHolder() {
+        return classHolder;
     }
 }
