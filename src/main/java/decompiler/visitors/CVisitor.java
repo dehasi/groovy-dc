@@ -26,6 +26,7 @@ import java.util.Set;
 import static decompiler.utils.Loader.loadFromFileSystemOrNull;
 import static decompiler.utils.ParserUtils.isTrait;
 import static decompiler.utils.ParserUtils.parsePackagaName;
+import static decompiler.utils.TraitUtils.processTrait;
 
 public class CVisitor extends ClassVisitor {
 
@@ -65,20 +66,10 @@ public class CVisitor extends ClassVisitor {
     }
 
     @Override
-    public void visitSource(String s, String s1) {
-        System.err.println(parser.getClass().getSimpleName());
-        System.err.println(s);
-        System.err.println(s1);
-
-    }
+    public void visitSource(String s, String s1) { }
 
     @Override
-    public void visitOuterClass(String s, String s1, String s2) {
-        System.err.println(parser.getClass().getSimpleName());
-        System.err.println(s);
-        System.err.println(s1);
-        System.err.println(s2);
-    }
+    public void visitOuterClass(String s, String s1, String s2) { }
 
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
@@ -104,15 +95,11 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
-        System.err.println("     name : " + name);
-        System.err.println("outerName : " + outerName);
-        System.err.println("innerName : " + innerName);
         String s = "build/classes/main/" + name + ".class";
         if (pathSet.add(s)) {
-            System.err.println("s = " + s);
-        ClassReader classReader = loadFromFileSystemOrNull(s);
-        ClassHolder e = (new Decompiler()).decompileToHolder(classReader);
-        classHolder.inner.add(e);
+            ClassReader classReader = loadFromFileSystemOrNull(s);
+            ClassHolder e = (new Decompiler()).decompileToHolder(classReader);
+            classHolder.inner.add(e);
         }
     }
 
@@ -131,12 +118,15 @@ public class CVisitor extends ClassVisitor {
         method.parent = classHolder.type;
         classHolder.methods.add(method);
         MVisitor mVisitor = new MVisitor(Opcodes.ASM4);
-        methodAnnotationsMap.put(name+signature, mVisitor);
+        methodAnnotationsMap.put(name + signature, mVisitor);
         return mVisitor;
     }
 
     @Override
     public void visitEnd() {
+        if (classHolder.type == ObjectType.TRAIT) {
+            classHolder = processTrait(classHolder);
+        }
         result.append(CVisitorUtils.toStringFields(classHolder.fields, fieldAnnotationsMap));
         clazz
                 .append(pack)
