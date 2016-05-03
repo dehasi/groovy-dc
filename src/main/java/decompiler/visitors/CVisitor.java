@@ -1,5 +1,6 @@
 package decompiler.visitors;
 
+import decompiler.Decompiler;
 import decompiler.ObjectType;
 import decompiler.holders.ClassHolder;
 import decompiler.holders.FieldHolder;
@@ -9,6 +10,7 @@ import decompiler.utils.CVisitorUtils;
 import decompiler.utils.ParserUtils;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -16,14 +18,18 @@ import org.objectweb.asm.Opcodes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import static decompiler.utils.Loader.loadFromFileSystemOrNull;
 import static decompiler.utils.ParserUtils.isTrait;
 import static decompiler.utils.ParserUtils.parsePackagaName;
 
 public class CVisitor extends ClassVisitor {
 
+    private static Set<String> pathSet = new HashSet<>();
     Map<StringBuilder, AVisitor> classAnnotationsMap = new HashMap<>();
     Map<String, FVisitor> fieldAnnotationsMap = new HashMap<>();
     Map<String, MVisitor> methodAnnotationsMap = new HashMap<>();
@@ -98,11 +104,16 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
-//        System.err.println("visitInnerClass name: " + name);
-//        String path = getClass().getResource("/").toString().replace("test", "main");
-//        String s = "build/classes/main/" + name + ".class";
-//        ClassReader classReader = loadFromFileSystemOrNull(s);
-//        classHolder.inner.add((new Decompiler()).decompileToHolser(classReader));
+        System.err.println("     name : " + name);
+        System.err.println("outerName : " + outerName);
+        System.err.println("innerName : " + innerName);
+        String s = "build/classes/main/" + name + ".class";
+        if (pathSet.add(s)) {
+            System.err.println("s = " + s);
+        ClassReader classReader = loadFromFileSystemOrNull(s);
+        ClassHolder e = (new Decompiler()).decompileToHolder(classReader);
+        classHolder.inner.add(e);
+        }
     }
 
     @Override

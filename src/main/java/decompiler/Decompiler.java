@@ -13,7 +13,7 @@ public class Decompiler {
         return cVisitor.getClazz();
     }
 
-    public ClassHolder decompileToHolser(ClassReader classReader) {
+    public ClassHolder decompileToHolder(ClassReader classReader) {
         CVisitor cVisitor = new CVisitor(Opcodes.ASM4);
         classReader.accept(cVisitor, Opcodes.ASM4);
         return cVisitor.getClassHolder();
