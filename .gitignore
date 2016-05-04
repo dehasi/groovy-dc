@@ -10,6 +10,8 @@ jad
 temp
 groovy-dc.iml
 questions.txt
+gdplugin.iml
+plugin.xml
 # User-specific stuff:
 .idea/workspace.xml
 .idea/tasks.xml
