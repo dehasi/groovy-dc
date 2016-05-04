@@ -27,9 +27,14 @@ public class TraitsTest {
         routine("FullTrait", packageName);
     }
 
- @Test
+    @Test
     public void testGenericTrait() throws IOException {
         routine("GenericTrait", packageName);
+    }
+
+@Test
+    public void testStaticTrait() throws IOException {
+        routine("StaticTrait", packageName);
     }
 
 
