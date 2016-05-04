@@ -25,11 +25,31 @@ public class ClassParser extends ASMParser {
 
         holder.parsedName = parseClassName(access, name);
         holder.parsedSignature = parseSignature(signature);
-        holder.parsedSuper = (signature  != null) ? "extends " +  superName.replace('/', '.') : EMPTY_STRING;
-        holder.parsedInterface = interfaces.length > 0 ?
-                parseInterfaces(access, interfaces, (signature  == null) ?" implements ":EMPTY_STRING).toString()
-                :ParserUtils.EMPTY_STRING;
+        holder.parsedInterface = ParserUtils.EMPTY_STRING;
+        interfaces = filterInterfaces(interfaces);
+        if (interfaces.length > 0) {
+            holder.parsedInterface =
+                    parseInterfaces(access, interfaces, (signature == null) ? " implements " : EMPTY_STRING).toString();
+        }
+
+        holder.parsedSuper = EMPTY_STRING;
+        if (signature != null) {
+            superName = superName.replace('/', '.');
+            if (!ParserUtils.OBJECT.equals(superName)) {
+                holder.parsedSuper = "extends " + superName.replace('/', '.');
+            }
+
+        }
         return holder;
+    }
+
+    private String[] filterInterfaces(String[] interfaces) {
+        if (interfaces.length == 0) return interfaces;
+        interfaces[0] = interfaces[0].replace('/', '.');
+        if (interfaces.length == 1 && interfaces[0].equals(ParserUtils.GROOVY_OBJECT)) return new String[0];
+        if (interfaces.length == 1 && interfaces[0].equals(ParserUtils.OBJECT)) return new String[0];
+
+        return interfaces;
     }
 
     private String parseClassName(int access, String name) {

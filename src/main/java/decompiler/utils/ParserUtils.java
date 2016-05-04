@@ -23,6 +23,8 @@ public class ParserUtils {
     public static final String DEF = "def";
     public static final StringBuilder EMPTY_STRING_BUILDER = new StringBuilder();
     public static final String EMPTY_STRING = "";
+    public static final String GROOVY_OBJECT = "groovy.lang.GroovyObject";
+    public static final String OBJECT = "java.lang.Object";
 
     public static ASMParser getParser(ObjectType type) {
         switch (type) {
