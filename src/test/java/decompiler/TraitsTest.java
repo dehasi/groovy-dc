@@ -27,6 +27,11 @@ public class TraitsTest {
         routine("FullTrait", packageName);
     }
 
+ @Test
+    public void testGenericTrait() throws IOException {
+        routine("GenericTrait", packageName);
+    }
+
 
     @Test
     @Ignore("only for debug")

@@ -7,6 +7,7 @@ import decompiler.utils.ParserUtils;
 import static decompiler.utils.MethodParserUtils.parseSignature;
 import static decompiler.utils.ParserUtils.EMPTY_STRING;
 import static decompiler.utils.ParserUtils.EMPTY_STRING_BUILDER;
+import static decompiler.utils.ParserUtils.filterInterfaces;
 import static decompiler.utils.ParserUtils.getModifiers;
 import static decompiler.utils.ParserUtils.parseInterfaces;
 
@@ -43,14 +44,7 @@ public class ClassParser extends ASMParser {
         return holder;
     }
 
-    private String[] filterInterfaces(String[] interfaces) {
-        if (interfaces.length == 0) return interfaces;
-        interfaces[0] = interfaces[0].replace('/', '.');
-        if (interfaces.length == 1 && interfaces[0].equals(ParserUtils.GROOVY_OBJECT)) return new String[0];
-        if (interfaces.length == 1 && interfaces[0].equals(ParserUtils.OBJECT)) return new String[0];
 
-        return interfaces;
-    }
 
     private String parseClassName(int access, String name) {
         int i = name.lastIndexOf('/');

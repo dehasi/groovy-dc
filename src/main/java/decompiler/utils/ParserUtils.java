@@ -154,4 +154,13 @@ public class ParserUtils {
         }
         return buf;
     }
+
+    public static String[] filterInterfaces(String[] interfaces) {
+        if (interfaces.length == 0) return interfaces;
+        interfaces[0] = interfaces[0].replace('/', '.');
+        if (interfaces.length == 1 && interfaces[0].equals(ParserUtils.GROOVY_OBJECT)) return new String[0];
+        if (interfaces.length == 1 && interfaces[0].equals(ParserUtils.OBJECT)) return new String[0];
+
+        return interfaces;
+    }
 }
