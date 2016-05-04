@@ -1,7 +1,6 @@
 package decompiler;
 
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,7 +26,7 @@ public class ClassesTest {
     }
 
     @Test
-    @Ignore("smth wrong with headers. but traits has prio")
+//    @Ignore("smth wrong with headers. but traits has prio")
     public void GenericClassTest() throws IOException {
         routine("GenericClass", packageName);
     }

@@ -1,5 +1,6 @@
 package decompiler;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -28,12 +29,14 @@ public class TraitsTest {
 
 
     @Test
+    @Ignore("only for debug")
     public void testFullTrait1() throws IOException {
         routine("FullTrait$Trait$Helper", packageName);
     }
 
 
     @Test
+    @Ignore("only for debug")
     public void testFullTrait2() throws IOException {
         routine("FullTrait$Trait$FieldHelper", packageName);
     }

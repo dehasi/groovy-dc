@@ -43,7 +43,9 @@ public class ParserUtils {
         } else if (((ACC_PUBLIC & access) == ACC_PUBLIC) && ((ACC_SUPER & access) == ACC_SUPER)) {
             return ObjectType.CLASS;
         } else {
-            throw new UnsupportedOperationException("I can create only interface parser");
+            return ObjectType.CLASS;
+
+//            throw new UnsupportedOperationException("I can create only interface parser");
         }
     }
 
