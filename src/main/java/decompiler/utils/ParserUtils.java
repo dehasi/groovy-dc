@@ -163,4 +163,10 @@ public class ParserUtils {
 
         return interfaces;
     }
+
+    public static String getNameWithoutPackage(String name) {
+        if (name.contains("/")) return name.substring(name.lastIndexOf('/')+1);
+        if (name.contains(".")) return name.substring(name.lastIndexOf('.')+1);
+        return name;
+    }
 }
