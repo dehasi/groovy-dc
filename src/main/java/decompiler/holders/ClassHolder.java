@@ -22,4 +22,15 @@ public class ClassHolder {
     public StringBuilder toStringBuilder() {
         return new StringBuilder();
     }
+
+    public boolean contains(MethodHolder method) {
+        // TODO check exceptions
+        for(MethodHolder m : methods) {
+            if ((m.name.equals(method.name))
+                    && (m.desc.equals(method.desc))
+                    && (m.signature.equals(method.signature))
+                    ) return true;
+        }
+        return false;
+    }
 }

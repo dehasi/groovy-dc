@@ -24,7 +24,7 @@ public abstract class ASMParser {
 
     public StringBuilder parseField(int access, String name, String desc, String signature, Object value) {
         StringBuilder sb = new StringBuilder();
-        sb
+        sb.append(ParserUtils.getModifiers(access))
                 .append(parseFieldSignature(desc, signature))
                 .append(' ')
                 .append(name)

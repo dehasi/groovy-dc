@@ -49,8 +49,6 @@ public class CVisitorUtils {
         if (method.name.contains("init>")) {
             return sb;
         }
-        Set<Map.Entry<StringBuilder, AVisitor>> entries = mVisitor.getMethodAnnotationsMap().entrySet();
-        method.parsedAnnotations = createAnnotations(entries);
         method.parsedBody = ((method.access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) ? "" : createMethodBody(type);
 
         if (method.parent == ObjectType.TRAIT) {
@@ -61,6 +59,9 @@ public class CVisitorUtils {
                 method.parsedModifiers.replace(start, start + ABSTRACT.length(), ParserUtils.EMPTY_STRING);
             }
         }
+        if (mVisitor == null) return method.toStringBuilder();
+        Set<Map.Entry<StringBuilder, AVisitor>> entries = mVisitor.getMethodAnnotationsMap().entrySet();
+        method.parsedAnnotations = createAnnotations(entries);
         for (int i = 0; i < method.parsedArgs.length; ++i) {
             if (mVisitor.getParameters().get(i) == null) continue;
             for (AVisitorEntry entry : mVisitor.getParameters().get(i)) {
@@ -86,6 +87,7 @@ public class CVisitorUtils {
 
     private static StringBuilder createAnnotations(Set<Map.Entry<StringBuilder, AVisitor>> entries) {
         StringBuilder sb = new StringBuilder();
+        if (entries == null) return sb;
         for (Map.Entry<StringBuilder, AVisitor> entry : entries) {
             StringBuilder key = entry.getKey();
             AVisitor value = entry.getValue();
