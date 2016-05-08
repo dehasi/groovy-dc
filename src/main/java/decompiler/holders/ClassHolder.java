@@ -24,12 +24,10 @@ public class ClassHolder {
     }
 
     public boolean contains(MethodHolder method) {
-        // TODO check exceptions
+        // TODO check exceptions, desc, signature
         for(MethodHolder m : methods) {
-            if ((m.name.equals(method.name))
-                    && (m.desc.equals(method.desc))
-                    && (m.signature.equals(method.signature))
-                    ) return true;
+            if (m.name.equals(method.name))
+                return true;
         }
         return false;
     }
