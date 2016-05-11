@@ -50,7 +50,6 @@ public class TraitsTest {
     }
 
     @Test
-    @Ignore("in development")
     public void testStaticTrait() throws IOException {
         routine("StaticTrait", packageName);
     }

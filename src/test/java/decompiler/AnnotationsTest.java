@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static utils.TestUtils.routine;
-@Ignore("only preporation")
+@Ignore("senseless")
 public class AnnotationsTest {
     private static final String packageName = "annotations";
 

@@ -25,8 +25,8 @@ public class MethodHolder {
     public StringBuilder toStringBuilder() {
         if (skip) return EMPTY_STRING_BUILDER;
         return new StringBuilder()
-                .append(parsedAnnotations)
-                .append(parsedModifiers)
+                .append(getAnnotations())
+                .append(getModifiers())
                 .append(parsedGenericDeclaration)
                 .append(parsedReturnValue)
                 .append(' ')
@@ -48,5 +48,26 @@ public class MethodHolder {
         }
         sb.setLength(sb.length() - 2);
         return sb;
+    }
+
+    private String getAnnotations() {
+        String annotaions[] = parsedAnnotations.toString().split("@");
+        String res = "";
+        for (String s : annotaions) {
+            if( s.contains("org.codehaus.groovy.transform.trait.Traits")) {
+                parsedBody = "{throw new UnsupportedOperationException(\"I can't parse body\");}";
+                continue;
+            }
+            if (s.length() > 0) {
+                res += "@" + s + "\n";
+            }
+        }
+        return res;
+    }
+
+    private  String getModifiers() {
+        String m = parsedModifiers.toString();
+        if (parsedBody.length() > 0) m = m.replaceAll("abstract ", "");
+        return m;
     }
 }

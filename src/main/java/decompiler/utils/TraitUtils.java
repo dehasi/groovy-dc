@@ -25,6 +25,8 @@ public class TraitUtils {
         ClassHolder helper = getHelper(trait, false);
         for (MethodHolder m: helper.methods) {
             if (!isSystem(m.name) && !trait.contains(m)) {
+                if (m.parsedGenericDeclaration.contains(trait.header.name.replace('/','.')))
+                    m.parsedGenericDeclaration = EMPTY_STRING;
                 trait.methods.add(m);
             }
 
