@@ -169,4 +169,10 @@ public class ParserUtils {
         if (name.contains(".")) return name.substring(name.lastIndexOf('.')+1);
         return name;
     }
+
+    public static StringBuilder removePattern(StringBuilder str, String pattern){
+        int start = str.indexOf(pattern);
+        int finish = pattern.length();
+        return str.replace(start, finish, "");
+    }
 }
