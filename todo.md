@@ -1,7 +1,7 @@
 This project needs full refactoring.
 But the first prepatatiob steps should be done.
 
-- [ ] [DC-02](https://github.com/dehasi/groovy-dc/issues/3): write readme
+- [ ] [DC-03](https://github.com/dehasi/groovy-dc/issues/3): write readme
 - [ ] Upgrade libraries
 - [ ] Rewrite tests with AssertJ
 
