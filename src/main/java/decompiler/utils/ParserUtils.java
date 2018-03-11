@@ -172,6 +172,9 @@ public class ParserUtils {
 
     public static StringBuilder removePattern(StringBuilder str, String pattern){
         int start = str.indexOf(pattern);
+        if (start == -1) {
+            return str;
+        }
         int finish = pattern.length();
         return str.replace(start, finish, "");
     }

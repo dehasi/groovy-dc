@@ -21,7 +21,7 @@ public class SVisitor extends  SignatureVisitor {
 
     public static final String formalTypeParameter = "formalTypeParameter";
     public static final String typeVariable = "typeVariable";
-    public static final String classType = "сlassType";
+    public static final String classType = "classType";
     public static final String typeArgument = "typeArgument";
     public static final String innerClassType = "innerClassType";
     public static final String baseType = "baseType";

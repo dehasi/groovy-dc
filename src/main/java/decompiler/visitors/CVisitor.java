@@ -95,7 +95,7 @@ public class CVisitor extends ClassVisitor {
 
     @Override
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
-        String s = "build/classes/main/" + name + ".class";
+        String s = "build/classes/groovy/main/" + name + ".class";
         if (pathSet.add(s)) {
             ClassReader classReader = loadFromFileSystemOrNull(s);
             ClassHolder e = (new Decompiler()).decompileToHolder(classReader);

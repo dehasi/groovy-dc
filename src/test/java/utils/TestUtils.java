@@ -15,7 +15,7 @@ import java.io.IOException;
 import static utils.CompareUtils.compareClazzes;
 
 public class TestUtils {
-    static final public String TESTS_DIRECTORY = "build/classes/main/";
+    static final public String TESTS_DIRECTORY = "build/classes/groovy/main/";
 
     public static Class<?> convertGroovyClass2Java(GroovyClass groovyClass) {
         ByteArrayClassLoader classLoader = new ByteArrayClassLoader();
