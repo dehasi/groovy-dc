@@ -14,7 +14,7 @@ trait OneFuncTrait {
 }
 ```
 
-To this
+will be decompiled to this
 ```groovy
 package traits
 
