@@ -1,10 +1,9 @@
-# groovy-dc
-groovy decompiler
+# Groovy decompiler
 
 Decompiles only signature of a groovy class.
 
 __Dislaimer: Is's not a complete decompiler that can be used in a real project.__
- 
+
 I.e. code like this
 ```groovy
 package traits
@@ -28,7 +27,6 @@ trait OneFuncTrait {
 ```
 
 It also expects classes to be on the file system and not in a jar.
-
 There is no runner right now. To use code see the example below
 ```
 Decompiler decompiler = new Decompiler();
