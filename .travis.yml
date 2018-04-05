@@ -2,4 +2,5 @@ language: java
 install: true
 script:
   gradle assemble
+
   gradle check
