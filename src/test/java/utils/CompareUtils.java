@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import static org.junit.Assert.fail;
 
-public class CompareUtils {
+final class CompareUtils {
     //TODO split to few small functions
     public static boolean compareClazzes(Class<?> c1, Class<?> c2) {
         if (c1 == null || c2 == null) {
@@ -29,5 +29,8 @@ public class CompareUtils {
         if (!Objects.equals(c1.getTypeName(), c2.getTypeName())) {
             fail(String.format("Type names are not equals: %s != %s", c1.getTypeName(), c2.getTypeName()));
         }
+    }
+
+    private CompareUtils() {
     }
 }
