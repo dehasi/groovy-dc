@@ -5,8 +5,8 @@ import java.util.Objects;
 import static org.junit.Assert.fail;
 
 final class CompareUtils {
-    //TODO split to few small functions
-    public static boolean compareClazzes(Class<?> c1, Class<?> c2) {
+
+    static boolean compareClazzes(Class<?> c1, Class<?> c2) {
         if (c1 == null || c2 == null) {
             return false;
         }
