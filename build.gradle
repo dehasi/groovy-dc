@@ -16,7 +16,7 @@ repositories {
 }
 
 
-dependencies {
+dependencies { 
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
     compile 'org.ow2.asm:asm:6.1.1'
     compile 'com.intellij:openapi:7.0.3'
